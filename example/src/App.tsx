@@ -1,17 +1,18 @@
 import BitLabs from 'bitlabs';
 import * as React from 'react';
 
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
 export default function App() {
 
   BitLabs.init('46d31e1e-315a-4b52-b0de-eca6062163af', 'USER_ID');
 
-  BitLabs.checkSurveys();
-
   return (
     <View style={styles.container}>
       <Text>BitLabs</Text>
+      <TouchableOpacity onPress={(e) => BitLabs.checkSurveys()} style={styles.box}>
+        <Text>Check Surveys</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -23,8 +24,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   box: {
-    width: 60,
-    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    width: 250,
+    height: 40,
+    backgroundColor: '#dafaba',
     marginVertical: 20,
   },
 });

@@ -18,7 +18,7 @@ import BitLabsRepository from "./api/bitlabs_repository";
 let _uid = '';
 let _token = '';
 let _tags = new Map<string, any>();
-let onReward = (reward: string) => { };
+let _onReward = (reward: string) => { };
 
 const init = (token: string, uid: string) => {
     _uid = uid;
@@ -26,15 +26,21 @@ const init = (token: string, uid: string) => {
     BitLabsRepository.init(token, uid);
 }
 
-const checkSurveys = () => ifInitialised(() => BitLabsRepository.checkSurveys((hasSurveys => console.log(hasSurveys))));
+const checkSurveys = () => ifInitialised(() =>
+    BitLabsRepository.checkSurveys((hasSurveys => console.log(`Has Surveys: ${hasSurveys}`))));
 
 const setTags = (tags: Map<string, any>) => _tags = tags;
 
 const addTag = (key: string, value: any) => _tags.set(key, value);
 
+const setOnReward = (onReward: (reward: string) => void) => {
+    _onReward = onReward;
+}
+
 const ifInitialised = (block: () => void) => {
     if (_token === '' && _uid === '') {
-        console.log('[BitLabs] You should initialise BitLabs first! Call BitLabs.init()');
+        console.log('[BitLabs] Trying to use the BitLabs without initialising it!'
+            + 'You should initialise BitLabs first! Call BitLabs.init()');
         return;
     }
     block();
@@ -42,5 +48,6 @@ const ifInitialised = (block: () => void) => {
 
 export default {
     init: init,
-    checkSurveys: checkSurveys
+    checkSurveys: checkSurveys,
+    setOnReward: setOnReward,
 }
