@@ -1,4 +1,5 @@
 import BitLabsRepository from "./api/bitlabs_repository";
+import type { Survey } from "./api/bitlabs_repository.types";
 
 // const LINKING_ERROR =
 //   `The package 'bitlabs' doesn't seem to be linked. Make sure: \n\n` +
@@ -26,9 +27,6 @@ const init = (token: string, uid: string) => {
     BitLabsRepository.init(token, uid);
 }
 
-const checkSurveys = () => ifInitialised(() =>
-    BitLabsRepository.checkSurveys((hasSurveys => console.log(`Has Surveys: ${hasSurveys}`))));
-
 const setTags = (tags: Map<string, any>) => _tags = tags;
 
 const addTag = (key: string, value: any) => _tags.set(key, value);
@@ -36,6 +34,12 @@ const addTag = (key: string, value: any) => _tags.set(key, value);
 const setOnReward = (onReward: (reward: string) => void) => {
     _onReward = onReward;
 }
+
+const checkSurveys = (onResponse: (hasSurveys: boolean) => void) => ifInitialised(() =>
+    BitLabsRepository.checkSurveys(onResponse));
+
+const getSurveys = (onResponse: (surveys: [Survey]) => void) => ifInitialised(() =>
+    BitLabsRepository.getSurveys(onResponse));
 
 const ifInitialised = (block: () => void) => {
     if (_token === '' && _uid === '') {
@@ -50,4 +54,5 @@ export default {
     init: init,
     checkSurveys: checkSurveys,
     setOnReward: setOnReward,
+    getSurveys: getSurveys,
 }

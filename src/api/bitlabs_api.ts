@@ -5,7 +5,7 @@ let headers: { [key: string]: string };
 
 const init = (token: string, uid: string) => headers = { 'X-Api-Token': token, 'X-User-Id': uid };
 
-const checkSurveys = () => fetch(new Request(url('check'), { headers: { ...headers } }));
+const checkSurveys = () => fetch(new Request(url('check'), { headers: headers }));
 
 const getActions = () =>
     fetch(new Request(url('actions', new Map<string, any>([['os', Platform.OS]])), { headers: { ...headers } }));

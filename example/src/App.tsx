@@ -10,10 +10,18 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text>BitLabs</Text>
-      <TouchableOpacity onPress={(e) => BitLabs.checkSurveys()} style={styles.box}>
+      <TouchableOpacity
+        onPress={(_) => BitLabs.checkSurveys((hasSurveys) => console.log(`[Example] Has Surveys: ${hasSurveys}`))}
+        style={styles.box}>
         <Text>Check Surveys</Text>
       </TouchableOpacity>
-    </View>
+      <TouchableOpacity
+        onPress={(_) => BitLabs.getSurveys((surveys) => console.log(`[Example] Getting surveys -> ${surveys.map((survey) =>
+          `Survey ${survey.id} in ${survey.details.category.name}`)}`))}
+        style={styles.box}>
+        <Text>Get Surveys</Text>
+      </TouchableOpacity>
+    </View >
   );
 }
 
@@ -30,6 +38,6 @@ const styles = StyleSheet.create({
     width: 250,
     height: 40,
     backgroundColor: '#dafaba',
-    marginVertical: 20,
+    marginVertical: 10,
   },
 });
