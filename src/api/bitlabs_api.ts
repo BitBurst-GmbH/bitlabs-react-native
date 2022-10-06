@@ -8,7 +8,7 @@ const init = (token: string, uid: string) => headers = { 'X-Api-Token': token, '
 const checkSurveys = () => fetch(new Request(url('check'), { headers: headers }));
 
 const getActions = () =>
-    fetch(new Request(url('actions', new Map<string, any>([['os', Platform.OS]])), { headers: { ...headers } }));
+    fetch(new Request(url('actions', { 'os': Platform.OS }), { headers: { ...headers } }));
 
 
 export default {

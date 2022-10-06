@@ -19,7 +19,7 @@ import type { Survey } from "./api/bitlabs_repository.types";
 let _uid = '';
 let _token = '';
 let _tags = new Map<string, any>();
-let _onReward = (reward: string) => { };
+let _onReward = (_: string) => { };
 
 const init = (token: string, uid: string) => {
     _uid = uid;
@@ -32,6 +32,7 @@ const setTags = (tags: Map<string, any>) => _tags = tags;
 const addTag = (key: string, value: any) => _tags.set(key, value);
 
 const setOnReward = (onReward: (reward: string) => void) => {
+    _onReward('');
     _onReward = onReward;
 }
 
@@ -52,6 +53,8 @@ const ifInitialised = (block: () => void) => {
 
 export default {
     init: init,
+    setTags: setTags,
+    addTag: addTag,
     checkSurveys: checkSurveys,
     setOnReward: setOnReward,
     getSurveys: getSurveys,

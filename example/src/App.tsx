@@ -2,6 +2,8 @@ import BitLabs from 'bitlabs';
 import * as React from 'react';
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { BitLabsWebView } from '../../src/components/webview';
+
 
 export default function App() {
 
@@ -9,6 +11,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <BitLabsWebView url='https://reactnative.dev/docs/network' />
       <Text>BitLabs</Text>
       <TouchableOpacity
         onPress={(_) => BitLabs.checkSurveys((hasSurveys) => console.log(`[Example] Has Surveys: ${hasSurveys}`))}
