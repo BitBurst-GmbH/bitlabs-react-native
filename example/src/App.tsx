@@ -1,18 +1,15 @@
 import BitLabs from 'bitlabs';
 import * as React from 'react';
-
+import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { BitLabsWebView } from '../../src/components/webview';
+import { NavigationContainer } from '@react-navigation/native';
+import { BitLabsOfferWall } from '../../src/components/offerwall';
 
-
-export default function App() {
-
+const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
   BitLabs.init('46d31e1e-315a-4b52-b0de-eca6062163af', 'USER_ID');
 
   return (
     <View style={styles.container}>
-      <BitLabsWebView url='https://reactnative.dev/docs/network' />
-      <Text>BitLabs</Text>
       <TouchableOpacity
         onPress={(_) => BitLabs.checkSurveys((hasSurveys) => console.log(`[Example] Has Surveys: ${hasSurveys}`))}
         style={styles.box}>
@@ -24,9 +21,25 @@ export default function App() {
         style={styles.box}>
         <Text>Get Surveys</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        onPress={(_) => navigation.navigate('Offerwall')}
+        style={styles.box}>
+        <Text>Open Offerwall</Text>
+      </TouchableOpacity>
     </View >
   );
 }
+
+const OfferWall = () => (<BitLabsOfferWall token='46d31e1e-315a-4b52-b0de-eca6062163af' uid='USER_ID' />);
+
+const Stack = createNativeStackNavigator();
+
+export default () => (<NavigationContainer>
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name='Home' component={HomeScreen} />
+    <Stack.Screen name='Offerwall' component={OfferWall} />
+  </Stack.Navigator>
+</NavigationContainer>);
 
 const styles = StyleSheet.create({
   container: {
