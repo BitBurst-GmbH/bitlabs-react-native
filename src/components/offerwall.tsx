@@ -6,6 +6,7 @@ import type { WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTyp
 type Props = { token: string, uid: string, onReward: (reward: number) => void, onExitPressed: () => void }
 
 export const BitLabsOfferWall = ({ token, uid, onExitPressed }: Props) => {
+    let reward = 0.0;
     const [key, setKey] = useState(0);
     const [isPageOfferwall, setIsPageOfferwall] = useState(true);
     const url = `https://web.bitlabs.ai?token=${token}&uid=${uid}`;
@@ -13,7 +14,16 @@ export const BitLabsOfferWall = ({ token, uid, onExitPressed }: Props) => {
     const onBackPressed = () => setKey((key + 1) % 2);
 
     const onLoadProgress = ({ nativeEvent }: WebViewNavigationEvent) => {
-        setIsPageOfferwall(nativeEvent.url.startsWith('https://web.bitlabs.ai'));
+        const url = nativeEvent.url;
+        console.log(url);
+        setIsPageOfferwall(url.startsWith('https://web.bitlabs.ai'));
+
+        if (isPageOfferwall) return;
+
+        if (url.includes('survey/complete') || url.includes('survey/screenout')) {
+            reward += extractValue(url);
+        }
+
     }
 
     return (
@@ -37,6 +47,16 @@ export const BitLabsOfferWall = ({ token, uid, onExitPressed }: Props) => {
             )}
         </View>
     );
+}
+
+const extractValue = (url: string) => {
+    if (!url.includes('&val=')) return 0.0;
+
+    const params = url.split(/([?,=,&])/)
+    const index = params.indexOf('val')
+    const value = params[index + 2]
+
+    return parseFloat(value ?? '0');
 }
 
 const styles = StyleSheet.create({
