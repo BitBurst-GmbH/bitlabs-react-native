@@ -7,6 +7,9 @@ type Props = { token: string, uid: string, onReward: (reward: number) => void, o
 
 export const BitLabsOfferWall = ({ token, uid, onExitPressed }: Props) => {
     let reward = 0.0;
+    let surveyId: string = '';
+    let networkId: string = '';
+
     const [key, setKey] = useState(0);
     const [isPageOfferwall, setIsPageOfferwall] = useState(true);
     const url = `https://web.bitlabs.ai?token=${token}&uid=${uid}`;
@@ -15,15 +18,16 @@ export const BitLabsOfferWall = ({ token, uid, onExitPressed }: Props) => {
 
     const onLoadProgress = ({ nativeEvent }: WebViewNavigationEvent) => {
         const url = nativeEvent.url;
-        console.log(url);
         setIsPageOfferwall(url.startsWith('https://web.bitlabs.ai'));
-
-        if (isPageOfferwall) return;
 
         if (url.includes('survey/complete') || url.includes('survey/screenout')) {
             reward += extractValue(url);
+        } else {
+            const [idNetwork, idSurvey] = extractNetworkIdAndSurveyId(url);
+            networkId = idNetwork ?? networkId;
+            surveyId = idSurvey ?? surveyId;
+            console.log(`networkId: ${networkId}, surveyId: ${surveyId}`);
         }
-
     }
 
     return (
@@ -52,11 +56,27 @@ export const BitLabsOfferWall = ({ token, uid, onExitPressed }: Props) => {
 const extractValue = (url: string) => {
     if (!url.includes('&val=')) return 0.0;
 
-    const params = url.split(/([?,=,&])/)
-    const index = params.indexOf('val')
-    const value = params[index + 2]
+    const params = url.split(/([?,=,&])/);
+    const index = params.indexOf('val');
+    const value = params[index + 2];
 
     return parseFloat(value ?? '0');
+}
+
+const extractNetworkIdAndSurveyId = (url: string) => {
+    if (!url.startsWith('https://redirect.bitlabs.ai/'))
+        return [null, null];
+
+    const params = url.split(/([?,=,&])/);
+    let index = params.indexOf('network');
+    const networkId = params[index + 2];
+    index = params.indexOf('survey');
+    const surveyId = params[index + 2];
+
+    if (!networkId || !surveyId)
+        return [null, null];
+
+    return [networkId, surveyId];
 }
 
 const styles = StyleSheet.create({
