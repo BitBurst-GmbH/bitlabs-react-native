@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import WebView from 'react-native-webview';
 import type { WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
+import { LeaveSurveyModal } from './leave-survey-modal';
 
 type Props = { token: string, uid: string, onReward: (reward: number) => void, onExitPressed: () => void }
 
@@ -11,7 +12,8 @@ export const BitLabsOfferWall = ({ token, uid, onExitPressed }: Props) => {
     let networkId: string = '';
 
     const [key, setKey] = useState(0);
-    const [isPageOfferwall, setIsPageOfferwall] = useState(true);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isPageOfferwall, setIsPageOfferwall] = useState(false);
     const url = `https://web.bitlabs.ai?token=${token}&uid=${uid}`;
 
     const onBackPressed = () => setKey((key + 1) % 2);
@@ -26,15 +28,15 @@ export const BitLabsOfferWall = ({ token, uid, onExitPressed }: Props) => {
             const [idNetwork, idSurvey] = extractNetworkIdAndSurveyId(url);
             networkId = idNetwork ?? networkId;
             surveyId = idSurvey ?? surveyId;
-            console.log(`networkId: ${networkId}, surveyId: ${surveyId}`);
         }
     }
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'stretch' }}>
+            <LeaveSurveyModal visible={isModalVisible} setIsVisible={setIsModalVisible} leaveSurveHandler={onBackPressed} />
             {!isPageOfferwall && (
                 <View style={styles.headerView}>
-                    <TouchableOpacity onPress={onBackPressed} style={styles.chevronTouchable}>
+                    <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.chevronTouchable}>
                         <Image source={require('../assets/circle-chevron-left-regular.png')} style={styles.image} />
                     </TouchableOpacity>
                 </View>
@@ -80,7 +82,7 @@ const extractNetworkIdAndSurveyId = (url: string) => {
 }
 
 const styles = StyleSheet.create({
-    webview: { flex: 1 },
+    webview: { flex: 1, },
     headerView: {
         height: 50,
         alignItems: 'center',
