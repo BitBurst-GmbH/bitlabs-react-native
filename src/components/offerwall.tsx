@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { Image, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { BackHandler, Image, NativeEventSubscription, TouchableOpacity, View } from 'react-native';
 import WebView from 'react-native-webview';
 import type { WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
 import { leaveSurveys } from '../api/bitlabs_repository';
@@ -8,17 +8,37 @@ import styles from './offerwall.styles';
 
 type Props = { token: string, uid: string, onReward: (reward: number) => void, onExitPressed: () => void }
 
-export const BitLabsOfferWall = ({ token, uid, onExitPressed }: Props) => {
+export const BitLabsOfferWall = ({ token, uid, onExitPressed, onReward }: Props) => {
     let reward = useRef(0.0);
     let surveyId = useRef('');
     let networkId = useRef('');
 
     const [key, setKey] = useState(0);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [isPageOfferwall, setIsPageOfferwall] = useState(false);
+    const [isPageOfferwall, setIsPageOfferwall] = useState(true);
     const url = `https://web.bitlabs.ai?token=${token}&uid=${uid}`;
 
-    const onBackPressed = (reason: string) => {
+    let backHandler: NativeEventSubscription;
+
+    // Hook to add event listener which accepts a state value
+    useEffect(() => {
+        backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+            if (isPageOfferwall) return false;
+
+            setIsModalVisible(true);
+            return true;
+        });
+
+        return () => backHandler.remove();
+    }, [isPageOfferwall]);
+
+    // Cleanup state
+    useEffect(() => () => {
+        backHandler.remove();
+        onReward(reward.current);
+    }, []);
+
+    const onBackPressed = (reason: string = '') => {
         setKey((key + 1) % 2);
         if (networkId.current.length > 0 && surveyId.current.length > 0) {
             console.log(`Leaving with reason ~> ${reason}`);

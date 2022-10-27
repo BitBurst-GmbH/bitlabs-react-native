@@ -32,10 +32,10 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
 
 const OfferWall = ({ navigation }: NativeStackScreenProps<any, any>) => (
   <BitLabsOfferWall
-    token='46d31e1e-315a-4b52-b0de-eca6062163af'
     uid='USER_ID'
+    token='46d31e1e-315a-4b52-b0de-eca6062163af'
     onExitPressed={navigation.goBack}
-    onReward={() => { }}
+    onReward={reward => console.log(`Reward this time: ${reward}`)}
   />);
 
 const Stack = createNativeStackNavigator();
