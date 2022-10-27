@@ -1,39 +1,52 @@
-import React, { useState } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Image, TouchableOpacity, View } from 'react-native';
 import WebView from 'react-native-webview';
 import type { WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
+import { leaveSurveys } from '../api/bitlabs_repository';
 import { LeaveSurveyModal } from './leave-survey-modal';
+import styles from './offerwall.styles';
 
 type Props = { token: string, uid: string, onReward: (reward: number) => void, onExitPressed: () => void }
 
 export const BitLabsOfferWall = ({ token, uid, onExitPressed }: Props) => {
-    let reward = 0.0;
-    let surveyId: string = '';
-    let networkId: string = '';
+    let reward = useRef(0.0);
+    let surveyId = useRef('');
+    let networkId = useRef('');
 
     const [key, setKey] = useState(0);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isPageOfferwall, setIsPageOfferwall] = useState(false);
     const url = `https://web.bitlabs.ai?token=${token}&uid=${uid}`;
 
-    const onBackPressed = () => setKey((key + 1) % 2);
+    const onBackPressed = (reason: string) => {
+        setKey((key + 1) % 2);
+        if (networkId.current.length > 0 && surveyId.current.length > 0) {
+            console.log(`Leaving with reason ~> ${reason}`);
+            leaveSurveys(token, uid, networkId.current, surveyId.current, reason);
+            networkId.current = '';
+            surveyId.current = '';
+        }
+    }
 
     const onLoadProgress = ({ nativeEvent }: WebViewNavigationEvent) => {
         const url = nativeEvent.url;
         setIsPageOfferwall(url.startsWith('https://web.bitlabs.ai'));
 
         if (url.includes('survey/complete') || url.includes('survey/screenout')) {
-            reward += extractValue(url);
+            reward.current += extractValue(url);
         } else {
             const [idNetwork, idSurvey] = extractNetworkIdAndSurveyId(url);
-            networkId = idNetwork ?? networkId;
-            surveyId = idSurvey ?? surveyId;
+            networkId.current = idNetwork ?? networkId.current;
+            surveyId.current = idSurvey ?? surveyId.current;
         }
     }
 
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'stretch' }}>
-            <LeaveSurveyModal visible={isModalVisible} setIsVisible={setIsModalVisible} leaveSurveHandler={onBackPressed} />
+            <LeaveSurveyModal
+                visible={isModalVisible}
+                setIsVisible={setIsModalVisible}
+                leaveSurveHandler={onBackPressed} />
             {!isPageOfferwall && (
                 <View style={styles.headerView}>
                     <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.chevronTouchable}>
@@ -80,26 +93,3 @@ const extractNetworkIdAndSurveyId = (url: string) => {
 
     return [networkId, surveyId];
 }
-
-const styles = StyleSheet.create({
-    webview: { flex: 1, },
-    headerView: {
-        height: 50,
-        alignItems: 'center',
-        flexDirection: 'row',
-        backgroundColor: 'black',
-    },
-    chevronTouchable: {
-        marginHorizontal: 14,
-    },
-    xmarkTouchable: {
-        top: 16,
-        right: 16,
-        position: 'absolute',
-    },
-    image: {
-        width: 24,
-        height: 24,
-        resizeMode: 'contain',
-    }
-});

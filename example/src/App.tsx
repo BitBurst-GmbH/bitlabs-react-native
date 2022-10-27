@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { BitLabsOfferWall } from '../../src/components/offerwall';
 
 const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  BitLabs.init('46d31e1e-315a-4b52-b0de-eca6062163af', 'USER_ID');
+  BitLabs.init('46d31e1e-315a-4b52-b0de-eca6062163af', 'USER_ID1');
 
   return (
     <View style={styles.container}>
