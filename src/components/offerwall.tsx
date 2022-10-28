@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { BackHandler, Image, NativeEventSubscription, TouchableOpacity, View } from 'react-native';
+import { BackHandler, Image, Linking, NativeEventSubscription, TouchableOpacity, View } from 'react-native';
 import WebView from 'react-native-webview';
-import type { WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
+import type { OnShouldStartLoadWithRequest, ShouldStartLoadRequest, WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
 import { leaveSurveys } from '../api/bitlabs_repository';
 import { LeaveSurveyModal } from './leave-survey-modal';
 import styles from './offerwall.styles';
@@ -61,6 +61,14 @@ export const BitLabsOfferWall = ({ token, uid, onExitPressed, onReward }: Props)
         }
     }
 
+    const onShouldStartLoadingWithRequest = ({ url }: ShouldStartLoadRequest) => {
+        if (/offers\/.+\/open/.test(url)) {
+            Linking.openURL(url);
+            return false;
+        }
+        return true;
+    }
+
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'stretch' }}>
             <LeaveSurveyModal
@@ -76,9 +84,10 @@ export const BitLabsOfferWall = ({ token, uid, onExitPressed, onReward }: Props)
             )}
             <WebView
                 key={key}
-                source={{ uri: url }} style={styles.webview}
                 javaScriptEnabled={true}
-                onLoadStart={onLoadProgress} />
+                onLoadStart={onLoadProgress}
+                source={{ uri: url }} style={styles.webview}
+                onShouldStartLoadWithRequest={onShouldStartLoadingWithRequest} />
             {isPageOfferwall && (
                 <TouchableOpacity onPress={onExitPressed} style={styles.xmarkTouchable}>
                     <Image source={require('../assets/circle-xmark-regular.png')} style={styles.image} />
