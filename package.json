@@ -49,6 +49,7 @@
     "@babel/eslint-parser": "^7.18.2",
     "@react-native-community/eslint-config": "^3.0.2",
     "@release-it/conventional-changelog": "^5.0.0",
+    "@sparkfabrik/react-native-idfa-aaid": "^0.8.3",
     "@types/jest": "^28.1.2",
     "@types/react": "~17.0.21",
     "@types/react-native": "0.68.0",
@@ -69,9 +70,10 @@
     "@types/react": "17.0.21"
   },
   "peerDependencies": {
+    "@sparkfabrik/react-native-idfa-aaid": "^0.8.3",
     "react": "*",
-    "react-native-webview": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-webview": "*"
   },
   "jest": {
     "preset": "react-native",

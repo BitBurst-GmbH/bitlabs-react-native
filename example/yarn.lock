@@ -1019,6 +1019,11 @@
   resolved "https://registry.yarnpkg.com/@sideway/pinpoint/-/pinpoint-2.0.0.tgz#cff8ffadc372ad29fd3f78277aeb29e632cc70df"
   integrity sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==
 
+"@sparkfabrik/react-native-idfa-aaid@^0.8.3":
+  version "0.8.3"
+  resolved "https://registry.yarnpkg.com/@sparkfabrik/react-native-idfa-aaid/-/react-native-idfa-aaid-0.8.3.tgz#961ed984b0943ece85d2539337f66cf4e5dca747"
+  integrity sha512-HNjuvm6EoreCy6fXJV2YAdydV33v/03yLl+M3Pf1beCrhMOHhCiuhoH4ZGtKvIwVM+EA9v0eDTRfjWe8Cvj94A==
+
 "@types/graceful-fs@^4.1.2":
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/@types/graceful-fs/-/graceful-fs-4.1.5.tgz#21ffba0d98da4350db64891f92a9e5db3cdb4e15"

@@ -1,22 +1,32 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { BackHandler, Image, Linking, NativeEventSubscription, TouchableOpacity, View } from 'react-native';
 import WebView from 'react-native-webview';
-import type { OnShouldStartLoadWithRequest, ShouldStartLoadRequest, WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
+import type { ShouldStartLoadRequest, WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
 import { leaveSurveys } from '../api/bitlabs_repository';
 import { LeaveSurveyModal } from './leave-survey-modal';
 import styles from './offerwall.styles';
+import ReactNativeIdfaAaid, { AdvertisingInfoResponse } from '@sparkfabrik/react-native-idfa-aaid';
 
-type Props = { token: string, uid: string, onReward: (reward: number) => void, onExitPressed: () => void }
+type Props = {
+    uid: string,
+    token: string,
+    onExitPressed: () => void,
+    tags?: { [key: string]: string },
+    onReward: (reward: number) => void,
+}
 
-export const BitLabsOfferWall = ({ token, uid, onExitPressed, onReward }: Props) => {
+export const BitLabsOfferWall = ({ token, uid, onExitPressed, onReward, tags }: Props) => {
     let reward = useRef(0.0);
     let surveyId = useRef('');
     let networkId = useRef('');
+    const queries = Object.entries(tags ?? {})
+        .map(([key, value]) => `${key}=${value}`)
+        .join('&');
 
     const [key, setKey] = useState(0);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isPageOfferwall, setIsPageOfferwall] = useState(true);
-    const url = `https://web.bitlabs.ai?token=${token}&uid=${uid}`;
+    const [url, setUrl] = useState(`https://web.bitlabs.ai?token=${token}&uid=${uid}&${queries}`);
 
     let backHandler: NativeEventSubscription;
 
@@ -33,9 +43,14 @@ export const BitLabsOfferWall = ({ token, uid, onExitPressed, onReward }: Props)
     }, [isPageOfferwall]);
 
     // Cleanup state
-    useEffect(() => () => {
-        backHandler.remove();
-        onReward(reward.current);
+    useEffect(() => {
+        ReactNativeIdfaAaid.getAdvertisingInfo().then((res: AdvertisingInfoResponse) =>
+            !res.isAdTrackingLimited && setUrl(url + `&maid=${res.id!}`));
+
+        return () => {
+            backHandler.remove();
+            onReward(reward.current);
+        }
     }, []);
 
     const onBackPressed = (reason: string = '') => {
