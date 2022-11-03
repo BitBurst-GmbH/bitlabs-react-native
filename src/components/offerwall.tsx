@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { BackHandler, Image, Linking, NativeEventSubscription, TouchableOpacity, View } from 'react-native';
+import { BackHandler, Image, Linking, NativeEventSubscription, Platform, TouchableOpacity, View } from 'react-native';
 import WebView from 'react-native-webview';
 import type { ShouldStartLoadRequest, WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
-import { leaveSurveys } from '../api/bitlabs_repository';
+import { getHasOffers, leaveSurveys } from '../api/bitlabs_repository';
 import { LeaveSurveyModal } from './leave-survey-modal';
 import styles from './offerwall.styles';
 import ReactNativeIdfaAaid, { AdvertisingInfoResponse } from '@sparkfabrik/react-native-idfa-aaid';
@@ -24,11 +24,20 @@ export const BitLabsOfferWall = ({ token, uid, onExitPressed, onReward, tags }: 
         .join('&');
 
     const [key, setKey] = useState(0);
+    const [hasOffers, setHasOffers] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isPageOfferwall, setIsPageOfferwall] = useState(true);
     const [url, setUrl] = useState(`https://web.bitlabs.ai?token=${token}&uid=${uid}&${queries}`);
 
     let backHandler: NativeEventSubscription;
+
+    // Hook to open in external browser if on ios and has Offers
+    useEffect(() => {
+        if (hasOffers && Platform.OS === 'ios') {
+            onExitPressed();
+            Linking.openURL(url);
+        }
+    }, [hasOffers]);
 
     // Hook to add event listener which accepts a state value
     useEffect(() => {
@@ -42,8 +51,10 @@ export const BitLabsOfferWall = ({ token, uid, onExitPressed, onReward, tags }: 
         return () => backHandler.remove();
     }, [isPageOfferwall]);
 
-    // Cleanup state
+    // Mount/Unmount hook
     useEffect(() => {
+        getHasOffers(token, uid).then((hasOffers) => setHasOffers(hasOffers));
+
         ReactNativeIdfaAaid.getAdvertisingInfo().then((res: AdvertisingInfoResponse) =>
             !res.isAdTrackingLimited && setUrl(url + `&maid=${res.id!}`));
 

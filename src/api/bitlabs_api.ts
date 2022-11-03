@@ -23,14 +23,18 @@ export const leaveSurveysApi = (token: string, uid: string, networkId: string, s
             body: JSON.stringify({ reason: reason, })
         }));
 
+export const getOffersApi = (token: string, uid: string) => fetch(new Request(url('offers'), {
+    headers: {
+        'X-User-Id': uid,
+        'X-Api-Token': token,
+    }
+}));
+
 export default {
     init: init,
     getActions: getActions,
     checkSurveys: checkSurveys,
 }
-
-
-// Future<Response> getOffers() => get(url('offers'), headers: _headers);
 
 // Future<Response> getAppSettings() =>
 //     get(url('settings/v2'), headers: _headers);

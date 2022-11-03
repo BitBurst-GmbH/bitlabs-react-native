@@ -22,6 +22,10 @@ export type GetActionsResponse = {
     qualification: Qualification,
 }
 
+export type GetOffersResponse = {
+    offers: [{ id: number, }],
+}
+
 export type Survey = {
     network_id: number,
     id: number,
@@ -73,4 +77,3 @@ type Question = {
     }];
     can_skip: boolean,
 }
-

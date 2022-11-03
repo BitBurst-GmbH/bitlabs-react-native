@@ -1,5 +1,5 @@
-import BitLabsApi, { leaveSurveysApi } from "./bitlabs_api";
-import type { BitLabsResponse, CheckSurveyResponse, GetActionsResponse, Survey } from "./bitlabs_repository.types";
+import BitLabsApi, { getOffersApi, leaveSurveysApi } from "./bitlabs_api";
+import type { BitLabsResponse, CheckSurveyResponse, GetActionsResponse, GetOffersResponse, Survey } from "./bitlabs_repository.types";
 
 
 const init = (token: string, uid: string) => BitLabsApi.init(token, uid);
@@ -38,6 +38,18 @@ export const leaveSurveys = async (token: string, uid: string, networkId: string
     }
 
     console.log('[BitLabs] LeaveSurvey Successful');
+}
+
+export const getHasOffers = async (token: string, uid: string) => {
+    const response = await getOffersApi(token, uid);
+    const body = await (response.json() as Promise<BitLabsResponse<GetOffersResponse>>);
+
+    if (body.error) {
+        console.log(`${body.error.details.http} - ${body.error.details.msg}`);
+        return false;
+    }
+
+    return body.data.offers.length > 0;
 }
 
 export default {
