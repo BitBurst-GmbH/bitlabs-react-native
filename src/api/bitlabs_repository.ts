@@ -1,3 +1,4 @@
+import { getRandomSurveys } from "../utils/helpers";
 import BitLabsApi, { getOffersApi, leaveSurveysApi } from "./bitlabs_api";
 import type { BitLabsResponse, CheckSurveyResponse, GetActionsResponse, GetOffersResponse, Survey } from "./bitlabs_repository.types";
 
@@ -16,7 +17,7 @@ const checkSurveys = async (onResponse: (hasSurveys: boolean) => void) => {
     onResponse(body.data.has_surveys);
 }
 
-const getSurveys = async (onResponse: (surveys: [Survey]) => void) => {
+const getSurveys = async (onResponse: (surveys: Survey[]) => void) => {
     const response = await BitLabsApi.getActions();
     const body = await (response.json() as Promise<BitLabsResponse<GetActionsResponse>>);
 
@@ -25,7 +26,7 @@ const getSurveys = async (onResponse: (surveys: [Survey]) => void) => {
         return;
     }
 
-    onResponse(body.data.surveys);
+    onResponse(body.data.surveys.length > 0 ? body.data.surveys : getRandomSurveys());
 }
 
 export const leaveSurveys = async (token: string, uid: string, networkId: string, surveyId: string, reason: string) => {

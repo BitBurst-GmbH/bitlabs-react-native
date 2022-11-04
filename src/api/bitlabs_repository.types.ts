@@ -18,12 +18,12 @@ export type GetActionsResponse = {
     is_new_user: boolean,
     startBonus: { reward: string },
     restriction_reason: RestrictionReason,
-    surveys: [Survey],
+    surveys: Survey[],
     qualification: Qualification,
 }
 
 export type GetOffersResponse = {
-    offers: [{ id: number, }],
+    offers: { id: number, }[],
 }
 
 export type Survey = {
@@ -71,9 +71,9 @@ type Question = {
     language: string,
     type: string,
     localized_text: string,
-    answers: [{
+    answers: {
         code: string,
         localized_text: string,
-    }];
+    }[];
     can_skip: boolean,
 }
