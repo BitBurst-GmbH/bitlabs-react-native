@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { BackHandler, Image, Linking, NativeEventSubscription, Platform, TouchableOpacity, View } from 'react-native';
+import { BackHandler, Image, Linking, NativeEventSubscription, Platform, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import WebView from 'react-native-webview';
 import type { ShouldStartLoadRequest, WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
 import { getHasOffers, leaveSurveys } from '../api/bitlabs_repository';
@@ -96,30 +96,32 @@ export const BitLabsOfferWall = ({ token, uid, onExitPressed, onReward, tags }: 
     }
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'stretch' }}>
-            <LeaveSurveyModal
-                visible={isModalVisible}
-                setIsVisible={setIsModalVisible}
-                leaveSurveHandler={onBackPressed} />
-            {!isPageOfferwall && (
-                <View style={styles.headerView}>
-                    <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.chevronTouchable}>
-                        <Image source={require('../assets/circle-chevron-left-regular.png')} style={styles.image} />
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'stretch' }}>
+                <LeaveSurveyModal
+                    visible={isModalVisible}
+                    setIsVisible={setIsModalVisible}
+                    leaveSurveHandler={onBackPressed} />
+                {!isPageOfferwall && (
+                    <View style={styles.headerView}>
+                        <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.chevronTouchable}>
+                            <Image source={require('../assets/circle-chevron-left-regular.png')} style={styles.image} />
+                        </TouchableOpacity>
+                    </View>
+                )}
+                <WebView
+                    key={key}
+                    javaScriptEnabled={true}
+                    onLoadStart={onLoadProgress}
+                    source={{ uri: url }} style={styles.webview}
+                    onShouldStartLoadWithRequest={onShouldStartLoadingWithRequest} />
+                {isPageOfferwall && (
+                    <TouchableOpacity onPress={onExitPressed} style={styles.xmarkTouchable}>
+                        <Image source={require('../assets/circle-xmark-regular.png')} style={styles.image} />
                     </TouchableOpacity>
-                </View>
-            )}
-            <WebView
-                key={key}
-                javaScriptEnabled={true}
-                onLoadStart={onLoadProgress}
-                source={{ uri: url }} style={styles.webview}
-                onShouldStartLoadWithRequest={onShouldStartLoadingWithRequest} />
-            {isPageOfferwall && (
-                <TouchableOpacity onPress={onExitPressed} style={styles.xmarkTouchable}>
-                    <Image source={require('../assets/circle-xmark-regular.png')} style={styles.image} />
-                </TouchableOpacity>
-            )}
-        </View>
+                )}
+            </View>
+        </SafeAreaView>
     );
 }
 
