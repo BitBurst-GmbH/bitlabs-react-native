@@ -36,11 +36,11 @@ const setOnReward = (onReward: (reward: string) => void) => {
     _onReward = onReward;
 }
 
-const checkSurveys = (onResponse: (hasSurveys: boolean) => void) => ifInitialised(() =>
-    BitLabsRepository.checkSurveys(onResponse));
+const checkSurveys = (onResponse: (hasSurveys: boolean) => void, onFailure: (error: Error) => void) =>
+    ifInitialised(() => BitLabsRepository.checkSurveys(onResponse, onFailure));
 
-const getSurveys = (onResponse: (surveys: [Survey]) => void) => ifInitialised(() =>
-    BitLabsRepository.getSurveys(onResponse));
+const getSurveys = (onResponse: (surveys: Survey[]) => void, onFailure: (error: Error) => void) => ifInitialised(() =>
+    BitLabsRepository.getSurveys(onResponse, onFailure));
 
 const ifInitialised = (block: () => void) => {
     if (_token === '' && _uid === '') {

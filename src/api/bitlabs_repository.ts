@@ -5,24 +5,24 @@ import type { BitLabsResponse, CheckSurveyResponse, GetActionsResponse, GetOffer
 
 const init = (token: string, uid: string) => BitLabsApi.init(token, uid);
 
-const checkSurveys = async (onResponse: (hasSurveys: boolean) => void) => {
+const checkSurveys = async (onResponse: (hasSurveys: boolean) => void, onFailure: (error: Error) => void) => {
     const response = await BitLabsApi.checkSurveys();
     const body = await (response.json() as Promise<BitLabsResponse<CheckSurveyResponse>>);
 
     if (body.error) {
-        console.log(`${body.error.details.http} - ${body.error.details.msg}`);
+        onFailure(new Error(`${body.error.details.http} - ${body.error.details.msg}`));
         return;
     }
 
     onResponse(body.data.has_surveys);
 }
 
-const getSurveys = async (onResponse: (surveys: Survey[]) => void) => {
+const getSurveys = async (onResponse: (surveys: Survey[]) => void, onFailure: (error: Error) => void) => {
     const response = await BitLabsApi.getActions();
     const body = await (response.json() as Promise<BitLabsResponse<GetActionsResponse>>);
 
     if (body.error) {
-        console.log(`${body.error.details.http} - ${body.error.details.msg}`);
+        onFailure(new Error(`${body.error.details.http} - ${body.error.details.msg}`));
         return;
     }
 
@@ -34,7 +34,7 @@ export const leaveSurveys = async (token: string, uid: string, networkId: string
     const body = await (response.json() as Promise<BitLabsResponse<void>>);
 
     if (body.error) {
-        console.log(`${body.error.details.http} - ${body.error.details.msg}`);
+        console.error(`${body.error.details.http} - ${body.error.details.msg}`);
         return;
     }
 
@@ -46,7 +46,7 @@ export const getHasOffers = async (token: string, uid: string) => {
     const body = await (response.json() as Promise<BitLabsResponse<GetOffersResponse>>);
 
     if (body.error) {
-        console.log(`${body.error.details.http} - ${body.error.details.msg}`);
+        console.error(`${body.error.details.http} - ${body.error.details.msg}`);
         return false;
     }
 

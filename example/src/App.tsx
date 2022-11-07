@@ -6,18 +6,18 @@ import { NavigationContainer } from '@react-navigation/native';
 import { BitLabsOfferWall } from '../../src/components/offerwall';
 
 const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  BitLabs.init('46d31e1e-315a-4b52-b0de-eca6062163af', 'USER_ID1');
+  BitLabs.init('46d31e1e-315a-4b52-b0de-eca6062163a', 'USER_ID1');
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        onPress={(_) => BitLabs.checkSurveys((hasSurveys) => console.log(`[Example] Has Surveys: ${hasSurveys}`))}
+        onPress={(_) => BitLabs.checkSurveys((hasSurveys) => console.log(`[Example] Has Surveys: ${hasSurveys}`), (error) => console.log(error.message))}
         style={styles.box}>
         <Text>Check Surveys</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={(_) => BitLabs.getSurveys((surveys) => console.log(`[Example] Getting surveys -> ${surveys.map((survey) =>
-          `Survey ${survey.id} in ${survey.details.category.name}`)}`))}
+          `Survey ${survey.id} in ${survey.details.category.name}`)}`), (error) => console.log(error.message))}
         style={styles.box}>
         <Text>Get Surveys</Text>
       </TouchableOpacity>
