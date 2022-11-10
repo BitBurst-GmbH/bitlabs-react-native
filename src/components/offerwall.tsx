@@ -3,9 +3,10 @@ import { BackHandler, Image, Linking, NativeEventSubscription, Platform, SafeAre
 import WebView from 'react-native-webview';
 import type { ShouldStartLoadRequest, WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
 import { getHasOffers, leaveSurveys } from '../api/bitlabs_repository';
-import { LeaveSurveyModal } from './leave-survey-modal';
+import LeaveSurveyModal from './leave-survey-modal';
 import styles from './offerwall.styles';
 import ReactNativeIdfaAaid, { AdvertisingInfoResponse } from '@sparkfabrik/react-native-idfa-aaid';
+import Images from '../assets/images';
 
 type Props = {
     uid: string,
@@ -15,7 +16,7 @@ type Props = {
     onReward: (reward: number) => void,
 }
 
-export const BitLabsOfferWall = ({ token, uid, onExitPressed, onReward, tags }: Props) => {
+const BitLabsOfferWall = ({ token, uid, onExitPressed, onReward, tags }: Props) => {
     let reward = useRef(0.0);
     let surveyId = useRef('');
     let networkId = useRef('');
@@ -105,7 +106,7 @@ export const BitLabsOfferWall = ({ token, uid, onExitPressed, onReward, tags }: 
                 {!isPageOfferwall && (
                     <View style={styles.headerView}>
                         <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.chevronTouchable}>
-                            <Image source={require('../assets/circle-chevron-left-regular.png')} style={styles.image} />
+                            <Image source={Images.circleChevronLeftRegular} style={styles.image} />
                         </TouchableOpacity>
                     </View>
                 )}
@@ -117,7 +118,7 @@ export const BitLabsOfferWall = ({ token, uid, onExitPressed, onReward, tags }: 
                     onShouldStartLoadWithRequest={onShouldStartLoadingWithRequest} />
                 {isPageOfferwall && (
                     <TouchableOpacity onPress={onExitPressed} style={styles.xmarkTouchable}>
-                        <Image source={require('../assets/circle-xmark-regular.png')} style={styles.image} />
+                        <Image source={Images.circleXMarkRegular} style={styles.image} />
                     </TouchableOpacity>
                 )}
             </View>
@@ -150,3 +151,5 @@ const extractNetworkIdAndSurveyId = (url: string) => {
 
     return [networkId, surveyId];
 }
+
+export default BitLabsOfferWall;

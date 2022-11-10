@@ -1,40 +1,29 @@
-import { View, StyleSheet, Image } from 'react-native'
+import { View, Image } from 'react-native'
 import React from 'react'
+import Images from '../assets/images';
+import styles from './rating-bar.styles';
 
-const RatingBar = () => {
+type Props = { rating: number }
+
+const RatingBar = ({ rating }: Props) => {
     return (
         <View style={styles.container}>
-            <Image
-                style={styles.image}
-                source={require('../assets/star-regular.png')} />
-            <Image
-                style={styles.image}
-                source={require('../assets/star-regular.png')} />
-            <Image
-                style={styles.image}
-                source={require('../assets/star-regular.png')} />
-            <Image
-                style={styles.image}
-                source={require('../assets/star-regular.png')} />
-            <Image
-                style={styles.image}
-                source={require('../assets/star-regular.png')} />
+            {renderStars(rating)}
         </View>
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-    },
-    image: {
-        margin: 2,
-        width: 16,
-        height: 16,
-        resizeMode: 'contain',
-    },
-});
+const renderStars = (rating: number) => {
+    let jsx = [];
+
+    for (let i = 1; i <= 5; i++) {
+        jsx.push(<Image
+            key={i}
+            style={styles.image}
+            source={i <= rating ? Images.starSolid : Images.starRegular} />);
+    }
+
+    return jsx;
+}
 
 export default RatingBar;

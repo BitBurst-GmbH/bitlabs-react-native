@@ -6,7 +6,7 @@ const genericView = {
     borderRadius: 10,
 }
 
-export default StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         width: 300,
         height: 80,
@@ -55,3 +55,5 @@ export default StyleSheet.create({
         fontWeight: '500',
     },
 });
+
+export default styles;

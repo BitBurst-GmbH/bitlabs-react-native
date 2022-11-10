@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-export default StyleSheet.create({
+const styles = StyleSheet.create({
     webview: { flex: 1, },
     headerView: {
         height: 50,
@@ -22,3 +22,5 @@ export default StyleSheet.create({
         resizeMode: 'contain',
     }
 });
+
+export default styles;

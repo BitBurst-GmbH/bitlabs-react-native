@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-export default StyleSheet.create({
+const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         alignItems: 'center',
@@ -29,3 +29,5 @@ export default StyleSheet.create({
         paddingVertical: 10,
     },
 });
+
+export default styles;

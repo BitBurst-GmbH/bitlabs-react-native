@@ -16,7 +16,7 @@ const leaveReasons = {
     "OTHER": 'Other Reasons',
 };
 
-export const LeaveSurveyModal = ({ visible, setIsVisible, leaveSurveHandler }: Props) => {
+const LeaveSurveyModal = ({ visible, setIsVisible, leaveSurveHandler }: Props) => {
 
     const closeDialog = () => setIsVisible(false);
 
@@ -44,3 +44,5 @@ export const LeaveSurveyModal = ({ visible, setIsVisible, leaveSurveHandler }: P
         </View>
     </Modal>);
 }
+
+export default LeaveSurveyModal;

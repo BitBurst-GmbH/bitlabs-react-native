@@ -3,7 +3,7 @@ import * as React from 'react';
 import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { BitLabsOfferWall } from '../../src/components/offerwall';
+import BitLabsOfferWall from '../../src/components/offerwall';
 import Survey from '../../src/components/survey';
 
 const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
