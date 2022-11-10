@@ -4,9 +4,10 @@ import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navig
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { BitLabsOfferWall } from '../../src/components/offerwall';
+import Survey from '../../src/components/survey';
 
 const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  BitLabs.init('46d31e1e-315a-4b52-b0de-eca6062163a', 'USER_ID1');
+  BitLabs.init('46d31e1e-315a-4b52-b0de-eca6062163af', 'USER_ID1');
 
   return (
     <View style={styles.container}>
@@ -26,6 +27,7 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
         style={styles.box}>
         <Text>Open Offerwall</Text>
       </TouchableOpacity>
+      <Survey />
     </View >
   );
 }
