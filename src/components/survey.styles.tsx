@@ -6,13 +6,14 @@ const genericView = {
     borderRadius: 10,
 }
 
-const styles = StyleSheet.create({
+const styles = (margin: number, color: string) => StyleSheet.create({
     container: {
         width: 300,
         height: 80,
+        margin: margin,
         borderRadius: 10,
         flexDirection: 'row',
-        backgroundColor: '#fcd',
+        backgroundColor: color,
         justifyContent: 'space-between',
     },
     leftView: {
@@ -40,18 +41,18 @@ const styles = StyleSheet.create({
         flex: 0.9,
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: 'white',
+        backgroundColor: '#fff',
         justifyContent: 'space-around',
     },
     playImage: {
         width: 42,
         height: 42,
-        tintColor: '#fcd',
+        tintColor: color,
         resizeMode: 'contain',
     },
     earnText: {
+        color: color,
         fontSize: 16,
-        color: '#fcd',
         fontWeight: '500',
     },
 });
