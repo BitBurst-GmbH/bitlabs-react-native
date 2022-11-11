@@ -5,11 +5,12 @@ import RatingBar from './rating-bar'
 import Images from '../assets/images'
 
 type Props = {
+    value: string,
     color?: string,
     margin?: number,
 }
 
-const Survey = ({ margin, color }: Props) => {
+const Survey = ({ value, margin, color }: Props) => {
     const styles = SurveyStyles(margin ?? 0, color ?? '#daf');
 
     return (
@@ -27,7 +28,7 @@ const Survey = ({ margin, color }: Props) => {
                 <Image
                     style={styles.playImage}
                     source={Images.circlePlayLight} />
-                <Text style={styles.earnText}>EARN{'\n'}0.005</Text>
+                <Text style={styles.earnText}>EARN{'\n'}{value}</Text>
             </View>
         </View>
     )

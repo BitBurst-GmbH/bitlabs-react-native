@@ -27,7 +27,9 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
         style={styles.box}>
         <Text>Open Offerwall</Text>
       </TouchableOpacity>
-      <SurveyList />
+      <SurveyList
+        uid='USER_ID'
+        token='46d31e1e-315a-4b52-b0de-eca6062163af' />
     </View >
   );
 }

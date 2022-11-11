@@ -17,8 +17,8 @@ const checkSurveys = async (onResponse: (hasSurveys: boolean) => void, onFailure
     onResponse(body.data.has_surveys);
 }
 
-const getSurveys = async (onResponse: (surveys: Survey[]) => void, onFailure: (error: Error) => void) => {
-    const response = await BitLabsApi.getActions();
+export const getSurveys = async (token: string, uid: string, onResponse: (surveys: Survey[]) => void, onFailure: (error: Error) => void) => {
+    const response = await BitLabsApi.getActions(token, uid);
     const body = await (response.json() as Promise<BitLabsResponse<GetActionsResponse>>);
 
     if (body.error) {

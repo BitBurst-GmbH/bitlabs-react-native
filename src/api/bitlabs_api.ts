@@ -7,8 +7,8 @@ const init = (token: string, uid: string) => headers = { 'X-Api-Token': token, '
 
 const checkSurveys = () => fetch(new Request(url('check'), { headers: headers }));
 
-const getActions = () =>
-    fetch(new Request(url('actions', { 'os': Platform.OS }), { headers: headers }));
+const getActions = (token: string, uid: string) =>
+    fetch(new Request(url('actions', { 'os': Platform.OS }), { headers: { 'X-Api-Token': token, 'X-User-Id': uid } }));
 
 export const leaveSurveysApi = (token: string, uid: string, networkId: string, surveyId: string, reason: string) =>
     fetch(new Request(url(`networks/${networkId}/surveys/${surveyId}/leave`),

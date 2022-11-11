@@ -1,19 +1,28 @@
 import { FlatList, StyleProp, ViewStyle } from 'react-native'
-import React from 'react'
-import { getRandomSurveys } from '../utils/helpers'
-import Survey from './survey';
+import React, { useEffect, useState } from 'react'
+import SurveyComponent from './survey';
+import type { Survey } from '../api/bitlabs_repository.types';
+import { getSurveys } from '../api/bitlabs_repository';
 
+type Props = {
+  uid: string,
+  token: string,
+  style?: StyleProp<ViewStyle>,
+}
 
+const SurveyList = ({ uid, token, style }: Props) => {
+  const [surveys, setSurveys] = useState<Survey[]>([])
 
-const SurveyList = ({ style }: { style?: StyleProp<ViewStyle> }) => {
-  const surveys = getRandomSurveys();
+  useEffect(() => {
+    getSurveys(token, uid, (surveyList) => setSurveys(surveyList), (error) => console.error(`[BitLabs] ${error}`));
+  }, []);
 
   return (
     <FlatList
       data={surveys}
       horizontal={true}
       showsHorizontalScrollIndicator={false}
-      renderItem={({ }) => <Survey margin={4} />}
+      renderItem={({ item }) => <SurveyComponent margin={4} value={item.value} />}
       style={[style, { flexGrow: 0, marginVertical: 12 }]}
     />
   )

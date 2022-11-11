@@ -1,21 +1,6 @@
 import BitLabsRepository from "./api/bitlabs_repository";
 import type { Survey } from "./api/bitlabs_repository.types";
 
-// const LINKING_ERROR =
-//   `The package 'bitlabs' doesn't seem to be linked. Make sure: \n\n` +
-//   Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
-//   '- You rebuilt the app after installing the package\n' +
-//   '- You are not using Expo managed workflow\n';
-
-// const Bitlabs = NativeModules.Bitlabs ? NativeModules.Bitlabs : new Proxy(
-//   {},
-//   {
-//     get() {
-//       throw new Error(LINKING_ERROR);
-//     },
-//   }
-// );
-
 let _uid = '';
 let _token = '';
 let _tags = new Map<string, any>();
@@ -40,7 +25,7 @@ const checkSurveys = (onResponse: (hasSurveys: boolean) => void, onFailure: (err
     ifInitialised(() => BitLabsRepository.checkSurveys(onResponse, onFailure));
 
 const getSurveys = (onResponse: (surveys: Survey[]) => void, onFailure: (error: Error) => void) => ifInitialised(() =>
-    BitLabsRepository.getSurveys(onResponse, onFailure));
+    BitLabsRepository.getSurveys(_token, _uid, onResponse, onFailure));
 
 const ifInitialised = (block: () => void) => {
     if (_token === '' && _uid === '') {
