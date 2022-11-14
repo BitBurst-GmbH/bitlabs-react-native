@@ -7,10 +7,11 @@ import { getSurveys } from '../api/bitlabs_repository';
 type Props = {
   uid: string,
   token: string,
+  onPress: () => void,
   style?: StyleProp<ViewStyle>,
 }
 
-const SurveyList = ({ uid, token, style }: Props) => {
+const SurveyList = ({ uid, token, style, onPress }: Props) => {
   const [surveys, setSurveys] = useState<Survey[]>([])
 
   useEffect(() => {
@@ -22,7 +23,7 @@ const SurveyList = ({ uid, token, style }: Props) => {
       data={surveys}
       horizontal={true}
       showsHorizontalScrollIndicator={false}
-      renderItem={({ item }) => <SurveyComponent margin={4} value={item.value} />}
+      renderItem={({ item }) => <SurveyComponent onPress={onPress} margin={4} value={item.value} />}
       style={[style, { flexGrow: 0, marginVertical: 12 }]}
     />
   )

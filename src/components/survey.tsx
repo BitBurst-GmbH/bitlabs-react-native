@@ -1,4 +1,4 @@
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React, { } from 'react'
 import SurveyStyles from './survey.styles'
 import RatingBar from './rating-bar'
@@ -8,13 +8,16 @@ type Props = {
     value: string,
     color?: string,
     margin?: number,
+    onPress: () => void,
 }
 
-const Survey = ({ value, margin, color }: Props) => {
+const Survey = ({ value, margin, color, onPress }: Props) => {
     const styles = SurveyStyles(margin ?? 0, color ?? '#daf');
 
     return (
-        <View style={styles.container}>
+        <TouchableOpacity
+            style={styles.container}
+            onPress={onPress}>
             <View style={styles.leftView}>
                 <View style={styles.durationView}>
                     <Image
@@ -30,7 +33,7 @@ const Survey = ({ value, margin, color }: Props) => {
                     source={Images.circlePlayLight} />
                 <Text style={styles.earnText}>EARN{'\n'}{value}</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 

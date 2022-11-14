@@ -12,24 +12,25 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        onPress={(_) => BitLabs.checkSurveys((hasSurveys) => console.log(`[Example] Has Surveys: ${hasSurveys}`), (error) => console.log(error.message))}
-        style={styles.box}>
+        style={styles.box}
+        onPress={() => BitLabs.checkSurveys((hasSurveys) => console.log(`[Example] Has Surveys: ${hasSurveys}`), (error) => console.log(error.message))}>
         <Text>Check Surveys</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={(_) => BitLabs.getSurveys((surveys) => console.log(`[Example] Getting surveys -> ${surveys.map((survey) =>
-          `Survey ${survey.id} in ${survey.details.category.name}`)}`), (error) => console.log(error.message))}
-        style={styles.box}>
+        style={styles.box}
+        onPress={() => BitLabs.getSurveys((surveys) => console.log(`[Example] Getting surveys -> ${surveys.map((survey) =>
+          `Survey ${survey.id} in ${survey.details.category.name}`)}`), (error) => console.log(error.message))}>
         <Text>Get Surveys</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={(_) => navigation.navigate('Offerwall')}
-        style={styles.box}>
+        style={styles.box}
+        onPress={() => navigation.navigate('Offerwall')}>
         <Text>Open Offerwall</Text>
       </TouchableOpacity>
       <SurveyList
         uid='USER_ID'
-        token='46d31e1e-315a-4b52-b0de-eca6062163af' />
+        token='46d31e1e-315a-4b52-b0de-eca6062163af'
+        onPress={() => navigation.navigate('Offerwall')} />
     </View >
   );
 }
