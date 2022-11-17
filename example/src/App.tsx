@@ -4,7 +4,7 @@ import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navig
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import BitLabsOfferWall from '../../src/components/offerwall';
-import SurveyList from '../../src/components/survey.list';
+import SurveyList from '../../src/components/survey-list';
 
 const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
   BitLabs.init('46d31e1e-315a-4b52-b0de-eca6062163af', 'USER_ID');

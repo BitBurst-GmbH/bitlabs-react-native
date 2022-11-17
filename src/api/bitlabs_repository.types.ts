@@ -26,6 +26,21 @@ export type GetOffersResponse = {
     offers: { id: number, }[],
 }
 
+export type GetAppSettingsResponse = {
+    visual: {
+        background_color: string,
+        color_rating_threshold: number,
+        custom_logo_url: string,
+        element_border_radius: string,
+        hide_reward_value: boolean,
+        interaction_color: string,
+        navigation_color: string,
+        offerwall_width: string,
+        screenout_reward: string,
+        survey_icon_color: string,
+    }
+}
+
 export type Survey = {
     network_id: number,
     id: number,

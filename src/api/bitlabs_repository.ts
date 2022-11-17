@@ -1,6 +1,6 @@
 import { getRandomSurveys } from "../utils/helpers";
-import BitLabsApi, { getOffersApi, leaveSurveysApi } from "./bitlabs_api";
-import type { BitLabsResponse, CheckSurveyResponse, GetActionsResponse, GetOffersResponse, Survey } from "./bitlabs_repository.types";
+import BitLabsApi, { getAppSettingsApi, getOffersApi, leaveSurveysApi } from "./bitlabs_api";
+import type { BitLabsResponse, CheckSurveyResponse, GetActionsResponse, GetAppSettingsResponse, GetOffersResponse, Survey } from "./bitlabs_repository.types";
 
 
 const init = (token: string, uid: string) => BitLabsApi.init(token, uid);
@@ -51,6 +51,18 @@ export const getHasOffers = async (token: string, uid: string) => {
     }
 
     return body.data.offers.length > 0;
+}
+
+export const getColor = async (token: string, uid: string, onResponse: (color: string) => void) => {
+    const response = await getAppSettingsApi(token, uid);
+    const body = await (response.json() as Promise<BitLabsResponse<GetAppSettingsResponse>>);
+
+    if (body.error) {
+        console.error(`${body.error.details.http} - ${body.error.details.msg}`);
+        return;
+    }
+
+    onResponse(body.data.visual.survey_icon_color);
 }
 
 export default {

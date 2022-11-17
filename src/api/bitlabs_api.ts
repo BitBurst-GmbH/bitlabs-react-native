@@ -24,10 +24,11 @@ export const leaveSurveysApi = (token: string, uid: string, networkId: string, s
         }));
 
 export const getOffersApi = (token: string, uid: string) => fetch(new Request(url('offers'), {
-    headers: {
-        'X-User-Id': uid,
-        'X-Api-Token': token,
-    }
+    headers: { 'X-User-Id': uid, 'X-Api-Token': token }
+}));
+
+export const getAppSettingsApi = (token: string, uid: string) => fetch(new Request(url('settings/v2'), {
+    headers: { 'X-Api-Token': token, 'X-User-Id': uid }
 }));
 
 export default {
@@ -35,6 +36,3 @@ export default {
     getActions: getActions,
     checkSurveys: checkSurveys,
 }
-
-// Future<Response> getAppSettings() =>
-//     get(url('settings/v2'), headers: _headers);
