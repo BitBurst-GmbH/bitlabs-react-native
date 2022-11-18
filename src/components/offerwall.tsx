@@ -5,32 +5,30 @@ import type { ShouldStartLoadRequest, WebViewNavigationEvent } from 'react-nativ
 import { getHasOffers, leaveSurveys } from '../api/bitlabs_repository';
 import LeaveSurveyModal from './leave-survey-modal';
 import styles from './offerwall.styles';
-import ReactNativeIdfaAaid, { AdvertisingInfoResponse } from '@sparkfabrik/react-native-idfa-aaid';
 import Images from '../assets/images';
 
 type Props = {
     uid: string,
+    adId: string,
     token: string,
     onExitPressed: () => void,
     tags?: { [key: string]: string },
     onReward: (reward: number) => void,
 }
 
-const BitLabsOfferWall = ({ token, uid, onExitPressed, onReward, tags }: Props) => {
+const BitLabsOfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) => {
+    let backHandler: NativeEventSubscription;
+
     let reward = useRef(0.0);
     let surveyId = useRef('');
     let networkId = useRef('');
-    const queries = Object.entries(tags ?? {})
-        .map(([key, value]) => `${key}=${value}`)
-        .join('&');
+    const queries = Object.entries(tags ?? {}).map(([key, value]) => `&${key}=${value}`);
 
     const [key, setKey] = useState(0);
     const [hasOffers, setHasOffers] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isPageOfferwall, setIsPageOfferwall] = useState(true);
-    const [url, setUrl] = useState(`https://web.bitlabs.ai?token=${token}&uid=${uid}&${queries}`);
-
-    let backHandler: NativeEventSubscription;
+    const [url, setUrl] = useState(`https://web.bitlabs.ai?token=${token}&uid=${uid}${queries}`);
 
     // Hook to open in external browser if on ios and has Offers
     useEffect(() => {
@@ -52,12 +50,12 @@ const BitLabsOfferWall = ({ token, uid, onExitPressed, onReward, tags }: Props) 
         return () => backHandler.remove();
     }, [isPageOfferwall]);
 
+    // Hook to add adId if one is given
+    useEffect(() => { if (adId) setUrl(url + `&maid=${adId}`); }, [adId]);
+
     // Mount/Unmount hook
     useEffect(() => {
         getHasOffers(token, uid).then((hasOffers) => setHasOffers(hasOffers));
-
-        ReactNativeIdfaAaid.getAdvertisingInfo().then((res: AdvertisingInfoResponse) =>
-            !res.isAdTrackingLimited && setUrl(url + `&maid=${res.id!}`));
 
         return () => {
             backHandler.remove();

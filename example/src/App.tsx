@@ -1,6 +1,7 @@
 import BitLabs from 'bitlabs';
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack';
+import ReactNativeIdfaAaid, { AdvertisingInfoResponse } from '@sparkfabrik/react-native-idfa-aaid';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import BitLabsOfferWall from '../../src/components/offerwall';
@@ -8,6 +9,8 @@ import SurveyList from '../../src/components/survey-list';
 
 const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
   BitLabs.init('46d31e1e-315a-4b52-b0de-eca6062163af', 'USER_ID');
+
+
 
   return (
     <View style={styles.container}>
@@ -35,13 +38,22 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
   );
 }
 
-const OfferWall = ({ navigation }: NativeStackScreenProps<any, any>) => (
-  <BitLabsOfferWall
-    uid='USER_ID'
-    token='46d31e1e-315a-4b52-b0de-eca6062163af'
-    onExitPressed={navigation.goBack}
-    onReward={reward => console.log(`Reward this time: ${reward}`)}
-  />);
+const OfferWall = ({ navigation }: NativeStackScreenProps<any, any>) => {
+  const [adId, setAdId] = React.useState('');
+
+  useEffect(() => {
+    ReactNativeIdfaAaid.getAdvertisingInfo().then(
+      (res: AdvertisingInfoResponse) => { if (!res.isAdTrackingLimited) setAdId(res.id!); });
+  }, []);
+
+  return (
+    <BitLabsOfferWall
+      uid='USER_ID'
+      token='46d31e1e-315a-4b52-b0de-eca6062163af'
+      onExitPressed={navigation.goBack}
+      onReward={reward => console.log(`Reward this time: ${reward}`)}
+      adId={adId} />);
+}
 
 const Stack = createNativeStackNavigator();
 
