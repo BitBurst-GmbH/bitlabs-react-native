@@ -1,12 +1,9 @@
 import { getRandomSurveys } from "../utils/helpers";
-import BitLabsApi, { getAppSettingsApi, getOffersApi, leaveSurveysApi } from "./bitlabs_api";
+import { checkSurveysApi, getActionsApi, getAppSettingsApi, getOffersApi, leaveSurveysApi } from "./bitlabs_api";
 import type { BitLabsResponse, CheckSurveyResponse, GetActionsResponse, GetAppSettingsResponse, GetOffersResponse, Survey } from "./bitlabs_repository.types";
 
-
-const init = (token: string, uid: string) => BitLabsApi.init(token, uid);
-
-const checkSurveys = async (onResponse: (hasSurveys: boolean) => void, onFailure: (error: Error) => void) => {
-    const response = await BitLabsApi.checkSurveys();
+export const checkSurveysRepo = async (token: string, uid: string, onResponse: (hasSurveys: boolean) => void, onFailure: (error: Error) => void) => {
+    const response = await checkSurveysApi(token, uid);
     const body = await (response.json() as Promise<BitLabsResponse<CheckSurveyResponse>>);
 
     if (body.error) {
@@ -17,8 +14,8 @@ const checkSurveys = async (onResponse: (hasSurveys: boolean) => void, onFailure
     onResponse(body.data.has_surveys);
 }
 
-export const getSurveys = async (token: string, uid: string, onResponse: (surveys: Survey[]) => void, onFailure: (error: Error) => void) => {
-    const response = await BitLabsApi.getActions(token, uid);
+export const getSurveysRepo = async (token: string, uid: string, onResponse: (surveys: Survey[]) => void, onFailure: (error: Error) => void) => {
+    const response = await getActionsApi(token, uid);
     const body = await (response.json() as Promise<BitLabsResponse<GetActionsResponse>>);
 
     if (body.error) {
@@ -29,7 +26,7 @@ export const getSurveys = async (token: string, uid: string, onResponse: (survey
     onResponse(body.data.surveys.length > 0 ? body.data.surveys : getRandomSurveys());
 }
 
-export const leaveSurveys = async (token: string, uid: string, networkId: string, surveyId: string, reason: string) => {
+export const leaveSurveysRepo = async (token: string, uid: string, networkId: string, surveyId: string, reason: string) => {
     const response = await leaveSurveysApi(token, uid, networkId, surveyId, reason);
     const body = await (response.json() as Promise<BitLabsResponse<void>>);
 
@@ -41,7 +38,7 @@ export const leaveSurveys = async (token: string, uid: string, networkId: string
     console.log('[BitLabs] LeaveSurvey Successful');
 }
 
-export const getHasOffers = async (token: string, uid: string) => {
+export const getHasOffersRepo = async (token: string, uid: string) => {
     const response = await getOffersApi(token, uid);
     const body = await (response.json() as Promise<BitLabsResponse<GetOffersResponse>>);
 
@@ -53,7 +50,7 @@ export const getHasOffers = async (token: string, uid: string) => {
     return body.data.offers.length > 0;
 }
 
-export const getColor = async (token: string, uid: string, onResponse: (color: string) => void) => {
+export const getColorRepo = async (token: string, uid: string, onResponse: (color: string) => void) => {
     const response = await getAppSettingsApi(token, uid);
     const body = await (response.json() as Promise<BitLabsResponse<GetAppSettingsResponse>>);
 
@@ -63,10 +60,4 @@ export const getColor = async (token: string, uid: string, onResponse: (color: s
     }
 
     onResponse(body.data.visual.survey_icon_color);
-}
-
-export default {
-    init: init,
-    getSurveys: getSurveys,
-    checkSurveys: checkSurveys,
 }

@@ -1,4 +1,3 @@
-import BitLabs from 'bitlabs';
 import React, { useEffect } from 'react';
 import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack';
 import ReactNativeIdfaAaid, { AdvertisingInfoResponse } from '@sparkfabrik/react-native-idfa-aaid';
@@ -6,9 +5,11 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import BitLabsOfferWall from '../../src/components/offerwall';
 import SurveyList from '../../src/components/survey-list';
+import { checkSurveys, getSurveys } from '../../src';
 
 const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  BitLabs.init('46d31e1e-315a-4b52-b0de-eca6062163af', 'USER_ID');
+  const token = '46d31e1e-315a-4b52-b0de-eca6062163af';
+  const uid = 'USER_ID';
 
 
 
@@ -16,12 +17,12 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.box}
-        onPress={() => BitLabs.checkSurveys((hasSurveys) => console.log(`[Example] Has Surveys: ${hasSurveys}`), (error) => console.log(error.message))}>
+        onPress={() => checkSurveys(token, uid, (hasSurveys) => console.log(`[Example] Has Surveys: ${hasSurveys}`), (error) => console.log(error.message))}>
         <Text>Check Surveys</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.box}
-        onPress={() => BitLabs.getSurveys((surveys) => console.log(`[Example] Getting surveys -> ${surveys.map((survey) =>
+        onPress={() => getSurveys(token, uid, (surveys) => console.log(`[Example] Getting surveys -> ${surveys.map((survey) =>
           `Survey ${survey.id} in ${survey.details.category.name}`)}`), (error) => console.log(error.message))}>
         <Text>Get Surveys</Text>
       </TouchableOpacity>
@@ -31,8 +32,8 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
         <Text>Open Offerwall</Text>
       </TouchableOpacity>
       <SurveyList
-        uid='USER_ID'
-        token='46d31e1e-315a-4b52-b0de-eca6062163af'
+        uid={uid}
+        token={token}
         onPress={() => navigation.navigate('Offerwall')} />
     </View >
   );

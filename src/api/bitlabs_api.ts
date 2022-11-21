@@ -1,13 +1,10 @@
 import { Platform } from "react-native";
 import { url } from "../utils/helpers";
 
-let headers: { [key: string]: string };
+export const checkSurveysApi = (token: string, uid: string) =>
+    fetch(new Request(url('check'), { headers: { 'X-Api-Token': token, 'X-User-Id': uid } }));
 
-const init = (token: string, uid: string) => headers = { 'X-Api-Token': token, 'X-User-Id': uid };
-
-const checkSurveys = () => fetch(new Request(url('check'), { headers: headers }));
-
-const getActions = (token: string, uid: string) =>
+export const getActionsApi = (token: string, uid: string) =>
     fetch(new Request(url('actions', { 'os': Platform.OS }), { headers: { 'X-Api-Token': token, 'X-User-Id': uid } }));
 
 export const leaveSurveysApi = (token: string, uid: string, networkId: string, surveyId: string, reason: string) =>
@@ -30,9 +27,3 @@ export const getOffersApi = (token: string, uid: string) => fetch(new Request(ur
 export const getAppSettingsApi = (token: string, uid: string) => fetch(new Request(url('settings/v2'), {
     headers: { 'X-Api-Token': token, 'X-User-Id': uid }
 }));
-
-export default {
-    init: init,
-    getActions: getActions,
-    checkSurveys: checkSurveys,
-}

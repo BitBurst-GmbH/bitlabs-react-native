@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { BackHandler, Image, Linking, NativeEventSubscription, Platform, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import WebView from 'react-native-webview';
 import type { ShouldStartLoadRequest, WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
-import { getHasOffers, leaveSurveys } from '../api/bitlabs_repository';
+import { getHasOffersRepo, leaveSurveysRepo } from '../api/bitlabs_repository';
 import LeaveSurveyModal from './leave-survey-modal';
 import styles from './offerwall.styles';
 import Images from '../assets/images';
@@ -55,7 +55,7 @@ const BitLabsOfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: P
 
     // Mount/Unmount hook
     useEffect(() => {
-        getHasOffers(token, uid).then((hasOffers) => setHasOffers(hasOffers));
+        getHasOffersRepo(token, uid).then((hasOffers) => setHasOffers(hasOffers));
 
         return () => {
             backHandler.remove();
@@ -67,7 +67,7 @@ const BitLabsOfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: P
         setKey((key + 1) % 2);
         if (networkId.current.length > 0 && surveyId.current.length > 0) {
             console.log(`Leaving with reason ~> ${reason}`);
-            leaveSurveys(token, uid, networkId.current, surveyId.current, reason);
+            leaveSurveysRepo(token, uid, networkId.current, surveyId.current, reason);
             networkId.current = '';
             surveyId.current = '';
         }
