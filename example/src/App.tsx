@@ -3,9 +3,7 @@ import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navig
 import ReactNativeIdfaAaid, { AdvertisingInfoResponse } from '@sparkfabrik/react-native-idfa-aaid';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import BitLabsOfferWall from '../../src/components/offerwall';
-import SurveyList from '../../src/components/survey-list';
-import { checkSurveys, getSurveys } from '../../src';
+import { BitLabsOfferWall, BitLabsSurveys, checkSurveys, getSurveys } from '../../src';
 
 const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const token = '46d31e1e-315a-4b52-b0de-eca6062163af';
@@ -31,7 +29,7 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
         onPress={() => navigation.navigate('Offerwall')}>
         <Text>Open Offerwall</Text>
       </TouchableOpacity>
-      <SurveyList
+      <BitLabsSurveys
         uid={uid}
         token={token}
         onPress={() => navigation.navigate('Offerwall')} />

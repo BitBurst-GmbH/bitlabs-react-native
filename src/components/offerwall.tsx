@@ -16,7 +16,7 @@ type Props = {
     onReward: (reward: number) => void,
 }
 
-const BitLabsOfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) => {
+const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) => {
     let backHandler: NativeEventSubscription;
 
     let reward = useRef(0.0);
@@ -150,4 +150,4 @@ const extractNetworkIdAndSurveyId = (url: string) => {
     return [networkId, surveyId];
 }
 
-export default BitLabsOfferWall;
+export default OfferWall;
