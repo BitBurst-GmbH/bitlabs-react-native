@@ -9,8 +9,6 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const token = '46d31e1e-315a-4b52-b0de-eca6062163af';
   const uid = 'USER_ID';
 
-
-
   return (
     <View style={styles.container}>
       <TouchableOpacity

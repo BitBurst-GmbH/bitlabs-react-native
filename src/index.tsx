@@ -11,4 +11,4 @@ export const getSurveys = (token: string, uid: string, onResponse: (surveys: Sur
 
 export const BitLabsOfferWall = OfferWall;
 
-export const BitLabsSurveys = SurveyList
+export const BitLabsSurveys = SurveyList;
