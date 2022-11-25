@@ -12,7 +12,7 @@ type Props = {
 }
 
 const Survey = ({ value, margin, color, onPress }: Props) => {
-    const styles = SurveyStyles(margin ?? 0, color ?? '#daf');
+    const styles = SurveyStyles(margin ?? 0, color ?? '#007bff');
 
     return (
         <TouchableOpacity

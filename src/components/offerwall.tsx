@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { BackHandler, Image, Linking, NativeEventSubscription, Platform, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import WebView from 'react-native-webview';
 import type { ShouldStartLoadRequest, WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
-import { getHasOffersRepo, leaveSurveysRepo } from '../api/bitlabs_repository';
+import { getColorRepo, getHasOffersRepo, leaveSurveysRepo } from '../api/bitlabs_repository';
 import LeaveSurveyModal from './leave-survey-modal';
-import styles from './offerwall.styles';
+import OfferWallStyles from './offerwall.styles';
 import Images from '../assets/images';
 
 type Props = {
@@ -25,10 +25,12 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
     const queries = Object.entries(tags ?? {}).map(([key, value]) => `&${key}=${value}`);
 
     const [key, setKey] = useState(0);
+    const [styles, setStyles] = useState(OfferWallStyles('#007bff'));
     const [hasOffers, setHasOffers] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isPageOfferwall, setIsPageOfferwall] = useState(true);
     const [url, setUrl] = useState(`https://web.bitlabs.ai?token=${token}&uid=${uid}${queries}`);
+
 
     // Hook to open in external browser if on ios and has Offers
     useEffect(() => {
@@ -56,6 +58,7 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
     // Mount/Unmount hook
     useEffect(() => {
         getHasOffersRepo(token, uid).then((hasOffers) => setHasOffers(hasOffers));
+        getColorRepo(token, uid, color => setStyles(OfferWallStyles(color)));
 
         return () => {
             backHandler.remove();

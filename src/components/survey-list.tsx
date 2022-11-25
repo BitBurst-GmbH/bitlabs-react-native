@@ -13,7 +13,7 @@ type Props = {
 
 const SurveyList = ({ uid, token, style, onPress }: Props) => {
   const [surveys, setSurveys] = useState<Survey[]>([])
-  const [color, setColor] = useState('#daf');
+  const [color, setColor] = useState('#007bff');
 
   useEffect(() => {
     getSurveysRepo(token, uid, (surveyList) => setSurveys(surveyList), (error) => console.error(`[BitLabs] ${error}`));
