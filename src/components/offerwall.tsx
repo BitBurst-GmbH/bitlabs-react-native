@@ -12,7 +12,7 @@ type Props = {
     adId: string,
     token: string,
     onExitPressed: () => void,
-    tags?: { [key: string]: string },
+    tags?: { [key: string]: string | boolean },
     onReward: (reward: number) => void,
 }
 

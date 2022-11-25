@@ -30,7 +30,7 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
       <BitLabsSurveys
         uid={uid}
         token={token}
-        onPress={() => navigation.navigate('Offerwall')} />
+        onSurveyPressed={() => navigation.navigate('Offerwall')} />
     </View >
   );
 }
