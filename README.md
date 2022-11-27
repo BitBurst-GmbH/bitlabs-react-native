@@ -1,28 +1,29 @@
 # bitlabs
 BitLabs offers the opportunity to monetize your app with rewarded surveys easily.
+
 ## Installation
 
 ```sh
 npm install bitlabs
 ```
 
+OR
+
+```sh
+yarn add bitlabs
+```
+
 ## Usage
 
-```js
-import { multiply } from "bitlabs";
-
-// ...
-
-const result = await multiply(3, 7);
-```
+Check Refer to the full guide: [React Native SDK](https://developer.bitlabs.ai/docs/react-native-sdk#list-of-survey-widgets)
 
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
 
-## License
+## Author
 
-MIT
+BitBurst GmbH, [bitlabs@bitburst.net](bitlabs@bitburst.net)
 
 ---
 
