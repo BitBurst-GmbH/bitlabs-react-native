@@ -1,6 +1,6 @@
 {
   "name": "bitlabs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "BitLabs offers the opportunity to monetize your app with rewarded surveys easily.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
