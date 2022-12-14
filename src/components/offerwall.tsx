@@ -119,7 +119,7 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
                     onShouldStartLoadWithRequest={onShouldStartLoadingWithRequest} />
                 {isPageOfferwall && (
                     <TouchableOpacity onPress={onExitPressed} style={styles.xmarkTouchable}>
-                        <Image source={Images.circleXMarkRegular} style={styles.image} />
+                        <Image source={Images.signOutRegular} style={styles.image} />
                     </TouchableOpacity>
                 )}
             </View>
