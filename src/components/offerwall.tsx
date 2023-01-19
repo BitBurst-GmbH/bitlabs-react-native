@@ -97,6 +97,13 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
         return true;
     }
 
+    const disableZoom = `
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+    `;
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'stretch' }}>
@@ -113,8 +120,10 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
                 )}
                 <WebView
                     key={key}
+                    scalesPageToFit={false}
                     javaScriptEnabled={true}
                     onLoadStart={onLoadProgress}
+                    injectedJavaScript={disableZoom}
                     source={{ uri: url }} style={styles.webview}
                     onShouldStartLoadWithRequest={onShouldStartLoadingWithRequest} />
                 {isPageOfferwall && (

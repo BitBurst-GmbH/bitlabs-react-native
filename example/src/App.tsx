@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { BitLabsOfferWall, BitLabsSurveys, checkSurveys, getSurveys } from '../../src';
 
 const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  const token = 'YOUR_APP_TOKEN';
+  const token = '46d31e1e-315a-4b52-b0de-eca6062163af';
   const uid = 'USER_ID';
 
   return (
