@@ -6,6 +6,8 @@ const styles = (color: string) => StyleSheet.create({
         height: 50,
         alignItems: 'center',
         flexDirection: 'row',
+        borderColor: '#000000',
+        borderBottomWidth: 0.5,
         backgroundColor: color,
     },
     chevronTouchable: {

@@ -39,3 +39,14 @@ export const getRandomSurveys = () => {
 
     return surveys;
 }
+
+export const hexToLuminance = (hex: string) => {
+    // Convert hex to RGB
+    let r = parseInt(hex.substring(1, 3), 16) / 255;
+    let g = parseInt(hex.substring(3, 5), 16) / 255;
+    let b = parseInt(hex.substring(5, 7), 16) / 255;
+
+    let luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+    return luminance;
+}
