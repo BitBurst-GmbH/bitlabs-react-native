@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { BackHandler, Image, Linking, NativeEventSubscription, Platform, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { Appearance, BackHandler, Image, Linking, NativeEventSubscription, Platform, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import WebView from 'react-native-webview';
 import type { ShouldStartLoadRequest, WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
 import { getColorRepo, getHasOffersRepo, leaveSurveysRepo } from '../api/bitlabs_repository';
 import LeaveSurveyModal from './leave-survey-modal';
 import OfferWallStyles from './offerwall.styles';
 import Images from '../assets/images';
+import { hexToLuminance } from '../utils/helpers';
 
 type Props = {
     uid: string,
@@ -29,6 +30,7 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
     const [hasOffers, setHasOffers] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isPageOfferwall, setIsPageOfferwall] = useState(true);
+    const [isLuminanceThresholdExceeded, setIsLuminanceThresholdExceeded] = useState(false);
     const [url, setUrl] = useState(`https://web.bitlabs.ai?token=${token}&uid=${uid}${queries}`);
 
 
@@ -58,7 +60,10 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
     // Mount/Unmount hook
     useEffect(() => {
         getHasOffersRepo(token, uid).then((hasOffers) => setHasOffers(hasOffers));
-        getColorRepo(token, uid, color => setStyles(OfferWallStyles(color)));
+        getColorRepo(token, uid, (surveyIconColor, navigationColor) => {
+            setStyles(OfferWallStyles(navigationColor));
+            setIsLuminanceThresholdExceeded(hexToLuminance(navigationColor) > 0.729);
+        });
 
         return () => {
             backHandler.remove();
@@ -97,6 +102,13 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
         return true;
     }
 
+    const disableZoom = `
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+    `;
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'stretch' }}>
@@ -107,24 +119,40 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
                 {!isPageOfferwall && (
                     <View style={styles.headerView}>
                         <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.chevronTouchable}>
-                            <Image source={Images.circleChevronLeftRegular} style={styles.image} />
+                            <Image source={getChevronIcon(isLuminanceThresholdExceeded)} style={styles.image} />
                         </TouchableOpacity>
                     </View>
                 )}
                 <WebView
                     key={key}
+                    scalesPageToFit={false}
                     javaScriptEnabled={true}
                     onLoadStart={onLoadProgress}
+                    injectedJavaScript={disableZoom}
                     source={{ uri: url }} style={styles.webview}
                     onShouldStartLoadWithRequest={onShouldStartLoadingWithRequest} />
                 {isPageOfferwall && (
                     <TouchableOpacity onPress={onExitPressed} style={styles.xmarkTouchable}>
-                        <Image source={Images.signOutRegular} style={styles.image} />
+                        <Image source={getSignOutIcon(isLuminanceThresholdExceeded)} style={styles.image} />
                     </TouchableOpacity>
                 )}
             </View>
         </SafeAreaView>
     );
+}
+
+const getSignOutIcon = (isLuminanceThresholdExceeded: boolean) => {
+    if (Appearance.getColorScheme() === 'dark') return Images.signOutRegularWhite;
+
+    if (isLuminanceThresholdExceeded) return Images.signOutRegularBlack;
+
+    return Images.signOutRegularWhite;
+}
+
+const getChevronIcon = (isLuminanceThresholdExceeded: boolean) => {
+    if (isLuminanceThresholdExceeded) return Images.circleChevronLeftRegularBlack;
+
+    return Images.circleChevronLeftRegularWhite;
 }
 
 const extractValue = (url: string) => {
