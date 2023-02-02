@@ -38,6 +38,9 @@ export type GetAppSettingsResponse = {
         offerwall_width: string,
         screenout_reward: string,
         survey_icon_color: string,
+    },
+    offers: {
+        enabled: boolean,
     }
 }
 

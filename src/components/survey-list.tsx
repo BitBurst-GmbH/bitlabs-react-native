@@ -2,7 +2,7 @@ import { FlatList, StyleProp, ViewStyle } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import SurveyComponent from './survey';
 import type { Survey } from '../api/bitlabs_repository.types';
-import { getColorRepo, getSurveysRepo } from '../api/bitlabs_repository';
+import { getAppSettingsRepo, getSurveysRepo } from '../api/bitlabs_repository';
 
 type Props = {
   uid: string,
@@ -17,7 +17,7 @@ const SurveyList = ({ uid, token, style, onSurveyPressed }: Props) => {
 
   useEffect(() => {
     getSurveysRepo(token, uid, (surveyList) => setSurveys(surveyList), (error) => console.error(`[BitLabs] ${error}`));
-    getColorRepo(token, uid, (color) => setColor(color));
+    getAppSettingsRepo(token, uid, (color) => setColor(color));
   }, []);
 
   return (

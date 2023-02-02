@@ -50,7 +50,7 @@ export const getHasOffersRepo = async (token: string, uid: string) => {
     return body.data.offers.length > 0;
 }
 
-export const getColorRepo = async (token: string, uid: string, onResponse: (surveyIconColor: string, navigationColor: string) => void) => {
+export const getAppSettingsRepo = async (token: string, uid: string, onResponse: (surveyIconColor: string, navigationColor: string, isOffersEnable: boolean) => void) => {
     const response = await getAppSettingsApi(token, uid);
     const body = await (response.json() as Promise<BitLabsResponse<GetAppSettingsResponse>>);
 
@@ -59,5 +59,5 @@ export const getColorRepo = async (token: string, uid: string, onResponse: (surv
         return;
     }
 
-    onResponse(body.data.visual.survey_icon_color, body.data.visual.navigation_color);
+    onResponse(body.data.visual.survey_icon_color, body.data.visual.navigation_color, body.data.offers.enabled);
 }

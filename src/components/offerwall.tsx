@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Appearance, BackHandler, Image, Linking, NativeEventSubscription, Platform, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import WebView from 'react-native-webview';
 import type { ShouldStartLoadRequest, WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
-import { getColorRepo, getHasOffersRepo, leaveSurveysRepo } from '../api/bitlabs_repository';
+import { getAppSettingsRepo, getHasOffersRepo, leaveSurveysRepo } from '../api/bitlabs_repository';
 import LeaveSurveyModal from './leave-survey-modal';
 import OfferWallStyles from './offerwall.styles';
 import Images from '../assets/images';
@@ -28,6 +28,7 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
     const [key, setKey] = useState(0);
     const [styles, setStyles] = useState(OfferWallStyles('#007bff'));
     const [hasOffers, setHasOffers] = useState(false);
+    const [isOffersEnabled, setIsOffersEnabled] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isPageOfferwall, setIsPageOfferwall] = useState(true);
     const [isLuminanceThresholdExceeded, setIsLuminanceThresholdExceeded] = useState(false);
@@ -36,11 +37,11 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
 
     // Hook to open in external browser if on ios and has Offers
     useEffect(() => {
-        if (hasOffers && Platform.OS === 'ios') {
+        if (isOffersEnabled && hasOffers && Platform.OS === 'ios') {
             onExitPressed();
             Linking.openURL(url);
         }
-    }, [hasOffers]);
+    }, [isOffersEnabled, hasOffers]);
 
     // Hook to add event listener which accepts a state value
     useEffect(() => {
@@ -60,9 +61,10 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
     // Mount/Unmount hook
     useEffect(() => {
         getHasOffersRepo(token, uid).then((hasOffers) => setHasOffers(hasOffers));
-        getColorRepo(token, uid, (surveyIconColor, navigationColor) => {
+        getAppSettingsRepo(token, uid, (_, navigationColor, isOffersEnabled) => {
             setStyles(OfferWallStyles(navigationColor));
             setIsLuminanceThresholdExceeded(hexToLuminance(navigationColor) > 0.729);
+            setIsOffersEnabled(isOffersEnabled);
         });
 
         return () => {
