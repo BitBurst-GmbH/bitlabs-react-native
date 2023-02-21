@@ -1,8 +1,10 @@
 import { FlatList, StyleProp, ViewStyle } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import SurveyComponent from './simple-survey';
+import SimpleWidget from './simple-survey';
+import CompactWidget from './compact-survey';
 import type { Survey } from '../api/bitlabs_repository.types';
 import { getAppSettingsRepo, getSurveysRepo } from '../api/bitlabs_repository';
+import { WidgetType } from '../api/widget-type';
 
 type Props = {
   uid: string,
@@ -25,10 +27,21 @@ const SurveyList = ({ uid, token, style, onSurveyPressed }: Props) => {
       data={surveys}
       horizontal={true}
       showsHorizontalScrollIndicator={false}
-      renderItem={({ item }) => <SurveyComponent color={color} onPress={onSurveyPressed} margin={4} survey={item} />}
+      renderItem={({ item }) => getWidget(WidgetType.Simple, color, onSurveyPressed, item)}
       style={[style, { flexGrow: 0, marginVertical: 12 }]}
     />
   )
+}
+
+const getWidget = (type: WidgetType, color: string, onPress: () => void, survey: Survey) => {
+  switch (type) {
+    case WidgetType.Simple:
+      return (<SimpleWidget color={color} onPress={onPress} margin={4} survey={survey} />);
+
+    case WidgetType.Compact:
+    default:
+      return (<CompactWidget color={color} onPress={onPress} margin={4} survey={survey} />);
+  }
 }
 
 export default SurveyList;

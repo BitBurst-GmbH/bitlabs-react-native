@@ -4,7 +4,7 @@ import WebView from 'react-native-webview';
 import type { ShouldStartLoadRequest, WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
 import { getAppSettingsRepo, getHasOffersRepo, leaveSurveysRepo } from '../api/bitlabs_repository';
 import LeaveSurveyModal from './leave-survey-modal';
-import OfferWallStyles from './offerwall.styles';
+import OfferWallStyles from '../styles/offerwall.styles';
 import Images from '../assets/images';
 import { hexToLuminance } from '../utils/helpers';
 

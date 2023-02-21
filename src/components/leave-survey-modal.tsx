@@ -1,6 +1,6 @@
 import React from 'react'
 import { Alert, Modal, Text, TouchableOpacity, View } from 'react-native';
-import styles from './leave-survey-modal.styles';
+import styles from '../styles/leave-survey-modal.styles';
 
 type Props = {
     visible: boolean,

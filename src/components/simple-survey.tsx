@@ -1,7 +1,7 @@
 import React from 'react'
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import Images from '../assets/images'
-import SurveyStyles from '../components/simple-survey.styles'
+import SurveyStyles from '../styles/simple-survey.styles'
 import type { Survey } from '../api/bitlabs_repository.types';
 
 

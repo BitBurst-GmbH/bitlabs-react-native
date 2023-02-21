@@ -1,7 +1,7 @@
 import { View, Image } from 'react-native'
 import React from 'react'
 import Images from '../assets/images';
-import styles from './rating-bar.styles';
+import styles from '../styles/rating-bar.styles';
 
 type Props = { rating: number }
 
