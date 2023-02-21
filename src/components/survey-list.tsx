@@ -1,6 +1,6 @@
 import { FlatList, StyleProp, ViewStyle } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import SurveyComponent from './survey';
+import SurveyComponent from './simple-survey';
 import type { Survey } from '../api/bitlabs_repository.types';
 import { getAppSettingsRepo, getSurveysRepo } from '../api/bitlabs_repository';
 
@@ -25,7 +25,7 @@ const SurveyList = ({ uid, token, style, onSurveyPressed }: Props) => {
       data={surveys}
       horizontal={true}
       showsHorizontalScrollIndicator={false}
-      renderItem={({ item }) => <SurveyComponent color={color} onPress={onSurveyPressed} margin={4} value={item.value} />}
+      renderItem={({ item }) => <SurveyComponent color={color} onPress={onSurveyPressed} margin={4} survey={item} />}
       style={[style, { flexGrow: 0, marginVertical: 12 }]}
     />
   )
