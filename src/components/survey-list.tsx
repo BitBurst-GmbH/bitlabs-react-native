@@ -5,6 +5,7 @@ import CompactWidget from './compact-survey';
 import type { Survey } from '../api/bitlabs_repository.types';
 import { getAppSettingsRepo, getSurveysRepo } from '../api/bitlabs_repository';
 import { WidgetType } from '../api/widget-type';
+import FullWidthWidget from './fullwidth-survey';
 
 type Props = {
   uid: string,
@@ -27,7 +28,7 @@ const SurveyList = ({ uid, token, style, onSurveyPressed }: Props) => {
       data={surveys}
       horizontal={true}
       showsHorizontalScrollIndicator={false}
-      renderItem={({ item }) => getWidget(WidgetType.Simple, color, onSurveyPressed, item)}
+      renderItem={({ item }) => getWidget(WidgetType.FullWidth, color, onSurveyPressed, item)}
       style={[style, { flexGrow: 0, marginVertical: 12 }]}
     />
   )
@@ -39,8 +40,10 @@ const getWidget = (type: WidgetType, color: string, onPress: () => void, survey:
       return (<SimpleWidget color={color} onPress={onPress} margin={4} survey={survey} />);
 
     case WidgetType.Compact:
-    default:
       return (<CompactWidget color={color} onPress={onPress} margin={4} survey={survey} />);
+    case WidgetType.FullWidth:
+      return (<FullWidthWidget color={color} onPress={onPress} margin={4} survey={survey} />);
+
   }
 }
 

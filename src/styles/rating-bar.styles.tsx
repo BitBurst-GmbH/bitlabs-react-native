@@ -1,17 +1,20 @@
 import { StyleSheet } from "react-native";
 
-const styles = StyleSheet.create({
+export default StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-start',
     },
     image: {
-        margin: 2,
         width: 16,
         height: 16,
         resizeMode: 'contain',
     },
+    text: {
+        margin: 4,
+        fontSize: 16,
+        color: '#fff',
+        fontWeight: '500',
+    }
 });
-
-export default styles;

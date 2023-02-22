@@ -1,59 +1,43 @@
 import { StyleSheet } from "react-native";
 
-const genericView = {
-    flex: 1,
-    margin: 4,
-    borderRadius: 5,
-}
-
 export default (margin: number, color: string) => StyleSheet.create({
     container: {
-        width: 300,
-        height: 80,
+        width: 400,
+        height: 50,
         margin: margin,
         borderRadius: 5,
+        padding: 6,
         flexDirection: 'row',
         backgroundColor: color,
         justifyContent: 'space-between',
     },
     leftView: {
-        ...genericView,
-        flex: 1,
-        padding: 8,
+        marginHorizontal: 4,
         justifyContent: 'space-evenly',
+        alignItems: 'center',
+        flexDirection: 'row',
     },
     durationView: {
-        flexDirection: 'row',
+        marginHorizontal: 8,
         alignItems: 'center',
+        flexDirection: 'row',
     },
     durationImage: {
         width: 16,
         height: 16,
-        marginStart: 4,
         resizeMode: 'contain',
     },
-    durationText: {
+    rewardText: {
         color: '#fff',
         fontWeight: '600',
-        marginHorizontal: 8
+        marginHorizontal: 4,
     },
     rightView: {
-        ...genericView,
-        flex: 0.9,
-        flexDirection: 'row',
-        alignItems: 'center',
+        paddingHorizontal: 24,
+        textAlignVertical: 'center',
         backgroundColor: '#fff',
-        justifyContent: 'space-around',
-    },
-    playImage: {
-        width: 42,
-        height: 42,
-        tintColor: color,
-        resizeMode: 'contain',
-    },
-    earnText: {
         color: color,
-        fontSize: 16,
-        fontWeight: '500',
-    },
+        fontWeight: '600',
+        borderRadius: 5,
+    }
 });
