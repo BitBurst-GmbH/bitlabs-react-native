@@ -33,11 +33,13 @@ export default (margin: number, color: string) => StyleSheet.create({
         marginHorizontal: 4,
     },
     rightView: {
+        justifyContent: 'center',
         paddingHorizontal: 24,
-        textAlignVertical: 'center',
         backgroundColor: '#fff',
+        borderRadius: 5,
+    },
+    earnText: {
         color: color,
         fontWeight: '600',
-        borderRadius: 5,
-    }
+    },
 });

@@ -28,7 +28,7 @@ export default ({ survey, margin, color, onPress }: Props) => {
                 </View>
                 <Text style={styles.rewardText}>{survey.value}</Text>
             </View>
-            <Text style={styles.rightView}>EARN NOW</Text>
+            <View style={styles.rightView}><Text style={styles.earnText}>EARN NOW</Text></View>
         </TouchableOpacity>
     );
 }
