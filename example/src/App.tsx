@@ -1,42 +1,40 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack';
 import ReactNativeIdfaAaid, { AdvertisingInfoResponse } from '@sparkfabrik/react-native-idfa-aaid';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { BitLabsOfferWall, BitLabsSurveys, checkSurveys, getSurveys } from '../../src';
 
-const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  const token = '46d31e1e-315a-4b52-b0de-eca6062163af';
-  const uid = 'USER_ID';
+const TOKEN = 'APP_TOKEN';
+const UID = 'USER_ID';
 
-  return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.box}
-        onPress={() => checkSurveys(token, uid, (hasSurveys) => console.log(`[Example] Has Surveys: ${hasSurveys}`), (error) => console.log(error.message))}>
-        <Text>Check Surveys</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.box}
-        onPress={() => getSurveys(token, uid, (surveys) => console.log(`[Example] Getting surveys -> ${surveys.map((survey) =>
-          `Survey ${survey.id} in ${survey.details.category.name}`)}`), (error) => console.log(error.message))}>
-        <Text>Get Surveys</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.box}
-        onPress={() => navigation.navigate('Offerwall')}>
-        <Text>Open Offerwall</Text>
-      </TouchableOpacity>
-      <BitLabsSurveys
-        uid={uid}
-        token={token}
-        onSurveyPressed={() => navigation.navigate('Offerwall')} />
-    </View >
-  );
-}
+const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => (
+  <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.box}
+      onPress={() => checkSurveys(TOKEN, UID, (hasSurveys) => console.log(`[Example] Has Surveys: ${hasSurveys}`), (error) => console.log(error.message))}>
+      <Text>Check Surveys</Text>
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={styles.box}
+      onPress={() => getSurveys(TOKEN, UID, (surveys) => console.log(`[Example] Getting surveys -> ${surveys.map((survey) =>
+        `Survey ${survey.id} in ${survey.details.category.name}`)}`), (error) => console.log(error.message))}>
+      <Text>Get Surveys</Text>
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={styles.box}
+      onPress={() => navigation.navigate('Offerwall')}>
+      <Text>Open Offerwall</Text>
+    </TouchableOpacity>
+    <BitLabsSurveys
+      uid={UID}
+      token={TOKEN}
+      onSurveyPressed={() => navigation.navigate('Offerwall')} />
+  </View >
+);
 
 const OfferWall = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  const [adId, setAdId] = React.useState('');
+  const [adId, setAdId] = useState('');
 
   useEffect(() => {
     ReactNativeIdfaAaid.getAdvertisingInfo().then(
@@ -45,8 +43,8 @@ const OfferWall = ({ navigation }: NativeStackScreenProps<any, any>) => {
 
   return (
     <BitLabsOfferWall
-      uid='USER_ID'
-      token='46d31e1e-315a-4b52-b0de-eca6062163af'
+      uid={UID}
+      token={TOKEN}
       onExitPressed={navigation.goBack}
       onReward={reward => console.log(`Reward this time: ${reward}`)}
       adId={adId} />);
