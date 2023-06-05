@@ -108,7 +108,7 @@ type Reward = {
     reward_raw: number,
 }
 
-type User = {
+export type User = {
     earnings_raw: number,
     name: String,
     rank: number,
