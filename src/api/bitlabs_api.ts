@@ -27,3 +27,7 @@ export const getOffersApi = (token: string, uid: string) => fetch(new Request(ur
 export const getAppSettingsApi = (token: string, uid: string) => fetch(new Request(url('settings/v2'), {
     headers: { 'X-Api-Token': token, 'X-User-Id': uid }
 }));
+
+export const getLeaderboardApi = (token: string, uid: string) => fetch(new Request(url('leaderboard'), {
+    headers: { 'X-Api-Token': token, 'X-User-Id': uid }
+}));

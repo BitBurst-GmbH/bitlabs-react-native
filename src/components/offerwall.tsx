@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Appearance, BackHandler, Image, Linking, NativeEventSubscription, Platform, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { Appearance, BackHandler, Image, Linking, type NativeEventSubscription, Platform, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import WebView from 'react-native-webview';
 import type { ShouldStartLoadRequest, WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
 import { getAppSettingsRepo, getHasOffersRepo, leaveSurveysRepo } from '../api/bitlabs_repository';

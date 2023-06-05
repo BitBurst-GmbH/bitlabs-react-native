@@ -1,5 +1,6 @@
 import { checkSurveysRepo, getSurveysRepo } from "./api/bitlabs_repository";
 import type { Survey } from "./api/bitlabs_repository.types";
+import Leaderboard from "./components/leaderboard";
 import OfferWall from "./components/offerwall";
 import SurveyList from "./components/survey-list";
 
@@ -31,3 +32,5 @@ export const getSurveys = (token: string, uid: string, onResponse: (surveys: Sur
 export const BitLabsOfferWall = OfferWall;
 
 export const BitLabsSurveys = SurveyList;
+
+export const BitLabsLeaderboard = Leaderboard;

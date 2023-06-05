@@ -1,4 +1,4 @@
-import { FlatList, StyleProp, ViewStyle } from 'react-native'
+import { FlatList, type StyleProp, type ViewStyle } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import SimpleWidget from './simple-survey';
 import CompactWidget from './compact-survey';
@@ -38,7 +38,6 @@ const getWidget = (type: WidgetType, color: string, onPress: () => void, survey:
   switch (type) {
     case WidgetType.Simple:
       return (<SimpleWidget color={color} onPress={onPress} margin={4} survey={survey} />);
-
     case WidgetType.Compact:
       return (<CompactWidget color={color} onPress={onPress} margin={4} survey={survey} />);
     case WidgetType.FullWidth:

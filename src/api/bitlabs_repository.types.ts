@@ -44,6 +44,13 @@ export type GetAppSettingsResponse = {
     }
 }
 
+export type GetLeaderboardResponse = {
+    next_reset_at: String,
+    own_user: User,
+    rewards: Reward[],
+    top_users: User[],
+}
+
 export type Survey = {
     network_id: number,
     id: number,
@@ -94,4 +101,15 @@ type Question = {
         localized_text: string,
     }[];
     can_skip: boolean,
+}
+
+type Reward = {
+    rank: number,
+    reward_raw: number,
+}
+
+type User = {
+    earnings_raw: number,
+    name: String,
+    rank: number,
 }

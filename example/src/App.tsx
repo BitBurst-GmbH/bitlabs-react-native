@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack';
-import ReactNativeIdfaAaid, { AdvertisingInfoResponse } from '@sparkfabrik/react-native-idfa-aaid';
+import { createNativeStackNavigator, type NativeStackScreenProps } from '@react-navigation/native-stack';
+import ReactNativeIdfaAaid, { type AdvertisingInfoResponse } from '@sparkfabrik/react-native-idfa-aaid';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { BitLabsOfferWall, BitLabsSurveys, checkSurveys, getSurveys } from '../../src';
+import { BitLabsLeaderboard, BitLabsOfferWall, BitLabsSurveys, checkSurveys, getSurveys } from '../../src';
 
 const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const token = '46d31e1e-315a-4b52-b0de-eca6062163af';
@@ -11,6 +11,10 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
 
   return (
     <View style={styles.container}>
+      <BitLabsLeaderboard
+        uid={uid}
+        token={token}
+      />
       <TouchableOpacity
         style={styles.box}
         onPress={() => checkSurveys(token, uid, (hasSurveys) => console.log(`[Example] Has Surveys: ${hasSurveys}`), (error) => console.log(error.message))}>

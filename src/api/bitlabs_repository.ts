@@ -1,6 +1,6 @@
 import { getRandomSurveys } from "../utils/helpers";
-import { checkSurveysApi, getActionsApi, getAppSettingsApi, getOffersApi, leaveSurveysApi } from "./bitlabs_api";
-import type { BitLabsResponse, CheckSurveyResponse, GetActionsResponse, GetAppSettingsResponse, GetOffersResponse, Survey } from "./bitlabs_repository.types";
+import { checkSurveysApi, getActionsApi, getAppSettingsApi, getLeaderboardApi, getOffersApi, leaveSurveysApi } from "./bitlabs_api";
+import type { BitLabsResponse, CheckSurveyResponse, GetActionsResponse, GetAppSettingsResponse, GetLeaderboardResponse, GetOffersResponse, Survey } from "./bitlabs_repository.types";
 
 export const checkSurveysRepo = async (token: string, uid: string, onResponse: (hasSurveys: boolean) => void, onFailure: (error: Error) => void) => {
     const response = await checkSurveysApi(token, uid);
@@ -60,4 +60,16 @@ export const getAppSettingsRepo = async (token: string, uid: string, onResponse:
     }
 
     onResponse(body.data.visual.survey_icon_color, body.data.visual.navigation_color, body.data.offers.enabled);
+}
+
+export const getLeaderboardRepo = async (token: string, uid: string, onResponse: (leaderboard: GetLeaderboardResponse) => void) => {
+    const response = await getLeaderboardApi(token, uid);
+    const body = await (response.json() as Promise<BitLabsResponse<GetLeaderboardResponse>>);
+
+    if (body.error) {
+        console.error(`${body.error.details.http} - ${body.error.details.msg}`);
+        return;
+    }
+
+    onResponse(body.data);
 }
