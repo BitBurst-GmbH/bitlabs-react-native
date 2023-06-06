@@ -6,5 +6,6 @@ export default {
     circlePlayLight: require('../assets/img/circle-play-light.png'),
     clockRegular: require('../assets/img/clock-regular.png'),
     starRegular: require('../assets/img/star-regular.png'),
+    trophySolid: require('../assets/img/trophy-solid.png'),
     starSolid: require('../assets/img/star-solid.png'),
 }
