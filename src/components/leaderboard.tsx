@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import type { GetLeaderboardResponse } from "../api/bitlabs_repository.types"
 import { getLeaderboardRepo } from "../api/bitlabs_repository";
-import { Text, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 import LeaderboardItem from "./leaderboard-item";
 
 type Props = {
@@ -12,14 +12,16 @@ const Leaderboard = ({ uid, token }: Props) => {
     const [leaderboard, setLeaderboard] = useState<GetLeaderboardResponse>();
 
     useEffect(() => {
-        getLeaderboardRepo(token, uid, leaderboard => console.log(leaderboard));
+        getLeaderboardRepo(token, uid, leaderboard => setLeaderboard(leaderboard));
     }, []);
 
     return (
-        <View style={{ backgroundColor: 'green', alignSelf: 'stretch' }}>
+        <View style={{ backgroundColor: 'green', alignSelf: 'stretch', height: '25%' }}>
             <Text style={{ fontSize: 20 }}>Leaderboard</Text>
             <Text>You are currently ranked 6 on our leaderboard.</Text>
-            {(() => leaderboard?.top_users.map((user) => <LeaderboardItem user={user} />))()}
+            <FlatList
+                data={leaderboard?.top_users}
+                renderItem={({ item }) => <LeaderboardItem user={item} isOwnUser={(leaderboard?.own_user?.rank) == item.rank} />} />
         </View>
     );
 }

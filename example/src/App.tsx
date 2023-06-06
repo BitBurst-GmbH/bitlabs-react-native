@@ -4,9 +4,10 @@ import ReactNativeIdfaAaid, { type AdvertisingInfoResponse } from '@sparkfabrik/
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { BitLabsLeaderboard, BitLabsOfferWall, BitLabsSurveys, checkSurveys, getSurveys } from '../../src';
+import { APP_TOKEN } from './config';
 
 const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  const token = '46d31e1e-315a-4b52-b0de-eca6062163af';
+  const token = APP_TOKEN;
   const uid = 'USER_ID';
 
   return (

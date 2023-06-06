@@ -4,14 +4,16 @@ import type { User } from '../api/bitlabs_repository.types';
 
 type Props = {
     user: User,
+    isOwnUser: boolean,
 }
 
-const LeaderboardItem = ({ user }: Props) => {
+const LeaderboardItem = ({ user, isOwnUser }: Props) => {
     return (
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-            <View style={{ flexDirection: 'row', backgroundColor: 'red' }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Text style={[styles.text, { marginEnd: 14 }]}>{user.rank}</Text>
                 <Text style={[styles.text]}>{user.name}</Text>
+                {isOwnUser && <Text style={{ fontSize: 12, fontWeight: '500', color: 'blue' }}>(You)</Text>}
             </View>
             <Text style={[styles.text]}>{user.earnings_raw}</Text>
         </View>
