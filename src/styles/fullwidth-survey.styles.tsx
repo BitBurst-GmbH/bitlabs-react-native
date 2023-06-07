@@ -1,11 +1,6 @@
 import { StyleSheet } from "react-native";
 
-export default (margin: number, color: string) => StyleSheet.create({
-    background: {
-        width: 400,
-        height: 50,
-        margin: margin,
-    },
+export default (color: string) => StyleSheet.create({
     container: {
         flex: 1,
         padding: 6,

@@ -8,12 +8,11 @@ import type { Survey } from '../api/bitlabs_repository.types'
 type Props = {
     survey: Survey,
     color?: string,
-    margin?: number,
     onPress: () => void,
 }
 
-const Widget = ({ survey, margin, color, onPress }: Props) => {
-    const styles = SurveyStyles(margin ?? 0, color ?? '#007bff');
+const Widget = ({ survey, color, onPress }: Props) => {
+    const styles = SurveyStyles(color ?? '#007bff');
 
     return (
         <TouchableOpacity

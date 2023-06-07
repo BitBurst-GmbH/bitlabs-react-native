@@ -6,19 +6,20 @@ type Props = {
     children: React.ReactNode,
     style?: StyleProp<ViewStyle>,
     colors: String[],
+    rectRadius?: number,
 }
 
-const Gradient = ({ children, style, colors }: Props) => {
+const Gradient = ({ children, style, colors, rectRadius }: Props) => {
     return (
         <View style={[style]}>
             <Svg style={{ position: 'absolute' }} height='100%' width='100%'>
                 <Defs>
-                    <LinearGradient id='idGrad' x1='-1' y1='-1' x2='1' y2='1'>
-                        <Stop offset='0%' stopColor={colors[0]?.toString()} stopOpacity='1' />
-                        <Stop offset='100%' stopColor={colors[1]?.toString()} stopOpacity='1' />
+                    <LinearGradient id='idGrad' x1='0' y1='1' x2='1' y2='0' >
+                        <Stop offset='0' stopColor={colors[0]?.toString()} stopOpacity='1' />
+                        <Stop offset='1' stopColor={colors[1]?.toString()} stopOpacity='1' />
                     </LinearGradient>
                 </Defs>
-                <Rect rx='5' height='100%' width='100%' fill='url(#idGrad)' />
+                <Rect rx={rectRadius} height='100%' width='100%' fill='url(#idGrad)' />
             </Svg>
             {children}
         </View>

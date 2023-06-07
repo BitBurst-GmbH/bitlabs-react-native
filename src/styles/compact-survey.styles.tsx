@@ -6,14 +6,10 @@ const genericView = {
     borderRadius: 5,
 }
 
-export default (margin: number, color: string) => StyleSheet.create({
+export default (color: string) => StyleSheet.create({
     container: {
-        width: 300,
-        height: 80,
-        margin: margin,
-        borderRadius: 5,
+        flex: 1,
         flexDirection: 'row',
-        backgroundColor: color,
         justifyContent: 'space-between',
     },
     leftView: {

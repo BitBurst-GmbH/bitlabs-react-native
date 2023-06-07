@@ -3,7 +3,7 @@ import { createNativeStackNavigator, type NativeStackScreenProps } from '@react-
 import ReactNativeIdfaAaid, { type AdvertisingInfoResponse } from '@sparkfabrik/react-native-idfa-aaid';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { BitLabsLeaderboard, BitLabsOfferWall, BitLabsSurveys, checkSurveys, getSurveys } from '../../src';
+import { BitLabsLeaderboard, BitLabsOfferWall, BitLabsSurveys, checkSurveys, getSurveys, SurveyType } from '../../src';
 import { APP_TOKEN } from './config';
 
 const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
@@ -35,6 +35,7 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
       <BitLabsSurveys
         uid={uid}
         token={token}
+        type={SurveyType.FullWidth}
         onSurveyPressed={() => navigation.navigate('Offerwall')} />
     </View >
   );

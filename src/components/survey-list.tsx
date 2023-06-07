@@ -7,15 +7,17 @@ import { getAppSettingsRepo, getSurveysRepo } from '../api/bitlabs_repository';
 import { WidgetType } from '../api/widget-type';
 import FullWidthWidget from './fullwidth-survey';
 import { extractColors } from '../utils/helpers';
+import Gradient from './gradient';
 
 type Props = {
   uid: string,
   token: string,
+  type: WidgetType,
   onSurveyPressed: () => void,
   style?: StyleProp<ViewStyle>,
 }
 
-const SurveyList = ({ uid, token, style, onSurveyPressed }: Props) => {
+const SurveyList = ({ uid, token, style, type, onSurveyPressed }: Props) => {
   const [surveys, setSurveys] = useState<Survey[]>([])
   const [color, setColor] = useState<String[]>(['#007bff', '#007bff']);
 
@@ -29,20 +31,34 @@ const SurveyList = ({ uid, token, style, onSurveyPressed }: Props) => {
       data={surveys}
       horizontal={true}
       showsHorizontalScrollIndicator={false}
-      renderItem={({ item }) => getWidget(WidgetType.FullWidth, color, onSurveyPressed, item)}
+      renderItem={({ item }) => (
+        <Gradient style={getStyle(type)} colors={color} rectRadius={5} >
+          {getWidget(type, color[0]!.toString(), onSurveyPressed, item)}
+        </Gradient>)}
       style={[style, { flexGrow: 0, marginVertical: 12 }]}
     />
   )
 }
 
-const getWidget = (type: WidgetType, color: String[], onPress: () => void, survey: Survey) => {
+const getStyle = (type: WidgetType) => {
   switch (type) {
     case WidgetType.Simple:
-      return (<SimpleWidget color={color[0]?.toString()} onPress={onPress} margin={4} survey={survey} />);
+      return { width: 290, height: 130, margin: 4, };
     case WidgetType.Compact:
-      return (<CompactWidget color={color[1]?.toString()} onPress={onPress} margin={4} survey={survey} />);
+      return { width: 300, height: 80, margin: 4, };
     case WidgetType.FullWidth:
-      return (<FullWidthWidget colors={color} onPress={onPress} margin={4} survey={survey} />);
+      return { width: 400, height: 50, margin: 4, };
+  }
+};
+
+const getWidget = (type: WidgetType, color: string, onPress: () => void, survey: Survey) => {
+  switch (type) {
+    case WidgetType.Simple:
+      return (<SimpleWidget onPress={onPress} survey={survey} />);
+    case WidgetType.Compact:
+      return (<CompactWidget color={color} onPress={onPress} survey={survey} />);
+    case WidgetType.FullWidth:
+      return (<FullWidthWidget color={color} onPress={onPress} survey={survey} />);
 
   }
 }

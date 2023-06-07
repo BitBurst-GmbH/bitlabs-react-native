@@ -1,14 +1,10 @@
 import { StyleSheet } from "react-native";
 
 
-export default (margin: number, color: string) => StyleSheet.create({
+export default () => StyleSheet.create({
     container: {
-        width: 290,
-        height: 130,
-        margin: margin,
-        borderRadius: 5,
+        flex: 1,
         flexDirection: 'row',
-        backgroundColor: color,
         alignItems: 'center',
         justifyContent: 'center',
     },
