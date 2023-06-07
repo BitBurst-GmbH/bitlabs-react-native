@@ -51,7 +51,7 @@ const OfferWall = ({ navigation }: NativeStackScreenProps<any, any>) => {
   return (
     <BitLabsOfferWall
       uid='USER_ID'
-      token='46d31e1e-315a-4b52-b0de-eca6062163af'
+      token={APP_TOKEN}
       onExitPressed={navigation.goBack}
       onReward={reward => console.log(`Reward this time: ${reward}`)}
       adId={adId} />);

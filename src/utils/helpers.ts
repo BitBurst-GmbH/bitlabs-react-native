@@ -40,6 +40,12 @@ export const getRandomSurveys = () => {
     return surveys;
 }
 
+export const extractColors = (color: String) => color.match(/linear-gradient\((\d+)deg,\s*(.+)\)/)?.[2]
+    ?.replace(/([0-9]+)%/g, '')
+    ?.split(',')
+    .map(v => v.trim())
+    ?? [color, color];
+
 export const hexToLuminance = (hex: string) => {
     // Convert hex to RGB
     let r = parseInt(hex.substring(1, 3), 16) / 255;

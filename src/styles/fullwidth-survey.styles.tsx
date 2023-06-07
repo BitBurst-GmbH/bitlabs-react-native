@@ -1,14 +1,15 @@
 import { StyleSheet } from "react-native";
 
 export default (margin: number, color: string) => StyleSheet.create({
-    container: {
+    background: {
         width: 400,
         height: 50,
         margin: margin,
-        borderRadius: 5,
+    },
+    container: {
+        flex: 1,
         padding: 6,
         flexDirection: 'row',
-        backgroundColor: color,
         justifyContent: 'space-between',
     },
     leftView: {

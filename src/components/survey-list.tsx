@@ -6,6 +6,7 @@ import type { Survey } from '../api/bitlabs_repository.types';
 import { getAppSettingsRepo, getSurveysRepo } from '../api/bitlabs_repository';
 import { WidgetType } from '../api/widget-type';
 import FullWidthWidget from './fullwidth-survey';
+import { extractColors } from '../utils/helpers';
 
 type Props = {
   uid: string,
@@ -16,11 +17,11 @@ type Props = {
 
 const SurveyList = ({ uid, token, style, onSurveyPressed }: Props) => {
   const [surveys, setSurveys] = useState<Survey[]>([])
-  const [color, setColor] = useState('#007bff');
+  const [color, setColor] = useState<String[]>(['#007bff', '#007bff']);
 
   useEffect(() => {
     getSurveysRepo(token, uid, (surveyList) => setSurveys(surveyList), (error) => console.error(`[BitLabs] ${error}`));
-    getAppSettingsRepo(token, uid, (color) => setColor(color));
+    getAppSettingsRepo(token, uid, (color) => setColor(extractColors(color)));
   }, []);
 
   return (
@@ -34,14 +35,14 @@ const SurveyList = ({ uid, token, style, onSurveyPressed }: Props) => {
   )
 }
 
-const getWidget = (type: WidgetType, color: string, onPress: () => void, survey: Survey) => {
+const getWidget = (type: WidgetType, color: String[], onPress: () => void, survey: Survey) => {
   switch (type) {
     case WidgetType.Simple:
-      return (<SimpleWidget color={color} onPress={onPress} margin={4} survey={survey} />);
+      return (<SimpleWidget color={color[0]?.toString()} onPress={onPress} margin={4} survey={survey} />);
     case WidgetType.Compact:
-      return (<CompactWidget color={color} onPress={onPress} margin={4} survey={survey} />);
+      return (<CompactWidget color={color[1]?.toString()} onPress={onPress} margin={4} survey={survey} />);
     case WidgetType.FullWidth:
-      return (<FullWidthWidget color={color} onPress={onPress} margin={4} survey={survey} />);
+      return (<FullWidthWidget colors={color} onPress={onPress} margin={4} survey={survey} />);
 
   }
 }
