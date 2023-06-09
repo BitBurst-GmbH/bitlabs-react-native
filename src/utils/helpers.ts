@@ -46,7 +46,7 @@ export const extractColors = (color: String) => color.match(/linear-gradient\((\
     .map(v => v.trim())
     ?? [color, color];
 
-export const hexToLuminance = (hex: string) => {
+const hexToLuminance = (hex: string) => {
     // Convert hex to RGB
     let r = parseInt(hex.substring(1, 3), 16) / 255;
     let g = parseInt(hex.substring(3, 5), 16) / 255;
@@ -56,3 +56,5 @@ export const hexToLuminance = (hex: string) => {
 
     return luminance;
 }
+
+export const isColorLuminant = (colors: String[]) => colors.some(color => hexToLuminance(color.toString()) > 0.729);

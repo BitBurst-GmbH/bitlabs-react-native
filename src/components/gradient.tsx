@@ -3,10 +3,10 @@ import { View, type StyleProp, type ViewStyle } from 'react-native';
 import { Defs, LinearGradient, Rect, Stop, Svg } from 'react-native-svg';
 
 type Props = {
-    children: React.ReactNode,
-    style?: StyleProp<ViewStyle>,
     colors: String[],
     rectRadius?: number,
+    children: React.ReactNode,
+    style?: StyleProp<ViewStyle>,
 }
 
 const Gradient = ({ children, style, colors, rectRadius }: Props) => {
