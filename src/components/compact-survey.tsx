@@ -23,7 +23,7 @@ const Widget = ({ survey, color, onPress }: Props) => {
                     <Image
                         style={styles.durationImage}
                         source={Images.clockRegular} />
-                    <Text style={styles.durationText}>{survey.loi} minutes</Text>
+                    <Text style={styles.durationText}>{Math.round(survey.loi)} minutes</Text>
                 </View>
                 <RatingBar rating={survey.rating} />
             </View>

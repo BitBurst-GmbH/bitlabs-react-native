@@ -37,7 +37,9 @@ const Leaderboard = ({ uid, token }: Props) => {
     return leaderboard?.top_users ? (
         <View style={{ alignSelf: 'stretch', height: '25%' }}>
             <Text style={{ fontSize: 20 }}>Leaderboard</Text>
-            <Text>You are currently ranked 6 on our leaderboard.</Text>
+            {leaderboard.own_user
+                ? (<Text>You are currently ranked {leaderboard.own_user.rank} on our leaderboard.</Text>)
+                : <Text>Participate in a survey to join the leaderboard.</Text>}
             <FlatList
                 data={leaderboard?.top_users}
                 ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: '#000', marginHorizontal: 4 }} />}

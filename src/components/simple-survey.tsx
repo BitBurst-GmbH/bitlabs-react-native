@@ -22,7 +22,7 @@ const Widget = ({ survey, onPress }: Props) => {
                 source={Images.circlePlayLight} />
             <View>
                 <Text style={styles.earnText}>EARN {survey.value}</Text>
-                <Text style={styles.durationText}>Now in {survey.loi} minutes!</Text>
+                <Text style={styles.durationText}>Now in {Math.round(survey.loi)} minutes!</Text>
             </View>
         </TouchableOpacity>
     );
