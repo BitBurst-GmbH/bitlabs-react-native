@@ -4,6 +4,7 @@ import { getAppSettingsRepo, getCurrencyIconRepo, getLeaderboardRepo } from "../
 import { FlatList, Image, Text, View } from "react-native";
 import LeaderboardItem from "./leaderboard-item";
 import { SvgFromUri } from "react-native-svg";
+import { extractColors } from "../utils/helpers";
 
 type Props = {
     uid: string, token: string,
@@ -11,17 +12,20 @@ type Props = {
 
 const Leaderboard = ({ uid, token }: Props) => {
     const [url, setUrl] = useState<string>();
+    const [color, setColor] = useState('#000');
     const [currencyIcon, setCurrencyIcon] = useState<React.JSX.Element>();
     const [leaderboard, setLeaderboard] = useState<GetLeaderboardResponse>();
 
     useEffect(() => {
         getLeaderboardRepo(token, uid, leaderboard => setLeaderboard(leaderboard));
-        getAppSettingsRepo(token, uid, (_1, _2, _3, url) => setUrl(url));
+        getAppSettingsRepo(token, uid, (color, _2, _3, url) => {
+            setUrl(url);
+            setColor(extractColors(color)[0]?.toString() || '#000');
+        });
     }, []);
 
     useEffect(() => {
         if (url) {
-            console.log('url', url);
             getCurrencyIconRepo(url, (iconUri, isSvg) => setCurrencyIcon(
                 isSvg
                     ? <SvgFromUri uri={iconUri} width={20} height={20} style={{ marginHorizontal: 2 }} />
@@ -30,18 +34,21 @@ const Leaderboard = ({ uid, token }: Props) => {
         }
     }, [url]);
 
-    return (
-        <View style={{ backgroundColor: 'green', alignSelf: 'stretch', height: '25%' }}>
+    return leaderboard?.top_users ? (
+        <View style={{ alignSelf: 'stretch', height: '25%' }}>
             <Text style={{ fontSize: 20 }}>Leaderboard</Text>
             <Text>You are currently ranked 6 on our leaderboard.</Text>
             <FlatList
                 data={leaderboard?.top_users}
-                renderItem={({ item }) => <LeaderboardItem user={item}
+                ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: '#000', marginHorizontal: 4 }} />}
+                renderItem={({ item }) => <LeaderboardItem
+                    user={item}
+                    color={color}
                     isOwnUser={(leaderboard?.own_user?.rank) == item.rank}
                     currency={currencyIcon} />}
             />
         </View>
-    );
+    ) : null;
 }
 
 export default Leaderboard;

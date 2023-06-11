@@ -5,19 +5,20 @@ import images from '../assets/images';
 
 type Props = {
     user: User,
+    color: string,
     isOwnUser: boolean,
     currency?: React.JSX.Element,
 }
 
-const LeaderboardItem = ({ user, isOwnUser, currency }: Props) => {
+const LeaderboardItem = ({ user, color, isOwnUser, currency }: Props) => {
     return (
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 4 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Text style={[styles.text, { marginEnd: 14 }]}>{user.rank}</Text>
                 <Text style={[styles.text]}>{user.name}</Text>
                 {isOwnUser && <Text style={styles.youText}>(You)</Text>}
                 {user.rank < 4 && <View style={{ marginHorizontal: 12, alignItems: 'center' }}>
-                    <Image source={images.trophySolid} style={[styles.trophyImage, { tintColor: 'blue' }]} />
+                    <Image source={images.trophySolid} style={[styles.trophyImage, { tintColor: color }]} />
                     <Text style={{ fontSize: 11, color: '#fff', fontWeight: '500' }}>{user.rank}</Text>
                 </View>}
             </View>
