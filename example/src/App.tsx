@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createNativeStackNavigator, type NativeStackScreenProps } from '@react-navigation/native-stack';
 import ReactNativeIdfaAaid, { type AdvertisingInfoResponse } from '@sparkfabrik/react-native-idfa-aaid';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
@@ -42,7 +42,7 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
 }
 
 const OfferWall = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  const [adId, setAdId] = React.useState('');
+  const [adId, setAdId] = useState('');
 
   useEffect(() => {
     ReactNativeIdfaAaid.getAdvertisingInfo().then(
