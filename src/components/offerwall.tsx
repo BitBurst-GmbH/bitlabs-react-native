@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Appearance, BackHandler, Image, Linking, NativeEventSubscription, Platform, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { Appearance, BackHandler, Image, Linking, type NativeEventSubscription, Platform, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import WebView from 'react-native-webview';
 import type { ShouldStartLoadRequest, WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
 import { getAppSettingsRepo, getHasOffersRepo, leaveSurveysRepo } from '../api/bitlabs_repository';
 import LeaveSurveyModal from './leave-survey-modal';
-import OfferWallStyles from './offerwall.styles';
+import OfferWallStyles from '../styles/offerwall.styles';
 import Images from '../assets/images';
-import { hexToLuminance } from '../utils/helpers';
+import { extractColors, isColorLuminant } from '../utils/helpers';
+import Gradient from './gradient';
 
 type Props = {
     uid: string,
@@ -23,15 +24,16 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
     let reward = useRef(0.0);
     let surveyId = useRef('');
     let networkId = useRef('');
+
+    const styles = OfferWallStyles();
     const queries = Object.entries(tags ?? {}).map(([key, value]) => `&${key}=${value}`);
 
     const [key, setKey] = useState(0);
-    const [styles, setStyles] = useState(OfferWallStyles('#007bff'));
+    const [color, setColor] = useState<String[]>(['#007bff', '#007bff']);
     const [hasOffers, setHasOffers] = useState(false);
     const [isOffersEnabled, setIsOffersEnabled] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isPageOfferwall, setIsPageOfferwall] = useState(true);
-    const [isLuminanceThresholdExceeded, setIsLuminanceThresholdExceeded] = useState(false);
     const [url, setUrl] = useState(`https://web.bitlabs.ai?token=${token}&uid=${uid}${queries}`);
 
 
@@ -62,8 +64,7 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
     useEffect(() => {
         getHasOffersRepo(token, uid).then((hasOffers) => setHasOffers(hasOffers));
         getAppSettingsRepo(token, uid, (_, navigationColor, isOffersEnabled) => {
-            setStyles(OfferWallStyles(navigationColor));
-            setIsLuminanceThresholdExceeded(hexToLuminance(navigationColor) > 0.729);
+            setColor(extractColors(navigationColor));
             setIsOffersEnabled(isOffersEnabled);
         });
 
@@ -119,11 +120,14 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
                     setIsVisible={setIsModalVisible}
                     leaveSurveHandler={onBackPressed} />
                 {!isPageOfferwall && (
-                    <View style={styles.headerView}>
-                        <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.chevronTouchable}>
-                            <Image source={getChevronIcon(isLuminanceThresholdExceeded)} style={styles.image} />
-                        </TouchableOpacity>
-                    </View>
+                    <Gradient style={{ height: 50 }} colors={color} >
+                        <View style={styles.headerView}>
+                            <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.chevronTouchable}>
+                                <Image source={Images.circleChevronLeftRegular}
+                                    style={[styles.image, { tintColor: isColorLuminant(color) ? 'black' : 'white' }]} />
+                            </TouchableOpacity>
+                        </View>
+                    </Gradient>
                 )}
                 <WebView
                     key={key}
@@ -135,7 +139,7 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
                     onShouldStartLoadWithRequest={onShouldStartLoadingWithRequest} />
                 {isPageOfferwall && (
                     <TouchableOpacity onPress={onExitPressed} style={styles.xmarkTouchable}>
-                        <Image source={getSignOutIcon(isLuminanceThresholdExceeded)} style={styles.image} />
+                        <Image source={Images.signOutRegular} style={[styles.image, { tintColor: isColorDim(color) ? 'white' : 'black' }]} />
                     </TouchableOpacity>
                 )}
             </View>
@@ -143,19 +147,7 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
     );
 }
 
-const getSignOutIcon = (isLuminanceThresholdExceeded: boolean) => {
-    if (Appearance.getColorScheme() === 'dark') return Images.signOutRegularWhite;
-
-    if (isLuminanceThresholdExceeded) return Images.signOutRegularBlack;
-
-    return Images.signOutRegularWhite;
-}
-
-const getChevronIcon = (isLuminanceThresholdExceeded: boolean) => {
-    if (isLuminanceThresholdExceeded) return Images.circleChevronLeftRegularBlack;
-
-    return Images.circleChevronLeftRegularWhite;
-}
+const isColorDim = (color: String[]) => Appearance.getColorScheme() === 'dark' || !isColorLuminant(color);
 
 const extractValue = (url: string) => {
     if (!url.includes('&val=')) return 0.0;

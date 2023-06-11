@@ -41,7 +41,24 @@ export type GetAppSettingsResponse = {
     },
     offers: {
         enabled: boolean,
+    },
+    currency: {
+        bonus_percentage: number,
+        currency_promotion: number,
+        factor: string,
+        floor_decimal: boolean,
+        symbol: {
+            content: string,
+            is_image: boolean,
+        }
     }
+}
+
+export type GetLeaderboardResponse = {
+    next_reset_at: String,
+    own_user: User,
+    rewards: Reward[],
+    top_users: User[],
 }
 
 export type Survey = {
@@ -94,4 +111,15 @@ type Question = {
         localized_text: string,
     }[];
     can_skip: boolean,
+}
+
+type Reward = {
+    rank: number,
+    reward_raw: number,
+}
+
+export type User = {
+    earnings_raw: number,
+    name: String,
+    rank: number,
 }

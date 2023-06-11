@@ -40,6 +40,9 @@ project.xcworkspace
 local.properties
 android.iml
 
+# Misc.
+example/src/config.ts
+
 # Cocoapods
 #
 example/ios/Pods

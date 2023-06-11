@@ -1,14 +1,13 @@
 import { StyleSheet } from "react-native";
 
-const styles = (color: string) => StyleSheet.create({
+const styles = () => StyleSheet.create({
     webview: { flex: 1, },
     headerView: {
-        height: 50,
+        flex: 1,
         alignItems: 'center',
         flexDirection: 'row',
-        borderColor: '#000000',
+        borderColor: '#a00',
         borderBottomWidth: 0.5,
-        backgroundColor: color,
     },
     chevronTouchable: {
         marginHorizontal: 14,

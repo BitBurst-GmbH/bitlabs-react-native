@@ -3,17 +3,13 @@ import { StyleSheet } from "react-native";
 const genericView = {
     flex: 1,
     margin: 4,
-    borderRadius: 10,
+    borderRadius: 5,
 }
 
-const styles = (margin: number, color: string) => StyleSheet.create({
+export default (color: string) => StyleSheet.create({
     container: {
-        width: 300,
-        height: 80,
-        margin: margin,
-        borderRadius: 10,
+        flex: 1,
         flexDirection: 'row',
-        backgroundColor: color,
         justifyContent: 'space-between',
     },
     leftView: {
@@ -24,11 +20,12 @@ const styles = (margin: number, color: string) => StyleSheet.create({
     },
     durationView: {
         flexDirection: 'row',
+        alignItems: 'center',
     },
     durationImage: {
         width: 16,
         height: 16,
-        marginStart: 8,
+        marginStart: 4,
         resizeMode: 'contain',
     },
     durationText: {
@@ -56,5 +53,3 @@ const styles = (margin: number, color: string) => StyleSheet.create({
         fontWeight: '500',
     },
 });
-
-export default styles;

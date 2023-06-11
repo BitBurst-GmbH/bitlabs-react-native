@@ -1,18 +1,18 @@
+import React from 'react'
 import { View, Text, Image, TouchableOpacity } from 'react-native'
-import React, { } from 'react'
-import SurveyStyles from './survey.styles'
+import SurveyStyles from '../styles/compact-survey.styles'
 import RatingBar from './rating-bar'
 import Images from '../assets/images'
+import type { Survey } from '../api/bitlabs_repository.types'
 
 type Props = {
-    value: string,
+    survey: Survey,
     color?: string,
-    margin?: number,
     onPress: () => void,
 }
 
-const Survey = ({ value, margin, color, onPress }: Props) => {
-    const styles = SurveyStyles(margin ?? 0, color ?? '#007bff');
+const Widget = ({ survey, color, onPress }: Props) => {
+    const styles = SurveyStyles(color ?? '#007bff');
 
     return (
         <TouchableOpacity
@@ -23,18 +23,18 @@ const Survey = ({ value, margin, color, onPress }: Props) => {
                     <Image
                         style={styles.durationImage}
                         source={Images.clockRegular} />
-                    <Text style={styles.durationText}>1 Minutes</Text>
+                    <Text style={styles.durationText}>{Math.round(survey.loi)} minutes</Text>
                 </View>
-                <RatingBar rating={3} />
+                <RatingBar rating={survey.rating} />
             </View>
             <View style={styles.rightView}>
                 <Image
                     style={styles.playImage}
                     source={Images.circlePlayLight} />
-                <Text style={styles.earnText}>EARN{'\n'}{value}</Text>
+                <Text style={styles.earnText}>EARN{'\n'}{survey.value}</Text>
             </View>
         </TouchableOpacity>
     )
 }
 
-export default Survey;
+export default Widget;
