@@ -50,7 +50,7 @@ export const getHasOffersRepo = async (token: string, uid: string) => {
     return body.data.offers.length > 0;
 }
 
-export const getAppSettingsRepo = async (token: string, uid: string, onResponse: (surveyIconColor: string, navigationColor: string, isOffersEnable: boolean) => void) => {
+export const getAppSettingsRepo = async (token: string, uid: string, onResponse: (surveyIconColor: string, navigationColor: string, isOffersEnable: boolean, currencyUrl?: string) => void) => {
     const response = await getAppSettingsApi(token, uid);
     const body = await (response.json() as Promise<BitLabsResponse<GetAppSettingsResponse>>);
 
@@ -59,7 +59,8 @@ export const getAppSettingsRepo = async (token: string, uid: string, onResponse:
         return;
     }
 
-    onResponse(body.data.visual.survey_icon_color, body.data.visual.navigation_color, body.data.offers.enabled);
+    onResponse(body.data.visual.survey_icon_color, body.data.visual.navigation_color, body.data.offers.enabled,
+        body.data.currency.symbol.is_image ? body.data.currency.symbol.content : undefined);
 }
 
 export const getLeaderboardRepo = async (token: string, uid: string, onResponse: (leaderboard: GetLeaderboardResponse) => void) => {
@@ -72,4 +73,13 @@ export const getLeaderboardRepo = async (token: string, uid: string, onResponse:
     }
 
     onResponse(body.data);
+}
+
+export const getCurrencyIconRepo = async (url: string, onResponse: (iconUri: string, isSvg: boolean) => void) => {
+    const response = await fetch(new Request(url));
+    const blob = await response.blob();
+
+    const data = URL.createObjectURL(blob);
+
+    onResponse(data, blob.type === 'image/svg+xml');
 }

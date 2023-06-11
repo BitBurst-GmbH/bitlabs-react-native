@@ -6,9 +6,10 @@ import images from '../assets/images';
 type Props = {
     user: User,
     isOwnUser: boolean,
+    currency?: React.JSX.Element,
 }
 
-const LeaderboardItem = ({ user, isOwnUser }: Props) => {
+const LeaderboardItem = ({ user, isOwnUser, currency }: Props) => {
     return (
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -20,7 +21,10 @@ const LeaderboardItem = ({ user, isOwnUser }: Props) => {
                     <Text style={{ fontSize: 11, color: '#fff', fontWeight: '500' }}>{user.rank}</Text>
                 </View>}
             </View>
-            <Text style={[styles.text]}>{user.earnings_raw}</Text>
+            <View style={{ flexDirection: 'row' }}>
+                <Text style={[styles.text]}>{user.earnings_raw}</Text>
+                {currency}
+            </View>
         </View>
     );
 }

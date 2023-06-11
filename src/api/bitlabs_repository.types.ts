@@ -41,6 +41,16 @@ export type GetAppSettingsResponse = {
     },
     offers: {
         enabled: boolean,
+    },
+    currency: {
+        bonus_percentage: number,
+        currency_promotion: number,
+        factor: string,
+        floor_decimal: boolean,
+        symbol: {
+            content: string,
+            is_image: boolean,
+        }
     }
 }
 

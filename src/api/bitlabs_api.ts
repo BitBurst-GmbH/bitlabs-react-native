@@ -31,3 +31,5 @@ export const getAppSettingsApi = (token: string, uid: string) => fetch(new Reque
 export const getLeaderboardApi = (token: string, uid: string) => fetch(new Request(url('leaderboard'), {
     headers: { 'X-Api-Token': token, 'X-User-Id': uid }
 }));
+
+export const getCurrencyIconApi = (url: string) => fetch(new Request(url));
