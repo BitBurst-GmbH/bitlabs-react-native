@@ -17,7 +17,7 @@ export const leaveSurveysApi = (token: string, uid: string, networkId: string, s
             body: JSON.stringify({ reason: reason, })
         }));
 
-export const getOffersApi = (token: string, uid: string) => fetch(new Request(url('v1/client/offers'), {
+export const getOffersApi = (token: string, uid: string) => fetch(new Request(url('v2/client/offers'), {
     headers: { 'X-User-Id': uid, 'X-Api-Token': token }
 }));
 
