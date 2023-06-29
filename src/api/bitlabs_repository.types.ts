@@ -10,10 +10,6 @@ export type BitLabsResponse<T> = {
     trace_id: string
 };
 
-export type CheckSurveyResponse = {
-    has_surveys: boolean,
-}
-
 export type GetSurveysResponse = {
     restriction_reason: RestrictionReason,
     surveys: Survey[],

@@ -1,18 +1,5 @@
-import { getRandomSurveys } from "../utils/helpers";
-import { checkSurveysApi, getSurveysApi, getAppSettingsApi, getLeaderboardApi, getOffersApi, leaveSurveysApi } from "./bitlabs_api";
-import type { BitLabsResponse, CheckSurveyResponse, GetSurveysResponse, GetAppSettingsResponse, GetLeaderboardResponse, GetOffersResponse, Survey } from "./bitlabs_repository.types";
-
-export const checkSurveysRepo = async (token: string, uid: string, onResponse: (hasSurveys: boolean) => void, onFailure: (error: Error) => void) => {
-    const response = await checkSurveysApi(token, uid);
-    const body = await (response.json() as Promise<BitLabsResponse<CheckSurveyResponse>>);
-
-    if (body.error) {
-        onFailure(new Error(`${body.error.details.http} - ${body.error.details.msg}`));
-        return;
-    }
-
-    onResponse(body.data.has_surveys);
-}
+import { getSurveysApi, getAppSettingsApi, getLeaderboardApi, getOffersApi, leaveSurveysApi } from "./bitlabs_api";
+import type { BitLabsResponse, GetSurveysResponse, GetAppSettingsResponse, GetLeaderboardResponse, GetOffersResponse, Survey } from "./bitlabs_repository.types";
 
 export const getSurveysRepo = async (token: string, uid: string, onResponse: (surveys: Survey[]) => void, onFailure: (error: Error) => void) => {
     const response = await getSurveysApi(token, uid);
@@ -23,7 +10,7 @@ export const getSurveysRepo = async (token: string, uid: string, onResponse: (su
         return;
     }
 
-    onResponse(body.data.surveys.length > 0 ? body.data.surveys : getRandomSurveys());
+    onResponse(body.data.surveys);
 }
 
 export const leaveSurveysRepo = async (token: string, uid: string, networkId: string, surveyId: string, reason: string) => {

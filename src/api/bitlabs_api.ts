@@ -1,9 +1,6 @@
 import { Platform } from "react-native";
 import { url } from "../utils/helpers";
 
-export const checkSurveysApi = (token: string, uid: string) =>
-    fetch(new Request(url('v1/client/check'), { headers: { 'X-Api-Token': token, 'X-User-Id': uid } }));
-
 export const getSurveysApi = (token: string, uid: string) =>
     fetch(new Request(url('v2/client/surveys', { 'os': Platform.OS }), { headers: { 'X-Api-Token': token, 'X-User-Id': uid } }));
 
