@@ -1,6 +1,6 @@
 import { getRandomSurveys } from "../utils/helpers";
-import { checkSurveysApi, getActionsApi, getAppSettingsApi, getLeaderboardApi, getOffersApi, leaveSurveysApi } from "./bitlabs_api";
-import type { BitLabsResponse, CheckSurveyResponse, GetActionsResponse, GetAppSettingsResponse, GetLeaderboardResponse, GetOffersResponse, Survey } from "./bitlabs_repository.types";
+import { checkSurveysApi, getSurveysApi, getAppSettingsApi, getLeaderboardApi, getOffersApi, leaveSurveysApi } from "./bitlabs_api";
+import type { BitLabsResponse, CheckSurveyResponse, GetSurveysResponse, GetAppSettingsResponse, GetLeaderboardResponse, GetOffersResponse, Survey } from "./bitlabs_repository.types";
 
 export const checkSurveysRepo = async (token: string, uid: string, onResponse: (hasSurveys: boolean) => void, onFailure: (error: Error) => void) => {
     const response = await checkSurveysApi(token, uid);
@@ -15,8 +15,8 @@ export const checkSurveysRepo = async (token: string, uid: string, onResponse: (
 }
 
 export const getSurveysRepo = async (token: string, uid: string, onResponse: (surveys: Survey[]) => void, onFailure: (error: Error) => void) => {
-    const response = await getActionsApi(token, uid);
-    const body = await (response.json() as Promise<BitLabsResponse<GetActionsResponse>>);
+    const response = await getSurveysApi(token, uid);
+    const body = await (response.json() as Promise<BitLabsResponse<GetSurveysResponse>>);
 
     if (body.error) {
         onFailure(new Error(`${body.error.details.http} - ${body.error.details.msg}`));

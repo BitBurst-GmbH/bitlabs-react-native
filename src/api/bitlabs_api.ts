@@ -2,13 +2,13 @@ import { Platform } from "react-native";
 import { url } from "../utils/helpers";
 
 export const checkSurveysApi = (token: string, uid: string) =>
-    fetch(new Request(url('check'), { headers: { 'X-Api-Token': token, 'X-User-Id': uid } }));
+    fetch(new Request(url('v1/client/check'), { headers: { 'X-Api-Token': token, 'X-User-Id': uid } }));
 
-export const getActionsApi = (token: string, uid: string) =>
-    fetch(new Request(url('actions', { 'os': Platform.OS }), { headers: { 'X-Api-Token': token, 'X-User-Id': uid } }));
+export const getSurveysApi = (token: string, uid: string) =>
+    fetch(new Request(url('v2/client/surveys', { 'os': Platform.OS }), { headers: { 'X-Api-Token': token, 'X-User-Id': uid } }));
 
 export const leaveSurveysApi = (token: string, uid: string, networkId: string, surveyId: string, reason: string) =>
-    fetch(new Request(url(`networks/${networkId}/surveys/${surveyId}/leave`),
+    fetch(new Request(url(`v1/client/networks/${networkId}/surveys/${surveyId}/leave`),
         {
             method: 'POST',
             headers: {
@@ -20,15 +20,15 @@ export const leaveSurveysApi = (token: string, uid: string, networkId: string, s
             body: JSON.stringify({ reason: reason, })
         }));
 
-export const getOffersApi = (token: string, uid: string) => fetch(new Request(url('offers'), {
+export const getOffersApi = (token: string, uid: string) => fetch(new Request(url('v1/client/offers'), {
     headers: { 'X-User-Id': uid, 'X-Api-Token': token }
 }));
 
-export const getAppSettingsApi = (token: string, uid: string) => fetch(new Request(url('settings/v2'), {
+export const getAppSettingsApi = (token: string, uid: string) => fetch(new Request(url('v1/client/settings/v2'), {
     headers: { 'X-Api-Token': token, 'X-User-Id': uid }
 }));
 
-export const getLeaderboardApi = (token: string, uid: string) => fetch(new Request(url('leaderboard'), {
+export const getLeaderboardApi = (token: string, uid: string) => fetch(new Request(url('v1/client/leaderboard'), {
     headers: { 'X-Api-Token': token, 'X-User-Id': uid }
 }));
 
