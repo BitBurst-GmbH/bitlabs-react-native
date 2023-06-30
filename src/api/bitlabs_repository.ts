@@ -1,4 +1,4 @@
-import { getSurveysApi, getAppSettingsApi, getLeaderboardApi, getOffersApi, leaveSurveysApi } from "./bitlabs_api";
+import { getSurveysApi, getAppSettingsApi, getLeaderboardApi, getOffersApi, updateClickApi } from "./bitlabs_api";
 import type { BitLabsResponse, GetSurveysResponse, GetAppSettingsResponse, GetLeaderboardResponse, GetOffersResponse, Survey } from "./bitlabs_repository.types";
 
 export const getSurveysRepo = async (token: string, uid: string, onResponse: (surveys: Survey[]) => void, onFailure: (error: Error) => void) => {
@@ -13,8 +13,8 @@ export const getSurveysRepo = async (token: string, uid: string, onResponse: (su
     onResponse(body.data.surveys);
 }
 
-export const leaveSurveysRepo = async (token: string, uid: string, networkId: string, surveyId: string, reason: string) => {
-    const response = await leaveSurveysApi(token, uid, networkId, surveyId, reason);
+export const leaveSurveysRepo = async (token: string, uid: string, clickId: string, reason: string) => {
+    const response = await updateClickApi(token, uid, clickId, reason);
     const body = await (response.json() as Promise<BitLabsResponse<void>>);
 
     if (body.error) {

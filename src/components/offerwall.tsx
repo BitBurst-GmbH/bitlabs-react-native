@@ -22,8 +22,7 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
     let backHandler: NativeEventSubscription;
 
     let reward = useRef(0.0);
-    let surveyId = useRef('');
-    let networkId = useRef('');
+    let clickId = useRef('');
 
     const styles = OfferWallStyles();
     const queries = Object.entries(tags ?? {}).map(([key, value]) => `&${key}=${value}`);
@@ -76,11 +75,10 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
 
     const onBackPressed = (reason: string = '') => {
         setKey((key + 1) % 2);
-        if (networkId.current.length > 0 && surveyId.current.length > 0) {
+        if (clickId.current.length > 0) {
             console.log(`Leaving with reason ~> ${reason}`);
-            leaveSurveysRepo(token, uid, networkId.current, surveyId.current, reason);
-            networkId.current = '';
-            surveyId.current = '';
+            leaveSurveysRepo(token, uid, clickId.current, reason);
+            clickId.current = '';
         }
     }
 
@@ -88,12 +86,10 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
         const url = nativeEvent.url;
         setIsPageOfferwall(url.startsWith('https://web.bitlabs.ai'));
 
-        if (url.includes('survey/complete') || url.includes('survey/screenout')) {
+        if (url.includes('survey-compete') || url.includes('survey-screenout') || url.includes('start-bonus')) {
             reward.current += extractValue(url);
         } else {
-            const [idNetwork, idSurvey] = extractNetworkIdAndSurveyId(url);
-            networkId.current = idNetwork ?? networkId.current;
-            surveyId.current = idSurvey ?? surveyId.current;
+            clickId.current = extractClickId(url) ?? clickId.current;
         }
     }
 
@@ -159,20 +155,17 @@ const extractValue = (url: string) => {
     return parseFloat(value ?? '0');
 }
 
-const extractNetworkIdAndSurveyId = (url: string) => {
+const extractClickId = (url: string) => {
     if (!url.startsWith('https://redirect.bitlabs.ai/'))
-        return [null, null];
+        return null;
 
-    const params = url.split(/([?,=,&])/);
-    let index = params.indexOf('network');
-    const networkId = params[index + 2];
-    index = params.indexOf('survey');
-    const surveyId = params[index + 2];
+    const params = url.split(/([?,=,&])/)
+    let index = params.indexOf('clk');
+    const clk = params[index + 2];
 
-    if (!networkId || !surveyId)
-        return [null, null];
+    if (!clk) return null;
 
-    return [networkId, surveyId];
+    return clk;
 }
 
 export default OfferWall;
