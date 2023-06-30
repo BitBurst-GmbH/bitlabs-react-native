@@ -14,8 +14,7 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
     <View style={styles.container}>
       <BitLabsLeaderboard
         uid={uid}
-        token={token}
-      />
+        token={token} />
       <TouchableOpacity
         style={styles.box}
         onPress={() => checkSurveys(token, uid, (hasSurveys) => console.log(`[Example] Has Surveys: ${hasSurveys}`), (error) => console.log(error.message))}>
