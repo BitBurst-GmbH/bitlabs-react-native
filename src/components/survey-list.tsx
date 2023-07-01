@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import SimpleWidget from './simple-survey';
 import CompactWidget from './compact-survey';
 import type { Survey } from '../api/bitlabs_repository.types';
-import { getAppSettingsRepo, getSurveysRepo } from '../api/bitlabs_repository';
+import { getAppSettings, getSurveysRepo } from '../api/bitlabs_repository';
 import { WidgetType } from '../api/widget-type';
 import FullWidthWidget from './fullwidth-survey';
 import { extractColors } from '../utils/helpers';
@@ -23,7 +23,7 @@ const SurveyList = ({ uid, token, style, type, onSurveyPressed }: Props) => {
 
   useEffect(() => {
     getSurveysRepo(token, uid, (surveyList) => setSurveys(surveyList), (error) => console.error(`[BitLabs] ${error}`));
-    getAppSettingsRepo(token, uid, (color) => setColor(extractColors(color)));
+    getAppSettings(token, uid, (color) => setColor(extractColors(color)));
   }, []);
 
   return (

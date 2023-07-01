@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Appearance, BackHandler, Image, Linking, type NativeEventSubscription, Platform, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import WebView from 'react-native-webview';
 import type { ShouldStartLoadRequest, WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
-import { getAppSettingsRepo, getHasOffersRepo, leaveSurveysRepo } from '../api/bitlabs_repository';
+import { getAppSettings, getHasOffers, leaveSurveys } from '../api/bitlabs_repository';
 import LeaveSurveyModal from './leave-survey-modal';
 import OfferWallStyles from '../styles/offerwall.styles';
 import Images from '../assets/images';
@@ -61,8 +61,8 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
 
     // Mount/Unmount hook
     useEffect(() => {
-        getHasOffersRepo(token, uid).then((hasOffers) => setHasOffers(hasOffers));
-        getAppSettingsRepo(token, uid, (_, navigationColor, isOffersEnabled) => {
+        getHasOffers(token, uid).then((hasOffers) => setHasOffers(hasOffers));
+        getAppSettings(token, uid, (_, navigationColor, isOffersEnabled) => {
             setColor(extractColors(navigationColor));
             setIsOffersEnabled(isOffersEnabled);
         });
@@ -77,7 +77,7 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
         setKey((key + 1) % 2);
         if (clickId.current.length > 0) {
             console.log(`Leaving with reason ~> ${reason}`);
-            leaveSurveysRepo(token, uid, clickId.current, reason);
+            leaveSurveys(token, uid, clickId.current, reason);
             clickId.current = '';
         }
     }

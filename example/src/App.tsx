@@ -23,7 +23,7 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
       <TouchableOpacity
         style={styles.box}
         onPress={() => getSurveys(token, uid, (surveys) => console.log(`[Example] Getting surveys -> ${surveys.map((survey) =>
-          `Survey ${survey.id} in ${survey.details.category.name}`)}`), (error) => console.log(error.message))}>
+          `Survey ${survey.id} in ${survey.category.name}`)}`), (error) => console.log(error.message))}>
         <Text>Get Surveys</Text>
       </TouchableOpacity>
       <TouchableOpacity

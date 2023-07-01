@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import type { GetLeaderboardResponse } from "../api/bitlabs_repository.types"
-import { getAppSettingsRepo, getCurrencyIconRepo, getLeaderboardRepo } from "../api/bitlabs_repository";
+import { getAppSettings, getCurrencyIcon, getLeaderboard } from "../api/bitlabs_repository";
 import { FlatList, Image, Text, View } from "react-native";
 import LeaderboardItem from "./leaderboard-item";
 import { SvgFromUri } from "react-native-svg";
@@ -17,8 +17,8 @@ const Leaderboard = ({ uid, token }: Props) => {
     const [leaderboard, setLeaderboard] = useState<GetLeaderboardResponse>();
 
     useEffect(() => {
-        getLeaderboardRepo(token, uid, leaderboard => setLeaderboard(leaderboard));
-        getAppSettingsRepo(token, uid, (color, _2, _3, url) => {
+        getLeaderboard(token, uid, leaderboard => setLeaderboard(leaderboard));
+        getAppSettings(token, uid, (color, _2, _3, url) => {
             setUrl(url);
             setColor(extractColors(color)[0]?.toString() || '#000');
         });
@@ -26,7 +26,7 @@ const Leaderboard = ({ uid, token }: Props) => {
 
     useEffect(() => {
         if (url) {
-            getCurrencyIconRepo(url, (iconUri, isSvg) => setCurrencyIcon(
+            getCurrencyIcon(url, (iconUri, isSvg) => setCurrencyIcon(
                 isSvg
                     ? <SvgFromUri uri={iconUri} width={20} height={20} style={{ marginHorizontal: 2 }} />
                     : <Image source={{ uri: iconUri }} style={{ width: 20, height: 20, resizeMode: 'contain' }} />
