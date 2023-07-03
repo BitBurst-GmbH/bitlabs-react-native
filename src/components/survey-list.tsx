@@ -33,7 +33,7 @@ const SurveyList = ({ uid, token, style, type, onSurveyPressed }: Props) => {
       showsHorizontalScrollIndicator={false}
       renderItem={({ item }) => (
         <Gradient style={getStyle(type)} colors={color} rectRadius={5} >
-          {getWidget(type, color[0]!.toString(), onSurveyPressed, item)}
+          {getWidget(type, color, onSurveyPressed, item)}
         </Gradient>)}
       style={[style, { flexGrow: 0, marginVertical: 12 }]}
     />
@@ -47,18 +47,18 @@ const getStyle = (type: WidgetType) => {
     case WidgetType.Compact:
       return { width: 300, height: 80, margin: 4, };
     case WidgetType.FullWidth:
-      return { width: 400, height: 50, margin: 4, };
+      return { width: 450, height: 50, margin: 4, };
   }
 };
 
-const getWidget = (type: WidgetType, color: string, onPress: () => void, survey: Survey) => {
+const getWidget = (type: WidgetType, colors: String[], onPress: () => void, survey: Survey) => {
   switch (type) {
     case WidgetType.Simple:
-      return (<SimpleWidget onPress={onPress} survey={survey} />);
+      return (<SimpleWidget onPress={onPress} survey={survey} color={colors[0]!.toString()} />);
     case WidgetType.Compact:
-      return (<CompactWidget color={color} onPress={onPress} survey={survey} />);
+      return (<CompactWidget colors={colors.map(s => s.toString())} onPress={onPress} survey={survey} />);
     case WidgetType.FullWidth:
-      return (<FullWidthWidget color={color} onPress={onPress} survey={survey} />);
+      return (<FullWidthWidget color={colors[0]!.toString()} onPress={onPress} survey={survey} />);
 
   }
 }

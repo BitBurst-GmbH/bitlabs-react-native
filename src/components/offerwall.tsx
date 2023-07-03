@@ -61,7 +61,7 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
 
     // Mount/Unmount hook
     useEffect(() => {
-        getHasOffers(token, uid).then((hasOffers) => setHasOffers(hasOffers));
+        getHasOffers(token, uid).then((hasOffers) => setHasOffers(hasOffers ?? false));
         getAppSettings(token, uid, (_, navigationColor, isOffersEnabled) => {
             setColor(extractColors(navigationColor));
             setIsOffersEnabled(isOffersEnabled);

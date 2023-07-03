@@ -52,4 +52,17 @@ export default (color: string) => StyleSheet.create({
         fontSize: 16,
         fontWeight: '500',
     },
+    oldRewardText: {
+        color: color,
+        fontSize: 12,
+        fontWeight: '600',
+        textDecorationLine: 'line-through',
+    },
+    percentageText: {
+        fontSize: 11,
+        color: '#fff',
+        fontWeight: '600',
+        paddingVertical: 2,
+        paddingHorizontal: 2,
+    },
 });

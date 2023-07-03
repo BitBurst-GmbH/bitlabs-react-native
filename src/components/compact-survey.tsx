@@ -4,15 +4,16 @@ import SurveyStyles from '../styles/compact-survey.styles'
 import RatingBar from './rating-bar'
 import Images from '../assets/images'
 import type { Survey } from '../api/bitlabs_repository.types'
+import Gradient from './gradient'
 
 type Props = {
     survey: Survey,
-    color?: string,
+    colors: string[],
     onPress: () => void,
 }
 
-const Widget = ({ survey, color, onPress }: Props) => {
-    const styles = SurveyStyles(color ?? '#007bff');
+const Widget = ({ survey, colors, onPress }: Props) => {
+    const styles = SurveyStyles(colors[0]?.toString() ?? '#007bff');
 
     return (
         <TouchableOpacity
@@ -27,12 +28,22 @@ const Widget = ({ survey, color, onPress }: Props) => {
                 </View>
                 <RatingBar rating={survey.rating} />
             </View>
-            <View style={styles.rightView}>
+
+            <View style={[styles.rightView]}>
                 <Image
                     style={styles.playImage}
                     source={Images.circlePlayLight} />
-                <Text style={styles.earnText}>EARN{'\n'}{survey.value}</Text>
+                <View>
+                    <Text style={styles.earnText}>EARN{'\n'}{survey.value}</Text>
+                    <View style={{ flexDirection: 'row', }}>
+                        <Text style={[styles.oldRewardText, { alignSelf: 'flex-end' }]}>{survey.value}</Text>
+                        <Gradient colors={colors} rectRadius={5} style={{ marginHorizontal: 4 }}>
+                            <Text style={styles.percentageText}>+20%</Text>
+                        </Gradient>
+                    </View>
+                </View>
             </View>
+
         </TouchableOpacity>
     )
 }

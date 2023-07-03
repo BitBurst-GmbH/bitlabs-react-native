@@ -25,7 +25,15 @@ export default ({ survey, color, onPress }: Props) => {
                     <Image style={styles.durationImage} source={images.clockRegular} />
                     <Text style={styles.rewardText}>{Math.round(survey.loi)} minutes</Text>
                 </View>
-                <Text style={styles.rewardText}>{survey.value}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <View>
+                        <Text style={styles.oldRewardText}>{survey.value}</Text>
+                        <Text style={styles.rewardText}>{survey.value}</Text>
+                    </View>
+                    <View>
+                        <Text style={styles.percentageText}>+20%</Text>
+                    </View>
+                </View>
             </View>
             <View style={styles.rightView}><Text style={styles.earnText}>EARN NOW</Text></View>
         </TouchableOpacity>

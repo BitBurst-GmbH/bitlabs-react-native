@@ -9,9 +9,9 @@ export default (color: string) => StyleSheet.create({
     },
     leftView: {
         marginHorizontal: 4,
-        justifyContent: 'space-evenly',
         alignItems: 'center',
         flexDirection: 'row',
+        justifyContent: 'space-evenly',
     },
     durationView: {
         marginHorizontal: 8,
@@ -23,16 +23,33 @@ export default (color: string) => StyleSheet.create({
         height: 16,
         resizeMode: 'contain',
     },
+    oldRewardText: {
+        fontSize: 11,
+        color: '#fff',
+        fontWeight: '600',
+        marginHorizontal: 4,
+        textDecorationLine: 'line-through',
+    },
     rewardText: {
         color: '#fff',
         fontWeight: '600',
         marginHorizontal: 4,
     },
+    percentageText: {
+        color: color,
+        fontSize: 11,
+        borderRadius: 5,
+        fontWeight: '600',
+        paddingVertical: 2,
+        marginHorizontal: 4,
+        paddingHorizontal: 4,
+        backgroundColor: '#fff',
+    },
     rightView: {
-        justifyContent: 'center',
+        borderRadius: 5,
         paddingHorizontal: 24,
         backgroundColor: '#fff',
-        borderRadius: 5,
+        justifyContent: 'center',
     },
     earnText: {
         color: color,

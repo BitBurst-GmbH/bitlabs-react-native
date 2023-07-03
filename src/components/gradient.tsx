@@ -19,7 +19,7 @@ const Gradient = ({ children, style, colors, rectRadius }: Props) => {
                         <Stop offset='1' stopColor={colors[1]?.toString()} stopOpacity='1' />
                     </LinearGradient>
                 </Defs>
-                <Rect rx={rectRadius} height='100%' width='100%' fill='url(#idGrad)' />
+                <Rect rx={rectRadius} ry={rectRadius} height='100%' width='100%' fill='url(#idGrad)' />
             </Svg>
             {children}
         </View>
