@@ -5,14 +5,17 @@ import RatingBar from './rating-bar'
 import Images from '../assets/images'
 import type { Survey } from '../api/bitlabs_repository.types'
 import Gradient from './gradient'
+import { RewardView } from './reward-view'
 
 type Props = {
     survey: Survey,
     colors: string[],
     onPress: () => void,
+    currency?: React.JSX.Element,
+    oldCurrency?: React.JSX.Element,
 }
 
-const Widget = ({ survey, colors, onPress }: Props) => {
+const Widget = ({ survey, colors, onPress, currency, oldCurrency }: Props) => {
     const styles = SurveyStyles(colors[0]?.toString() ?? '#007bff');
 
     return (
@@ -29,18 +32,23 @@ const Widget = ({ survey, colors, onPress }: Props) => {
                 <RatingBar rating={survey.rating} />
             </View>
 
-            <View style={[styles.rightView]}>
-                <Image
-                    style={styles.playImage}
-                    source={Images.circlePlayLight} />
-                <View>
-                    <Text style={styles.earnText}>EARN{'\n'}{survey.value}</Text>
-                    <View style={{ flexDirection: 'row', }}>
-                        <Text style={[styles.oldRewardText, { alignSelf: 'flex-end' }]}>{survey.value}</Text>
-                        <Gradient colors={colors} rectRadius={5} style={{ marginHorizontal: 4 }}>
-                            <Text style={styles.percentageText}>+20%</Text>
-                        </Gradient>
+            <View style={styles.rightView}>
+                <View style={styles.earnView}>
+                    <Image
+                        style={styles.playImage}
+                        source={Images.circlePlayLight} />
+                    <View>
+                        <View style={{ flexDirection: 'column' }}>
+                            <Text style={styles.earnText}>EARN</Text>
+                            <RewardView styles={styles.earnText} value={survey.value} currency={currency} />
+                        </View>
                     </View>
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end' }}>
+                    <RewardView styles={styles.oldRewardText} value={survey.value} currency={oldCurrency} />
+                    <Gradient colors={colors} rectRadius={5} style={{ marginHorizontal: 2 }}>
+                        <Text style={styles.percentageText}>+20%</Text>
+                    </Gradient>
                 </View>
             </View>
 

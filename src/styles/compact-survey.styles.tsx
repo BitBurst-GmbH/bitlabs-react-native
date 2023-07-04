@@ -36,10 +36,13 @@ export default (color: string) => StyleSheet.create({
     rightView: {
         ...genericView,
         flex: 0.9,
-        flexDirection: 'row',
-        alignItems: 'center',
         backgroundColor: '#fff',
-        justifyContent: 'space-around',
+    },
+    earnView: {
+        flex: 1,
+        alignItems: 'flex-end',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
     },
     playImage: {
         width: 42,
@@ -54,15 +57,15 @@ export default (color: string) => StyleSheet.create({
     },
     oldRewardText: {
         color: color,
-        fontSize: 12,
+        fontSize: 10,
         fontWeight: '600',
         textDecorationLine: 'line-through',
     },
     percentageText: {
-        fontSize: 11,
+        fontSize: 10,
         color: '#fff',
         fontWeight: '600',
-        paddingVertical: 2,
+        paddingVertical: 3,
         paddingHorizontal: 2,
     },
 });
