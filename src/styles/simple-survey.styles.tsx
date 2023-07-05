@@ -32,6 +32,7 @@ export default (color: string) => StyleSheet.create({
         fontSize: 12,
         borderRadius: 5,
         fontWeight: '600',
+        overflow: 'hidden',
         paddingVertical: 2,
         marginHorizontal: 4,
         paddingHorizontal: 4,

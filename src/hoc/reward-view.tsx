@@ -8,7 +8,7 @@ type Props = {
 }
 
 export const RewardView = ({ currency, styles, value }: Props) => (
-    <View style={{ flexDirection: 'row' }}>
+    <View style={{ flexDirection: 'row', }}>
         <Text style={styles}>{value}</Text>
         {currency}
     </View>

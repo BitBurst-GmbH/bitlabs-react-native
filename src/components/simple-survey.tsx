@@ -3,15 +3,18 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 import Images from '../assets/images'
 import SurveyStyles from '../styles/simple-survey.styles'
 import type { Survey } from '../api/bitlabs_repository.types';
+import { RewardView } from '../hoc/reward-view';
 
 
 type Props = {
     color: string,
     survey: Survey,
     onPress: () => void,
+    currency?: React.JSX.Element,
+    oldCurrency?: React.JSX.Element,
 }
 
-const Widget = ({ color, survey, onPress }: Props) => {
+const Widget = ({ color, survey, onPress, currency, oldCurrency }: Props) => {
     const styles = SurveyStyles(color);
 
     return (
@@ -23,13 +26,11 @@ const Widget = ({ color, survey, onPress }: Props) => {
                 source={Images.circlePlayLight} />
             <View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <View>
-                        <Text style={[styles.oldRewardText, { alignSelf: 'flex-end' }]}>{survey.value}</Text>
-                        <Text style={styles.earnText}>EARN {survey.value}</Text>
+                    <View style={{ alignItems: 'flex-end' }}>
+                        <RewardView value={survey.value} currency={oldCurrency} styles={styles.oldRewardText} />
+                        <RewardView value={`EARN ${survey.value}`} currency={currency} styles={styles.earnText} />
                     </View>
-                    <View>
-                        <Text style={styles.percentageText}>+20%</Text>
-                    </View>
+                    <Text style={styles.percentageText}>+20%</Text>
                 </View>
                 <Text style={styles.durationText}>Now in {Math.round(survey.loi)} minutes!</Text>
             </View>

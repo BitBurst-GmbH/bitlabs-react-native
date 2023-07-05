@@ -3,16 +3,19 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 import type { Survey } from "../api/bitlabs_repository.types";
 import images from "../assets/images";
 import SurveyStyles from "../styles/fullwidth-survey.styles";
-import RatingBar from "./rating-bar";
+import RatingBar from "../hoc/rating-bar";
+import { RewardView } from "../hoc/reward-view";
 
 
 type Props = {
     survey: Survey,
     color: string,
     onPress: () => void,
+    currency?: React.JSX.Element,
+    oldCurrency?: React.JSX.Element,
 }
 
-export default ({ survey, color, onPress }: Props) => {
+export default ({ survey, color, onPress, currency, oldCurrency }: Props) => {
     const styles = SurveyStyles(color);
 
     return (
@@ -27,12 +30,10 @@ export default ({ survey, color, onPress }: Props) => {
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <View>
-                        <Text style={styles.oldRewardText}>{survey.value}</Text>
-                        <Text style={styles.rewardText}>{survey.value}</Text>
+                        <RewardView styles={styles.oldRewardText} currency={oldCurrency} value={survey.value} />
+                        <RewardView styles={styles.rewardText} currency={currency} value={survey.value} />
                     </View>
-                    <View>
-                        <Text style={styles.percentageText}>+20%</Text>
-                    </View>
+                    <Text style={styles.percentageText}>+20%</Text>
                 </View>
             </View>
             <View style={styles.rightView}><Text style={styles.earnText}>EARN NOW</Text></View>

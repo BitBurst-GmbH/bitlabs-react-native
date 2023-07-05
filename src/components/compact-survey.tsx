@@ -1,11 +1,11 @@
 import React from 'react'
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 import SurveyStyles from '../styles/compact-survey.styles'
-import RatingBar from './rating-bar'
+import RatingBar from '../hoc/rating-bar'
 import Images from '../assets/images'
 import type { Survey } from '../api/bitlabs_repository.types'
-import Gradient from './gradient'
-import { RewardView } from './reward-view'
+import Gradient from '../hoc/gradient'
+import { RewardView } from '../hoc/reward-view'
 
 type Props = {
     survey: Survey,

@@ -7,7 +7,7 @@ import LeaveSurveyModal from './leave-survey-modal';
 import OfferWallStyles from '../styles/offerwall.styles';
 import Images from '../assets/images';
 import { extractColors, isColorLuminant } from '../utils/helpers';
-import Gradient from './gradient';
+import Gradient from '../hoc/gradient';
 
 type Props = {
     uid: string,

@@ -1,4 +1,4 @@
-import { FlatList, Image, type StyleProp, type ViewStyle } from 'react-native'
+import { FlatList, type StyleProp, type ViewStyle } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import SimpleWidget from './simple-survey';
 import CompactWidget from './compact-survey';
@@ -7,8 +7,8 @@ import { getAppSettings, getIsImageSVG, getSurveysRepo } from '../api/bitlabs_re
 import { WidgetType } from '../api/widget-type';
 import FullWidthWidget from './fullwidth-survey';
 import { extractColors } from '../utils/helpers';
-import Gradient from './gradient';
-import { SvgFromUri } from 'react-native-svg';
+import Gradient from '../hoc/gradient';
+import { CurrencyIcon } from '../hoc/currency-icon';
 
 type Props = {
   uid: string,
@@ -31,18 +31,8 @@ const SurveyList = ({ uid, token, style, type, onSurveyPressed }: Props) => {
 
       if (url) getIsImageSVG(url, (isSVG) => {
         var size = getDimension(type);
-        setCurrency(
-          isSVG
-            ? <SvgFromUri uri={url} width={size} height={size} style={{ marginHorizontal: 2 }} />
-            : <Image source={{ uri: url }} style={{ width: size, height: size, resizeMode: 'contain' }} />
-        );
-
-        size *= 0.7;
-        setOldCurrency(
-          isSVG
-            ? <SvgFromUri uri={url} width={size} height={size} style={{ marginHorizontal: 2 }} />
-            : <Image source={{ uri: url }} style={{ width: size, height: size, resizeMode: 'contain' }} />
-        );
+        setCurrency(<CurrencyIcon isSVG={isSVG} url={url} size={size} />);
+        setOldCurrency(<CurrencyIcon isSVG={isSVG} url={url} size={size * .7} />);
       });
     });
 
@@ -80,18 +70,18 @@ const getStyle = (type: WidgetType) => {
     case WidgetType.Compact:
       return { width: 300, height: 80, margin: 4, };
     case WidgetType.FullWidth:
-      return { width: 450, height: 50, margin: 4, };
+      return { width: 500, height: 50, margin: 4, };
   }
 };
 
 const getWidget = (type: WidgetType, colors: String[], onPress: () => void, survey: Survey, currency?: React.JSX.Element, oldCurrency?: React.JSX.Element) => {
   switch (type) {
     case WidgetType.Simple:
-      return (<SimpleWidget onPress={onPress} survey={survey} color={colors[0]!.toString()} />);
+      return (<SimpleWidget onPress={onPress} survey={survey} color={colors[0]!.toString()} currency={currency} oldCurrency={oldCurrency} />);
     case WidgetType.Compact:
       return (<CompactWidget colors={colors.map(s => s.toString())} onPress={onPress} survey={survey} currency={currency} oldCurrency={oldCurrency} />);
     case WidgetType.FullWidth:
-      return (<FullWidthWidget color={colors[0]!.toString()} onPress={onPress} survey={survey} />);
+      return (<FullWidthWidget color={colors[0]!.toString()} onPress={onPress} survey={survey} currency={currency} oldCurrency={oldCurrency} />);
 
   }
 }

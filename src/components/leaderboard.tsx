@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react"
 import type { GetLeaderboardResponse } from "../api/bitlabs_repository.types"
 import { getAppSettings, getIsImageSVG, getLeaderboard } from "../api/bitlabs_repository";
-import { FlatList, Image, Text, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 import LeaderboardItem from "./leaderboard-item";
-import { SvgFromUri } from "react-native-svg";
 import { extractColors } from "../utils/helpers";
+import { CurrencyIcon } from "../hoc/currency-icon";
 
 type Props = {
     uid: string, token: string,
@@ -19,11 +19,7 @@ const Leaderboard = ({ uid, token }: Props) => {
         getLeaderboard(token, uid, leaderboard => setLeaderboard(leaderboard));
         getAppSettings(token, uid, (color, _2, _3, url) => {
 
-            if (url) getIsImageSVG(url, (isSvg) => setCurrencyIcon(
-                isSvg
-                    ? <SvgFromUri uri={url} width={20} height={20} style={{ marginHorizontal: 2 }} />
-                    : <Image source={{ uri: url }} style={{ width: 20, height: 20, resizeMode: 'contain' }} />
-            ));
+            if (url) getIsImageSVG(url, (isSvg) => setCurrencyIcon(<CurrencyIcon isSVG={isSvg} url={url} size={20} />));
 
             setColor(extractColors(color)[0]?.toString() || '#000');
         });
