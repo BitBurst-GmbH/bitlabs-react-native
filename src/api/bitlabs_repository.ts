@@ -48,7 +48,6 @@ export const getLeaderboard = async (token: string, uid: string, onResponse: (le
     })
     .catch(error => console.error(error));
 
-export const getCurrencyIcon = async (url: string, onResponse: (iconUri: string, isSvg: boolean) => void) => fetch(new Request(url))
-    .then(response => response.blob())
-    .then(blob => onResponse(URL.createObjectURL(blob), blob.type === 'image/svg+xml'))
+export const getIsImageSVG = async (url: string, onResponse: (isSVG: boolean) => void) => fetch(new Request(url))
+    .then(response => onResponse(response.headers.get('content-type') === 'image/svg+xml'))
     .catch(error => console.error(error));

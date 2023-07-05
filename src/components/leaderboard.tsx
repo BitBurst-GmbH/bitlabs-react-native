@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import type { GetLeaderboardResponse } from "../api/bitlabs_repository.types"
-import { getAppSettings, getCurrencyIcon, getLeaderboard } from "../api/bitlabs_repository";
+import { getAppSettings, getIsImageSVG, getLeaderboard } from "../api/bitlabs_repository";
 import { FlatList, Image, Text, View } from "react-native";
 import LeaderboardItem from "./leaderboard-item";
 import { SvgFromUri } from "react-native-svg";
@@ -11,7 +11,6 @@ type Props = {
 }
 
 const Leaderboard = ({ uid, token }: Props) => {
-    const [url, setUrl] = useState<string>();
     const [color, setColor] = useState('#000');
     const [currencyIcon, setCurrencyIcon] = useState<React.JSX.Element>();
     const [leaderboard, setLeaderboard] = useState<GetLeaderboardResponse>();
@@ -19,20 +18,16 @@ const Leaderboard = ({ uid, token }: Props) => {
     useEffect(() => {
         getLeaderboard(token, uid, leaderboard => setLeaderboard(leaderboard));
         getAppSettings(token, uid, (color, _2, _3, url) => {
-            setUrl(url);
+
+            if (url) getIsImageSVG(url, (isSvg) => setCurrencyIcon(
+                isSvg
+                    ? <SvgFromUri uri={url} width={20} height={20} style={{ marginHorizontal: 2 }} />
+                    : <Image source={{ uri: url }} style={{ width: 20, height: 20, resizeMode: 'contain' }} />
+            ));
+
             setColor(extractColors(color)[0]?.toString() || '#000');
         });
     }, []);
-
-    useEffect(() => {
-        if (url) {
-            getCurrencyIcon(url, (iconUri, isSvg) => setCurrencyIcon(
-                isSvg
-                    ? <SvgFromUri uri={iconUri} width={20} height={20} style={{ marginHorizontal: 2 }} />
-                    : <Image source={{ uri: iconUri }} style={{ width: 20, height: 20, resizeMode: 'contain' }} />
-            ));
-        }
-    }, [url]);
 
     return leaderboard?.top_users ? (
         <View style={{ alignSelf: 'stretch', height: '25%' }}>

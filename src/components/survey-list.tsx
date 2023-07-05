@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import SimpleWidget from './simple-survey';
 import CompactWidget from './compact-survey';
 import type { Survey } from '../api/bitlabs_repository.types';
-import { getAppSettings, getCurrencyIcon, getSurveysRepo } from '../api/bitlabs_repository';
+import { getAppSettings, getIsImageSVG, getSurveysRepo } from '../api/bitlabs_repository';
 import { WidgetType } from '../api/widget-type';
 import FullWidthWidget from './fullwidth-survey';
 import { extractColors } from '../utils/helpers';
@@ -29,19 +29,19 @@ const SurveyList = ({ uid, token, style, type, onSurveyPressed }: Props) => {
     getAppSettings(token, uid, (color, _2, _3, url) => {
       setColor(extractColors(color));
 
-      if (url) getCurrencyIcon(url, (iconUri, isSvg) => {
+      if (url) getIsImageSVG(url, (isSVG) => {
         var size = getDimension(type);
         setCurrency(
-          isSvg
-            ? <SvgFromUri uri={iconUri} width={size} height={size} style={{ marginHorizontal: 2 }} />
-            : <Image source={{ uri: iconUri }} style={{ width: size, height: size, resizeMode: 'contain' }} />
+          isSVG
+            ? <SvgFromUri uri={url} width={size} height={size} style={{ marginHorizontal: 2 }} />
+            : <Image source={{ uri: url }} style={{ width: size, height: size, resizeMode: 'contain' }} />
         );
 
         size *= 0.7;
         setOldCurrency(
-          isSvg
-            ? <SvgFromUri uri={iconUri} width={size} height={size} style={{ marginHorizontal: 2 }} />
-            : <Image source={{ uri: iconUri }} style={{ width: size, height: size, resizeMode: 'contain' }} />
+          isSVG
+            ? <SvgFromUri uri={url} width={size} height={size} style={{ marginHorizontal: 2 }} />
+            : <Image source={{ uri: url }} style={{ width: size, height: size, resizeMode: 'contain' }} />
         );
       });
     });
