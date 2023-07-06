@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import type { GetLeaderboardResponse } from "../api/bitlabs_repository.types"
+import type { GetLeaderboardResponse } from "../api/types"
 import { getAppSettings, getIsImageSVG, getLeaderboard } from "../api/bitlabs_repository";
 import { FlatList, Text, View } from "react-native";
 import LeaderboardItem from "./leaderboard-item";
@@ -17,7 +17,7 @@ const Leaderboard = ({ uid, token }: Props) => {
 
     useEffect(() => {
         getLeaderboard(token, uid, leaderboard => setLeaderboard(leaderboard));
-        getAppSettings(token, uid, (color, _2, _3, url) => {
+        getAppSettings(token, uid, (color, _2, _3, _4, url) => {
 
             if (url) getIsImageSVG(url, (isSvg) => setCurrencyIcon(<CurrencyIcon isSVG={isSvg} url={url} size={20} />));
 

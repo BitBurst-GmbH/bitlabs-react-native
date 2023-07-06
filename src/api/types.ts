@@ -1,3 +1,5 @@
+import React from 'react';
+
 export type BitLabsResponse<T> = {
     data: T,
     error: {
@@ -90,4 +92,18 @@ export type User = {
     earnings_raw: number,
     name: String,
     rank: number,
+}
+
+export type SurveyProperties = {
+    colors: string[],
+    onPress: () => void,
+    bonusPercentage: number,
+    currency?: React.JSX.Element,
+    oldCurrency?: React.JSX.Element,
+}
+
+export enum WidgetType {
+    Simple,
+    Compact,
+    FullWidth
 }

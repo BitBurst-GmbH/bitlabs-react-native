@@ -1,27 +1,27 @@
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import type { Survey } from "../api/bitlabs_repository.types";
+import type { Survey, SurveyProperties } from "../api/types";
 import images from "../assets/images";
 import SurveyStyles from "../styles/fullwidth-survey.styles";
 import RatingBar from "../hoc/rating-bar";
 import { RewardView } from "../hoc/reward-view";
+import { rounded } from "../utils/helpers";
 
 
 type Props = {
     survey: Survey,
-    color: string,
-    onPress: () => void,
-    currency?: React.JSX.Element,
-    oldCurrency?: React.JSX.Element,
+    properties: SurveyProperties,
 }
 
-export default ({ survey, color, onPress, currency, oldCurrency }: Props) => {
-    const styles = SurveyStyles(color);
+export default ({ survey, properties }: Props) => {
+    const styles = SurveyStyles(properties.colors[0]?.toString() ?? '#007bff');
+
+    const oldReward = rounded(parseFloat(survey.value) / (1 + properties.bonusPercentage / 100));
 
     return (
         <TouchableOpacity
             style={styles.container}
-            onPress={onPress}>
+            onPress={properties.onPress}>
             <View style={styles.leftView}>
                 <RatingBar rating={survey.rating} />
                 <View style={styles.durationView}>
@@ -30,10 +30,10 @@ export default ({ survey, color, onPress, currency, oldCurrency }: Props) => {
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <View>
-                        <RewardView styles={styles.oldRewardText} currency={oldCurrency} value={survey.value} />
-                        <RewardView styles={styles.rewardText} currency={currency} value={survey.value} />
+                        {properties.bonusPercentage > 0 && <RewardView styles={styles.oldRewardText} currency={properties.oldCurrency} value={oldReward.toString()} />}
+                        <RewardView styles={styles.rewardText} currency={properties.currency} value={survey.value} />
                     </View>
-                    <Text style={styles.percentageText}>+20%</Text>
+                    {properties.bonusPercentage > 0 && <Text style={styles.percentageText}>+{properties.bonusPercentage}%</Text>}
                 </View>
             </View>
             <View style={styles.rightView}><Text style={styles.earnText}>EARN NOW</Text></View>

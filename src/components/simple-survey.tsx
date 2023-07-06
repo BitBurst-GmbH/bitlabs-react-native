@@ -2,35 +2,32 @@ import React from 'react'
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import Images from '../assets/images'
 import SurveyStyles from '../styles/simple-survey.styles'
-import type { Survey } from '../api/bitlabs_repository.types';
+import type { Survey, SurveyProperties } from '../api/types';
 import { RewardView } from '../hoc/reward-view';
 
 
 type Props = {
-    color: string,
     survey: Survey,
-    onPress: () => void,
-    currency?: React.JSX.Element,
-    oldCurrency?: React.JSX.Element,
+    properties: SurveyProperties,
 }
 
-const Widget = ({ color, survey, onPress, currency, oldCurrency }: Props) => {
-    const styles = SurveyStyles(color);
+const Widget = ({ survey, properties }: Props) => {
+    const styles = SurveyStyles(properties.colors[0]?.toString() ?? '#007bff');
 
     return (
         <TouchableOpacity
             style={styles.container}
-            onPress={onPress}>
+            onPress={properties.onPress}>
             <Image
                 style={styles.playImage}
                 source={Images.circlePlayLight} />
             <View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <View style={{ alignItems: 'flex-end' }}>
-                        <RewardView value={survey.value} currency={oldCurrency} styles={styles.oldRewardText} />
-                        <RewardView value={`EARN ${survey.value}`} currency={currency} styles={styles.earnText} />
+                        {properties.bonusPercentage > 0 && <RewardView value={survey.value} currency={properties.oldCurrency} styles={styles.oldRewardText} />}
+                        <RewardView value={`EARN ${survey.value}`} currency={properties.currency} styles={styles.earnText} />
                     </View>
-                    <Text style={styles.percentageText}>+20%</Text>
+                    {properties.bonusPercentage > 0 && <Text style={styles.percentageText}>+{properties.bonusPercentage}%</Text>}
                 </View>
                 <Text style={styles.durationText}>Now in {Math.round(survey.loi)} minutes!</Text>
             </View>

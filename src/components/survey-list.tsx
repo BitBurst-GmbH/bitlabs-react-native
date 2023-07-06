@@ -2,9 +2,8 @@ import { FlatList, type StyleProp, type ViewStyle } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import SimpleWidget from './simple-survey';
 import CompactWidget from './compact-survey';
-import type { Survey } from '../api/bitlabs_repository.types';
+import { type Survey, type SurveyProperties, WidgetType } from '../api/types';
 import { getAppSettings, getIsImageSVG, getSurveysRepo } from '../api/bitlabs_repository';
-import { WidgetType } from '../api/widget-type';
 import FullWidthWidget from './fullwidth-survey';
 import { extractColors } from '../utils/helpers';
 import Gradient from '../hoc/gradient';
@@ -21,13 +20,15 @@ type Props = {
 const SurveyList = ({ uid, token, style, type, onSurveyPressed }: Props) => {
   const [surveys, setSurveys] = useState<Survey[]>([])
   const [currency, setCurrency] = useState<React.JSX.Element>();
+  const [bonusPercentage, setBonusPercentage] = useState(0);
   const [oldCurrency, setOldCurrency] = useState<React.JSX.Element>();
-  const [color, setColor] = useState<String[]>(['#007bff', '#007bff']);
+  const [color, setColor] = useState(['#007bff', '#007bff']);
 
   useEffect(() => {
     getSurveysRepo(token, uid, (surveyList) => setSurveys(surveyList), (error) => console.error(`[BitLabs] ${error}`));
-    getAppSettings(token, uid, (color, _2, _3, url) => {
-      setColor(extractColors(color));
+    getAppSettings(token, uid, (color, _2, _3, bonusPercentage, url) => {
+      setColor(extractColors(color) as string[]);
+      setBonusPercentage(bonusPercentage);
 
       if (url) getIsImageSVG(url, (isSVG) => {
         var size = getDimension(type);
@@ -45,7 +46,13 @@ const SurveyList = ({ uid, token, style, type, onSurveyPressed }: Props) => {
       showsHorizontalScrollIndicator={false}
       renderItem={({ item }) => (
         <Gradient style={getStyle(type)} colors={color} rectRadius={5} >
-          {getWidget(type, color, onSurveyPressed, item, currency, oldCurrency)}
+          {getWidget(type, item, {
+            colors: color,
+            onPress: onSurveyPressed,
+            bonusPercentage: bonusPercentage,
+            currency: currency,
+            oldCurrency: oldCurrency
+          })}
         </Gradient>)}
       style={[style, { flexGrow: 0, marginVertical: 12 }]}
     />
@@ -74,14 +81,14 @@ const getStyle = (type: WidgetType) => {
   }
 };
 
-const getWidget = (type: WidgetType, colors: String[], onPress: () => void, survey: Survey, currency?: React.JSX.Element, oldCurrency?: React.JSX.Element) => {
+const getWidget = (type: WidgetType, survey: Survey, properties: SurveyProperties) => {
   switch (type) {
     case WidgetType.Simple:
-      return (<SimpleWidget onPress={onPress} survey={survey} color={colors[0]!.toString()} currency={currency} oldCurrency={oldCurrency} />);
+      return (<SimpleWidget survey={survey} properties={properties} />);
     case WidgetType.Compact:
-      return (<CompactWidget colors={colors.map(s => s.toString())} onPress={onPress} survey={survey} currency={currency} oldCurrency={oldCurrency} />);
+      return (<CompactWidget survey={survey} properties={properties} />);
     case WidgetType.FullWidth:
-      return (<FullWidthWidget color={colors[0]!.toString()} onPress={onPress} survey={survey} currency={currency} oldCurrency={oldCurrency} />);
+      return (<FullWidthWidget survey={survey} properties={properties} />);
 
   }
 }

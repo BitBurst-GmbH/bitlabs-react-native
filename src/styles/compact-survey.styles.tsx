@@ -40,7 +40,7 @@ export default (color: string) => StyleSheet.create({
     },
     earnView: {
         flex: 1,
-        alignItems: 'flex-end',
+        alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-evenly',
     },
