@@ -46,7 +46,12 @@ export type GetAppSettingsResponse = {
             content: string,
             is_image: boolean,
         }
-    }
+    },
+    promotion?: {
+        start_date: string,
+        end_date: string,
+        bonus_percentage: number,
+    },
 }
 
 export type GetLeaderboardResponse = {

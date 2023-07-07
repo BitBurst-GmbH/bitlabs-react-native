@@ -34,8 +34,12 @@ export const getAppSettings = async (token: string, uid: string, onResponse: (su
     .then(body => {
         if (body.error) throw new Error(`[BitLabs] ${body.error.details.http} - ${body.error.details.msg}`);
 
-        onResponse(body.data.visual.survey_icon_color, body.data.visual.navigation_color, body.data.offers.enabled,
-            body.data.currency.bonus_percentage, body.data.currency.symbol.is_image ? body.data.currency.symbol.content : undefined);
+        onResponse(
+            body.data.visual.survey_icon_color,
+            body.data.visual.navigation_color,
+            body.data.offers.enabled,
+            body.data.currency.bonus_percentage + (body.data.promotion?.bonus_percentage ?? 0),
+            body.data.currency.symbol.is_image ? body.data.currency.symbol.content : undefined);
     })
     .catch(error => console.error(error));
 
