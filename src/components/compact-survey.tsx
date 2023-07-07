@@ -6,6 +6,7 @@ import Images from '../assets/images'
 import type { Survey, SurveyProperties } from '../api/types'
 import Gradient from '../hoc/gradient'
 import { RewardView } from '../hoc/reward-view'
+import { rounded } from '../utils/helpers'
 
 type Props = {
     survey: Survey,
@@ -14,6 +15,7 @@ type Props = {
 
 const Widget = ({ survey, properties }: Props) => {
     const styles = SurveyStyles(properties.colors[0]?.toString() ?? '#007bff');
+    const oldReward = rounded(parseFloat(survey.value) / (1 + properties.bonusPercentage / 100)).toString();
 
     return (
         <TouchableOpacity
@@ -40,7 +42,7 @@ const Widget = ({ survey, properties }: Props) => {
                     </View>
                 </View>
                 {properties.bonusPercentage > 0 && <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end' }}>
-                    <RewardView styles={styles.oldRewardText} value={survey.value} currency={properties.oldCurrency} />
+                    <RewardView styles={styles.oldRewardText} value={oldReward} currency={properties.oldCurrency} />
                     <Gradient colors={properties.colors} rectRadius={5} style={{ marginHorizontal: 2 }}>
                         <Text style={styles.percentageText}>+{properties.bonusPercentage}%</Text>
                     </Gradient>
