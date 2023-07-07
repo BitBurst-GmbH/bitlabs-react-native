@@ -1,5 +1,5 @@
 import { getAppSettingsApi, getLeaderboardApi, getOffersApi, getSurveysApi, updateClickApi } from "./bitlabs_api";
-import type { BitLabsResponse, GetAppSettingsResponse, GetLeaderboardResponse, GetOffersResponse, GetSurveysResponse, Survey } from "./bitlabs_repository.types";
+import type { BitLabsResponse, GetAppSettingsResponse, GetLeaderboardResponse, GetOffersResponse, GetSurveysResponse, Survey } from "./types";
 
 
 export const getSurveysRepo = (token: string, uid: string, onResponse: (surveys: Survey[]) => void, onFailure: (error: Error) => void) => getSurveysApi(token, uid)
@@ -29,12 +29,16 @@ export const getHasOffers = async (token: string, uid: string) => getOffersApi(t
     })
     .catch(error => console.error(error));
 
-export const getAppSettings = async (token: string, uid: string, onResponse: (surveyIconColor: string, navigationColor: string, isOffersEnable: boolean, currencyUrl?: string) => void) => getAppSettingsApi(token, uid)
+export const getAppSettings = async (token: string, uid: string, onResponse: (surveyIconColor: string, navigationColor: string, isOffersEnable: boolean, bonusPercentage: number, currencyUrl?: string) => void) => getAppSettingsApi(token, uid)
     .then(response => response.json() as Promise<BitLabsResponse<GetAppSettingsResponse>>)
     .then(body => {
         if (body.error) throw new Error(`[BitLabs] ${body.error.details.http} - ${body.error.details.msg}`);
 
-        onResponse(body.data.visual.survey_icon_color, body.data.visual.navigation_color, body.data.offers.enabled,
+        onResponse(
+            body.data.visual.survey_icon_color,
+            body.data.visual.navigation_color,
+            body.data.offers.enabled,
+            body.data.currency.bonus_percentage + (body.data.promotion?.bonus_percentage ?? 0),
             body.data.currency.symbol.is_image ? body.data.currency.symbol.content : undefined);
     })
     .catch(error => console.error(error));
@@ -48,7 +52,6 @@ export const getLeaderboard = async (token: string, uid: string, onResponse: (le
     })
     .catch(error => console.error(error));
 
-export const getCurrencyIcon = async (url: string, onResponse: (iconUri: string, isSvg: boolean) => void) => fetch(new Request(url))
-    .then(response => response.blob())
-    .then(blob => onResponse(URL.createObjectURL(blob), blob.type === 'image/svg+xml'))
+export const getIsImageSVG = async (url: string, onResponse: (isSVG: boolean) => void) => fetch(new Request(url))
+    .then(response => onResponse(response.headers.get('content-type') === 'image/svg+xml'))
     .catch(error => console.error(error));

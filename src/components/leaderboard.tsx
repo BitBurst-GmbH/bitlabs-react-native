@@ -1,38 +1,29 @@
 import React, { useEffect, useState } from "react"
-import type { GetLeaderboardResponse } from "../api/bitlabs_repository.types"
-import { getAppSettings, getCurrencyIcon, getLeaderboard } from "../api/bitlabs_repository";
-import { FlatList, Image, Text, View } from "react-native";
+import type { GetLeaderboardResponse } from "../api/types"
+import { getAppSettings, getIsImageSVG, getLeaderboard } from "../api/bitlabs_repository";
+import { FlatList, Text, View } from "react-native";
 import LeaderboardItem from "./leaderboard-item";
-import { SvgFromUri } from "react-native-svg";
 import { extractColors } from "../utils/helpers";
+import { CurrencyIcon } from "../hoc/currency-icon";
 
 type Props = {
     uid: string, token: string,
 }
 
 const Leaderboard = ({ uid, token }: Props) => {
-    const [url, setUrl] = useState<string>();
     const [color, setColor] = useState('#000');
     const [currencyIcon, setCurrencyIcon] = useState<React.JSX.Element>();
     const [leaderboard, setLeaderboard] = useState<GetLeaderboardResponse>();
 
     useEffect(() => {
         getLeaderboard(token, uid, leaderboard => setLeaderboard(leaderboard));
-        getAppSettings(token, uid, (color, _2, _3, url) => {
-            setUrl(url);
+        getAppSettings(token, uid, (color, _2, _3, _4, url) => {
+
+            if (url) getIsImageSVG(url, (isSvg) => setCurrencyIcon(<CurrencyIcon isSVG={isSvg} url={url} size={20} />));
+
             setColor(extractColors(color)[0]?.toString() || '#000');
         });
     }, []);
-
-    useEffect(() => {
-        if (url) {
-            getCurrencyIcon(url, (iconUri, isSvg) => setCurrencyIcon(
-                isSvg
-                    ? <SvgFromUri uri={iconUri} width={20} height={20} style={{ marginHorizontal: 2 }} />
-                    : <Image source={{ uri: iconUri }} style={{ width: 20, height: 20, resizeMode: 'contain' }} />
-            ));
-        }
-    }, [url]);
 
     return leaderboard?.top_users ? (
         <View style={{ alignSelf: 'stretch', height: '25%' }}>

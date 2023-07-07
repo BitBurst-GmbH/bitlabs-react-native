@@ -1,6 +1,5 @@
 import { getSurveysRepo } from "./api/bitlabs_repository";
-import type { Survey } from "./api/bitlabs_repository.types";
-import { WidgetType } from "./api/widget-type";
+import { WidgetType, type Survey } from "./api/types";
 import Leaderboard from "./components/leaderboard";
 import OfferWall from "./components/offerwall";
 import SurveyList from "./components/survey-list";

@@ -2,26 +2,36 @@ import React from 'react'
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import Images from '../assets/images'
 import SurveyStyles from '../styles/simple-survey.styles'
-import type { Survey } from '../api/bitlabs_repository.types';
+import type { Survey, SurveyProperties } from '../api/types';
+import { RewardView } from '../hoc/reward-view';
+import { rounded } from '../utils/helpers';
 
 
 type Props = {
     survey: Survey,
-    onPress: () => void,
+    properties: SurveyProperties,
 }
 
-const Widget = ({ survey, onPress }: Props) => {
-    const styles = SurveyStyles();
+const Widget = ({ survey, properties }: Props) => {
+    const styles = SurveyStyles(properties.colors[0]?.toString() ?? '#007bff');
+    const oldReward = rounded(parseFloat(survey.value) / (1 + properties.bonusPercentage / 100)).toString();
+
 
     return (
         <TouchableOpacity
             style={styles.container}
-            onPress={onPress}>
+            onPress={properties.onPress}>
             <Image
                 style={styles.playImage}
                 source={Images.circlePlayLight} />
             <View>
-                <Text style={styles.earnText}>EARN {survey.value}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={{ alignItems: 'flex-end' }}>
+                        {properties.bonusPercentage > 0 && <RewardView value={oldReward} currency={properties.oldCurrency} styles={styles.oldRewardText} />}
+                        <RewardView value={`EARN ${survey.value}`} currency={properties.currency} styles={styles.earnText} />
+                    </View>
+                    {properties.bonusPercentage > 0 && <Text style={styles.percentageText}>+{properties.bonusPercentage}%</Text>}
+                </View>
                 <Text style={styles.durationText}>Now in {Math.round(survey.loi)} minutes!</Text>
             </View>
         </TouchableOpacity>

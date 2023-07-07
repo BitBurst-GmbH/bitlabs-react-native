@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
-import type { User } from '../api/bitlabs_repository.types';
+import type { User } from '../api/types';
 import images from '../assets/images';
 
 type Props = {

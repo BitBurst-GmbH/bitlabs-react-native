@@ -1,23 +1,26 @@
 import React from 'react'
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 import SurveyStyles from '../styles/compact-survey.styles'
-import RatingBar from './rating-bar'
+import RatingBar from '../hoc/rating-bar'
 import Images from '../assets/images'
-import type { Survey } from '../api/bitlabs_repository.types'
+import type { Survey, SurveyProperties } from '../api/types'
+import Gradient from '../hoc/gradient'
+import { RewardView } from '../hoc/reward-view'
+import { rounded } from '../utils/helpers'
 
 type Props = {
     survey: Survey,
-    color?: string,
-    onPress: () => void,
+    properties: SurveyProperties,
 }
 
-const Widget = ({ survey, color, onPress }: Props) => {
-    const styles = SurveyStyles(color ?? '#007bff');
+const Widget = ({ survey, properties }: Props) => {
+    const styles = SurveyStyles(properties.colors[0]?.toString() ?? '#007bff');
+    const oldReward = rounded(parseFloat(survey.value) / (1 + properties.bonusPercentage / 100)).toString();
 
     return (
         <TouchableOpacity
             style={styles.container}
-            onPress={onPress}>
+            onPress={properties.onPress}>
             <View style={styles.leftView}>
                 <View style={styles.durationView}>
                     <Image
@@ -27,12 +30,25 @@ const Widget = ({ survey, color, onPress }: Props) => {
                 </View>
                 <RatingBar rating={survey.rating} />
             </View>
+
             <View style={styles.rightView}>
-                <Image
-                    style={styles.playImage}
-                    source={Images.circlePlayLight} />
-                <Text style={styles.earnText}>EARN{'\n'}{survey.value}</Text>
+                <View style={styles.earnView}>
+                    <Image
+                        style={styles.playImage}
+                        source={Images.circlePlayLight} />
+                    <View style={{ flexDirection: 'column' }}>
+                        <Text style={styles.earnText}>EARN</Text>
+                        <RewardView styles={styles.earnText} value={survey.value} currency={properties.currency} />
+                    </View>
+                </View>
+                {properties.bonusPercentage > 0 && <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end' }}>
+                    <RewardView styles={styles.oldRewardText} value={oldReward} currency={properties.oldCurrency} />
+                    <Gradient colors={properties.colors} rectRadius={5} style={{ marginHorizontal: 2 }}>
+                        <Text style={styles.percentageText}>+{properties.bonusPercentage}%</Text>
+                    </Gradient>
+                </View>}
             </View>
+
         </TouchableOpacity>
     )
 }
