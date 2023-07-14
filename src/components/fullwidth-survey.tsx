@@ -15,7 +15,7 @@ type Props = {
 
 export default ({ survey, properties }: Props) => {
     const styles = SurveyStyles(properties.colors[0]?.toString() ?? '#007bff');
-    const oldReward = rounded(parseFloat(survey.value) / (1 + properties.bonusPercentage / 100)).toString();
+    const oldReward = rounded(parseFloat(survey.value) / (1 + properties.bonusPercentage)).toString();
 
     return (
         <TouchableOpacity
@@ -32,7 +32,7 @@ export default ({ survey, properties }: Props) => {
                         {properties.bonusPercentage > 0 && <RewardView styles={styles.oldRewardText} currency={properties.oldCurrency} value={oldReward} />}
                         <RewardView styles={styles.rewardText} currency={properties.currency} value={survey.value} />
                     </View>
-                    {properties.bonusPercentage > 0 && <Text style={styles.percentageText}>+{properties.bonusPercentage}%</Text>}
+                    {properties.bonusPercentage > 0 && <Text style={styles.percentageText}>+{properties.bonusPercentage * 100}%</Text>}
                 </View>
             </View>
             <View style={styles.rightView}><Text style={styles.earnText}>EARN NOW</Text></View>

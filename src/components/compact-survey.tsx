@@ -15,7 +15,7 @@ type Props = {
 
 const Widget = ({ survey, properties }: Props) => {
     const styles = SurveyStyles(properties.colors[0]?.toString() ?? '#007bff');
-    const oldReward = rounded(parseFloat(survey.value) / (1 + properties.bonusPercentage / 100)).toString();
+    const oldReward = rounded(parseFloat(survey.value) / (1 + properties.bonusPercentage)).toString();
 
     return (
         <TouchableOpacity
@@ -44,7 +44,7 @@ const Widget = ({ survey, properties }: Props) => {
                 {properties.bonusPercentage > 0 && <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end' }}>
                     <RewardView styles={styles.oldRewardText} value={oldReward} currency={properties.oldCurrency} />
                     <Gradient colors={properties.colors} rectRadius={5} style={{ marginHorizontal: 2 }}>
-                        <Text style={styles.percentageText}>+{properties.bonusPercentage}%</Text>
+                        <Text style={styles.percentageText}>+{properties.bonusPercentage * 100}%</Text>
                     </Gradient>
                 </View>}
             </View>
