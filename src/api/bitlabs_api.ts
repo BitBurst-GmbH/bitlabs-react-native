@@ -2,7 +2,7 @@ import { Platform } from "react-native";
 import { url } from "../utils/helpers";
 
 export const getSurveysApi = (token: string, uid: string) =>
-    fetch(new Request(url('v2/client/surveys', { 'os': Platform.OS }), { headers: { 'X-Api-Token': token, 'X-User-Id': uid } }));
+    fetch(new Request(url('v2/client/surveys', { 'os': Platform.OS, 'sdk': 'REACT' }), { headers: { 'X-Api-Token': token, 'X-User-Id': uid } }));
 
 export const updateClickApi = (token: string, uid: string, clickId: string, reason: string) =>
     fetch(new Request(url(`v2/client/clicks/${clickId}`),
