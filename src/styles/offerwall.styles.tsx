@@ -21,7 +21,14 @@ const styles = () => StyleSheet.create({
         width: 24,
         height: 24,
         resizeMode: 'contain',
-    }
+    },
+    errorView: {
+        position: 'absolute',
+        alignSelf: 'center',
+        top: '20%',
+        width: '85%',
+        flexDirection: 'row',
+    },
 });
 
 export default styles;

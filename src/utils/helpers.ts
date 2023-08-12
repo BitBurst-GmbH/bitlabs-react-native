@@ -1,4 +1,5 @@
 import type { Survey } from "../api/types";
+import { Buffer } from "buffer";
 
 export const url = (path: string, queries: { [key: string]: string } = {}) => {
     let url = `https://api.bitlabs.ai/${path}?platform=MOBILE`;
@@ -60,6 +61,6 @@ const hexToLuminance = (hex: string) => {
 
 export const isColorLuminant = (colors: String[]) => colors.some(color => hexToLuminance(color.toString()) > 0.729);
 
-export const rounded = (value: number) => {
-    return Math.round((value + Number.EPSILON) * 100) / 100;
-}
+export const rounded = (value: number) => Math.round((value + Number.EPSILON) * 100) / 100;
+
+export const encryptBase64 = (value: string) => Buffer.from(value).toString('base64');

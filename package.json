@@ -45,6 +45,9 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
+  "dependencies": {
+    "react-native-qrcode-svg": "^6.2.0"
+  },
   "devDependencies": {
     "@babel/eslint-parser": "^7.18.2",
     "@react-native-community/eslint-config": "^3.0.2",

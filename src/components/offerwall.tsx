@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Appearance, BackHandler, Image, Linking, type NativeEventSubscription, Platform, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { Appearance, BackHandler, Image, Linking, type NativeEventSubscription, Platform, SafeAreaView, TouchableOpacity, View, Text } from 'react-native';
 import WebView from 'react-native-webview';
 import type { ShouldStartLoadRequest, WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
 import { getAppSettings, getHasOffers, leaveSurveys } from '../api/bitlabs_repository';
 import LeaveSurveyModal from './leave-survey-modal';
 import OfferWallStyles from '../styles/offerwall.styles';
 import Images from '../assets/images';
-import { extractColors, isColorLuminant } from '../utils/helpers';
+import { encryptBase64, extractColors, isColorLuminant } from '../utils/helpers';
 import Gradient from '../hoc/gradient';
+import QRCode from 'react-native-qrcode-svg';
 
 type Props = {
     uid: string,
@@ -28,11 +29,12 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
     const queries = Object.entries(tags ?? {}).map(([key, value]) => `&${key}=${value}`);
 
     const [key, setKey] = useState(0);
-    const [color, setColor] = useState<String[]>(['#007bff', '#007bff']);
+    const [errorStr, setErrorStr] = useState('');
     const [hasOffers, setHasOffers] = useState(false);
-    const [isOffersEnabled, setIsOffersEnabled] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isPageOfferwall, setIsPageOfferwall] = useState(true);
+    const [isOffersEnabled, setIsOffersEnabled] = useState(false);
+    const [color, setColor] = useState<String[]>(['#007bff', '#007bff']);
     const [url, setUrl] = useState(`https://web.bitlabs.ai?token=${token}&uid=${uid}${queries}`);
 
 
@@ -101,6 +103,11 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
         return true;
     }
 
+    const onError = () => {
+        var errStr = `{ uid: ${uid}, date: ${Date.now()} }`;
+        setErrorStr(encryptBase64(errStr));
+    }
+
     const disableZoom = `
         var meta = document.createElement('meta');
         meta.name = 'viewport';
@@ -127,11 +134,13 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
                 )}
                 <WebView
                     key={key}
+                    onError={onError}
+                    source={{ uri: url }}
+                    style={styles.webview}
                     scalesPageToFit={false}
                     javaScriptEnabled={true}
                     onLoadStart={onLoadProgress}
                     injectedJavaScript={disableZoom}
-                    source={{ uri: url }} style={styles.webview}
                     onShouldStartLoadWithRequest={onShouldStartLoadingWithRequest} />
                 {isPageOfferwall && (
                     <TouchableOpacity onPress={onExitPressed} style={styles.xmarkTouchable}>
@@ -139,7 +148,11 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
                     </TouchableOpacity>
                 )}
             </View>
-        </SafeAreaView>
+            {errorStr.length > 0 && <View style={styles.errorView}>
+                <QRCode size={50} value={errorStr} />
+                <Text style={{ marginHorizontal: 4, flexShrink: 1 }}>{`Error ID:\n${errorStr}`}</Text>
+            </View>}
+        </SafeAreaView >
     );
 }
 
