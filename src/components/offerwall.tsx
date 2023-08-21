@@ -6,7 +6,7 @@ import { getAppSettings, getHasOffers, leaveSurveys } from '../api/bitlabs_repos
 import LeaveSurveyModal from './leave-survey-modal';
 import OfferWallStyles from '../styles/offerwall.styles';
 import Images from '../assets/images';
-import { encryptBase64, extractColors, isColorLuminant } from '../utils/helpers';
+import { encryptBase64, extractColors, isColorLuminant, offerWallUrl } from '../utils/helpers';
 import Gradient from '../hoc/gradient';
 import QRCode from 'react-native-qrcode-svg';
 
@@ -26,8 +26,6 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
     let clickId = useRef('');
 
     const styles = OfferWallStyles();
-    const queries = Object.entries(tags ?? {}).map(([key, value]) => `&${key}=${value}`);
-
     const [key, setKey] = useState(0);
     const [errorStr, setErrorStr] = useState('');
     const [hasOffers, setHasOffers] = useState(false);
@@ -35,8 +33,7 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
     const [isPageOfferwall, setIsPageOfferwall] = useState(true);
     const [isOffersEnabled, setIsOffersEnabled] = useState(false);
     const [color, setColor] = useState<String[]>(['#007bff', '#007bff']);
-    const [url, setUrl] = useState(`https://web.bitlabs.ai?token=${token}&uid=${uid}${queries}`);
-
+    const [url, setUrl] = useState(offerWallUrl(token, uid, tags ?? {}));
 
     // Hook to open in external browser if on ios and has Offers
     useEffect(() => {
@@ -96,7 +93,8 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
     }
 
     const onShouldStartLoadingWithRequest = ({ url }: ShouldStartLoadRequest) => {
-        if (/offers\/.+\/open/.test(url)) {
+        console.log(`onShouldStartLoading ~> ${url}`);
+        if (url.includes('/offers/')) {
             Linking.openURL(url);
             return false;
         }
