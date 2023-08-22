@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Appearance, BackHandler, Image, Linking, type NativeEventSubscription, Platform, SafeAreaView, TouchableOpacity, View, Text } from 'react-native';
+import { BackHandler, Image, Linking, type NativeEventSubscription, Platform, SafeAreaView, TouchableOpacity, View, Text } from 'react-native';
 import WebView from 'react-native-webview';
-import type { ShouldStartLoadRequest, WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
+import type { ShouldStartLoadRequest, WebViewNativeEvent, WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
 import { getAppSettings, getHasOffers, leaveSurveys } from '../api/bitlabs_repository';
 import LeaveSurveyModal from './leave-survey-modal';
 import OfferWallStyles from '../styles/offerwall.styles';
 import Images from '../assets/images';
-import { encryptBase64, extractColors, isColorLuminant } from '../utils/helpers';
+import { encryptBase64, extractColors, isColorLuminant, offerWallUrl } from '../utils/helpers';
 import Gradient from '../hoc/gradient';
 import QRCode from 'react-native-qrcode-svg';
 
@@ -26,8 +26,6 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
     let clickId = useRef('');
 
     const styles = OfferWallStyles();
-    const queries = Object.entries(tags ?? {}).map(([key, value]) => `&${key}=${value}`);
-
     const [key, setKey] = useState(0);
     const [errorStr, setErrorStr] = useState('');
     const [hasOffers, setHasOffers] = useState(false);
@@ -35,8 +33,7 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
     const [isPageOfferwall, setIsPageOfferwall] = useState(true);
     const [isOffersEnabled, setIsOffersEnabled] = useState(false);
     const [color, setColor] = useState<String[]>(['#007bff', '#007bff']);
-    const [url, setUrl] = useState(`https://web.bitlabs.ai?token=${token}&uid=${uid}${queries}`);
-
+    const [url, setUrl] = useState(offerWallUrl(token, uid, tags ?? {}));
 
     // Hook to open in external browser if on ios and has Offers
     useEffect(() => {
@@ -84,7 +81,7 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
         }
     }
 
-    const onLoadProgress = ({ nativeEvent }: WebViewNavigationEvent) => {
+    const onLoadStart = ({ nativeEvent }: WebViewNavigationEvent) => {
         const url = nativeEvent.url;
         setIsPageOfferwall(url.startsWith('https://web.bitlabs.ai'));
 
@@ -95,8 +92,15 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
         }
     }
 
+    const closeDetector = (nativeEvent: WebViewNativeEvent) => {
+        const url = nativeEvent.url;
+        if (url.endsWith('/close')) {
+            onExitPressed();
+        }
+    }
+
     const onShouldStartLoadingWithRequest = ({ url }: ShouldStartLoadRequest) => {
-        if (/offers\/.+\/open/.test(url)) {
+        if (url.includes('/offers/')) {
             Linking.openURL(url);
             return false;
         }
@@ -139,14 +143,11 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
                     style={styles.webview}
                     scalesPageToFit={false}
                     javaScriptEnabled={true}
-                    onLoadStart={onLoadProgress}
+                    onLoadStart={onLoadStart}
                     injectedJavaScript={disableZoom}
-                    onShouldStartLoadWithRequest={onShouldStartLoadingWithRequest} />
-                {isPageOfferwall && (
-                    <TouchableOpacity onPress={onExitPressed} style={styles.xmarkTouchable}>
-                        <Image source={Images.signOutRegular} style={[styles.image, { tintColor: isColorDim(color) ? 'white' : 'black' }]} />
-                    </TouchableOpacity>
-                )}
+                    onLoadEnd={({ nativeEvent }) => closeDetector(nativeEvent)}
+                    onShouldStartLoadWithRequest={onShouldStartLoadingWithRequest}
+                    onLoadProgress={({ nativeEvent }) => closeDetector(nativeEvent)} />
             </View>
             {errorStr.length > 0 && <View style={styles.errorView}>
                 <QRCode size={50} value={errorStr} />
@@ -155,8 +156,6 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
         </SafeAreaView >
     );
 }
-
-const isColorDim = (color: String[]) => Appearance.getColorScheme() === 'dark' || !isColorLuminant(color);
 
 const extractValue = (url: string) => {
     if (!url.includes('&val=')) return 0.0;

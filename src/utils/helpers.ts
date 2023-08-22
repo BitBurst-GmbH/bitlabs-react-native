@@ -7,8 +7,8 @@ export const url = (path: string, queries: { [key: string]: string } = {}) => {
     return url;
 }
 
-export const offerWallUrl = (token: string, uid: string, tags: { [key: string]: string }) => {
-    let url = `web.bitlabs.ai?token=${token}&uid=${uid}&sdk=REACT`;
+export const offerWallUrl = (token: string, uid: string, tags: { [key: string]: string | boolean }) => {
+    let url = `https://web.bitlabs.ai?token=${token}&uid=${uid}&sdk=REACT`;
 
     Object.keys(tags).forEach((key) => url = url + `&${key}=${tags[key]}`);
     return url;
