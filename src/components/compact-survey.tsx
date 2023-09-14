@@ -44,7 +44,7 @@ const Widget = ({ survey, properties }: Props) => {
                 {properties.bonusPercentage > 0 && <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end' }}>
                     <RewardView styles={styles.oldRewardText} value={oldReward} currency={properties.oldCurrency} />
                     <Gradient colors={properties.colors} rectRadius={5} style={{ marginHorizontal: 2 }}>
-                        <Text style={styles.percentageText}>+{properties.bonusPercentage * 100}%</Text>
+                        <Text style={styles.percentageText}>+{(properties.bonusPercentage * 100).toFixed(0)}%</Text>
                     </Gradient>
                 </View>}
             </View>

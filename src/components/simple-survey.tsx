@@ -30,7 +30,7 @@ const Widget = ({ survey, properties }: Props) => {
                         {properties.bonusPercentage > 0 && <RewardView value={oldReward} currency={properties.oldCurrency} styles={styles.oldRewardText} />}
                         <RewardView value={`EARN ${survey.value}`} currency={properties.currency} styles={styles.earnText} />
                     </View>
-                    {properties.bonusPercentage > 0 && <Text style={styles.percentageText}>+{properties.bonusPercentage * 100}%</Text>}
+                    {properties.bonusPercentage > 0 && <Text style={styles.percentageText}>+{(properties.bonusPercentage * 100).toFixed(0)}%</Text>}
                 </View>
                 <Text style={styles.durationText}>Now in {Math.round(survey.loi)} minutes!</Text>
             </View>

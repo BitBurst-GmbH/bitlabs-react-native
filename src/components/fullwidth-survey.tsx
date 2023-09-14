@@ -32,7 +32,7 @@ export default ({ survey, properties }: Props) => {
                         {properties.bonusPercentage > 0 && <RewardView styles={styles.oldRewardText} currency={properties.oldCurrency} value={oldReward} />}
                         <RewardView styles={styles.rewardText} currency={properties.currency} value={survey.value} />
                     </View>
-                    {properties.bonusPercentage > 0 && <Text style={styles.percentageText}>+{properties.bonusPercentage * 100}%</Text>}
+                    {properties.bonusPercentage > 0 && <Text style={styles.percentageText}>+{(properties.bonusPercentage * 100).toFixed(0)}%</Text>}
                 </View>
             </View>
             <View style={styles.rightView}><Text style={styles.earnText}>EARN NOW</Text></View>
