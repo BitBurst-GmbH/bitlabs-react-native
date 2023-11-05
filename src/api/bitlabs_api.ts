@@ -17,10 +17,6 @@ export const updateClickApi = (token: string, uid: string, clickId: string, reas
             body: JSON.stringify({ 'leave_survey': { reason: reason, } })
         }));
 
-export const getOffersApi = (token: string, uid: string) => fetch(new Request(url('v2/client/offers'), {
-    headers: { 'X-User-Id': uid, 'X-Api-Token': token }
-}));
-
 export const getAppSettingsApi = (token: string, uid: string) => fetch(new Request(url('v1/client/settings/v2'), {
     headers: { 'X-Api-Token': token, 'X-User-Id': uid }
 }));
