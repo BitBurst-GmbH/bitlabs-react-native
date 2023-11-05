@@ -17,8 +17,7 @@ const Leaderboard = ({ uid, token }: Props) => {
 
     useEffect(() => {
         getLeaderboard(token, uid, leaderboard => setLeaderboard(leaderboard));
-        getAppSettings(token, uid, (color, _2, _3, _4, url) => {
-
+        getAppSettings(token, uid, (color, _2, _3, url) => {
             if (url) getIsImageSVG(url, (isSvg) => setCurrencyIcon(<CurrencyIcon isSVG={isSvg} url={url} size={20} />));
 
             setColor(extractColors(color)[0]?.toString() || '#000');

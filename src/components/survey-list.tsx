@@ -26,7 +26,7 @@ const SurveyList = ({ uid, token, style, type, onSurveyPressed }: Props) => {
 
   useEffect(() => {
     getSurveysRepo(token, uid, (surveyList) => setSurveys(surveyList), (error) => console.error(`[BitLabs] ${error}`));
-    getAppSettings(token, uid, (color, _2, _3, bonusPercentage, url) => {
+    getAppSettings(token, uid, (color, _2, bonusPercentage, url) => {
       setColor(extractColors(color) as string[]);
       setBonusPercentage(bonusPercentage);
 

@@ -32,8 +32,7 @@ export const getRandomSurveys = () => {
                 icon_url: '',
                 icon_name: '',
                 name_internal: '',
-            }
-            ,
+            },
             rating: Math.floor(Math.random() * 6),
             click_url: '',
         })
