@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { BackHandler, Image, Linking, type NativeEventSubscription, Platform, SafeAreaView, TouchableOpacity, View, Text } from 'react-native';
+import { BackHandler, Image, Linking, type NativeEventSubscription, SafeAreaView, TouchableOpacity, View, Text } from 'react-native';
 import WebView from 'react-native-webview';
 import type { ShouldStartLoadRequest, WebViewNativeEvent, WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
-import { getAppSettings, getHasOffers, leaveSurveys } from '../api/bitlabs_repository';
+import { getAppSettings, leaveSurveys } from '../api/bitlabs_repository';
 import LeaveSurveyModal from './leave-survey-modal';
 import OfferWallStyles from '../styles/offerwall.styles';
 import Images from '../assets/images';
@@ -28,20 +28,10 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
     const styles = OfferWallStyles();
     const [key, setKey] = useState(0);
     const [errorStr, setErrorStr] = useState('');
-    const [hasOffers, setHasOffers] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isPageOfferwall, setIsPageOfferwall] = useState(true);
-    const [isOffersEnabled, setIsOffersEnabled] = useState(false);
     const [color, setColor] = useState<String[]>(['#007bff', '#007bff']);
     const [url, setUrl] = useState(offerWallUrl(token, uid, tags ?? {}));
-
-    // Hook to open in external browser if on ios and has Offers
-    useEffect(() => {
-        if (isOffersEnabled && hasOffers && Platform.OS === 'ios') {
-            onExitPressed();
-            Linking.openURL(url);
-        }
-    }, [isOffersEnabled, hasOffers]);
 
     // Hook to add event listener which accepts a state value
     useEffect(() => {
@@ -60,11 +50,7 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
 
     // Mount/Unmount hook
     useEffect(() => {
-        getHasOffers(token, uid).then((hasOffers) => setHasOffers(hasOffers ?? false));
-        getAppSettings(token, uid, (_, navigationColor, isOffersEnabled) => {
-            setColor(extractColors(navigationColor));
-            setIsOffersEnabled(isOffersEnabled);
-        });
+        getAppSettings(token, uid, (_, navigationColor) => setColor(extractColors(navigationColor)));
 
         return () => {
             backHandler.remove();

@@ -17,10 +17,6 @@ export type GetSurveysResponse = {
     surveys: Survey[],
 }
 
-export type GetOffersResponse = {
-    offers: { id: number, }[],
-}
-
 export type GetAppSettingsResponse = {
     visual: {
         background_color: string,
@@ -33,9 +29,6 @@ export type GetAppSettingsResponse = {
         offerwall_width: string,
         screenout_reward: string,
         survey_icon_color: string,
-    },
-    offers: {
-        enabled: boolean,
     },
     currency: {
         bonus_percentage: number,
