@@ -2,15 +2,18 @@ import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import type { User } from '../api/types';
 import images from '../assets/images';
+import { currencize } from '../utils/helpers';
 
 type Props = {
     user: User,
     color: string,
+    factor: number,
     isOwnUser: boolean,
-    currency?: React.JSX.Element,
+    currencyString: string,
+    currencyIcon?: React.JSX.Element,
 }
 
-const LeaderboardItem = ({ user, color, isOwnUser, currency }: Props) => {
+const LeaderboardItem = ({ user, color, factor, isOwnUser, currencyString, currencyIcon }: Props) => {
     return (
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 4 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -23,8 +26,11 @@ const LeaderboardItem = ({ user, color, isOwnUser, currency }: Props) => {
                 </View>}
             </View>
             <View style={{ flexDirection: 'row' }}>
-                <Text style={[styles.text]}>{user.earnings_raw}</Text>
-                {currency}
+                <Text style={[styles.text]}>
+                    {currencize((user.earnings_raw * factor).toLocaleString('en-us', factor > 1 ? { maximumFractionDigits: 0 } : undefined)
+                        , currencyString)}
+                </Text>
+                {currencyIcon}
             </View>
         </View>
     );

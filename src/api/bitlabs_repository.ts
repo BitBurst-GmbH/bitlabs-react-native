@@ -20,21 +20,25 @@ export const leaveSurveys = async (token: string, uid: string, clickId: string, 
     })
     .catch(error => console.error(error));
 
-export const getAppSettings = async (token: string, uid: string, onResponse: (surveyIconColor: string, navigationColor: string, bonusPercentage: number, currencyUrl?: string) => void) => getAppSettingsApi(token, uid)
-    .then(response => response.json() as Promise<BitLabsResponse<GetAppSettingsResponse>>)
-    .then(body => {
-        if (body.error) throw new Error(`[BitLabs] ${body.error.details.http} - ${body.error.details.msg}`);
+export const getAppSettings = async (token: string, uid: string,
+    onResponse: (surveyIconColor: string, navigationColor: string, currencyFactor: number, bonusPercentage: number, currencySymbol: [boolean, string]) => void) => getAppSettingsApi(token, uid)
+        .then(response => response.json() as Promise<BitLabsResponse<GetAppSettingsResponse>>)
+        .then(body => {
+            if (body.error) throw new Error(`[BitLabs] ${body.error.details.http} - ${body.error.details.msg}`);
 
-        let bonusPercentage = body.data.currency.bonus_percentage / 100;
-        if (body.data.promotion) bonusPercentage += body.data.promotion.bonus_percentage / 100 + bonusPercentage * body.data.promotion.bonus_percentage / 100;
+            let bonusPercentage = body.data.currency.bonus_percentage / 100;
+            if (body.data.promotion) bonusPercentage += body.data.promotion.bonus_percentage / 100 + bonusPercentage * body.data.promotion.bonus_percentage / 100;
 
-        onResponse(
-            body.data.visual.survey_icon_color,
-            body.data.visual.navigation_color,
-            bonusPercentage,
-            body.data.currency.symbol.is_image ? body.data.currency.symbol.content : undefined);
-    })
-    .catch(error => console.error(error));
+            const currencySymbol: [boolean, string] = [body.data.currency.symbol.is_image, body.data.currency.symbol.content];
+
+            onResponse(
+                body.data.visual.survey_icon_color,
+                body.data.visual.navigation_color,
+                +body.data.currency.factor,
+                bonusPercentage,
+                currencySymbol);
+        })
+        .catch(error => console.error(error));
 
 export const getLeaderboard = async (token: string, uid: string, onResponse: (leaderboard: GetLeaderboardResponse) => void) => getLeaderboardApi(token, uid)
     .then(response => response.json() as Promise<BitLabsResponse<GetLeaderboardResponse>>)

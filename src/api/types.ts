@@ -95,8 +95,9 @@ export type User = {
 export type SurveyProperties = {
     colors: string[],
     onPress: () => void,
+    currencyString: string,
     bonusPercentage: number,
-    currency?: React.JSX.Element,
+    currencyIcon?: React.JSX.Element,
     oldCurrency?: React.JSX.Element,
 }
 

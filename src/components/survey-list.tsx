@@ -19,22 +19,26 @@ type Props = {
 
 const SurveyList = ({ uid, token, style, type, onSurveyPressed }: Props) => {
   const [surveys, setSurveys] = useState<Survey[]>([])
-  const [currency, setCurrency] = useState<React.JSX.Element>();
   const [bonusPercentage, setBonusPercentage] = useState(0);
-  const [oldCurrency, setOldCurrency] = useState<React.JSX.Element>();
   const [color, setColor] = useState(['#007bff', '#007bff']);
+  const [currencyString, setCurrencyString] = useState<string>('');
+  const [currencyIcon, setCurrencyIcon] = useState<React.JSX.Element>();
+  const [oldCurrencyIcon, setOldCurrencyIcon] = useState<React.JSX.Element>();
 
   useEffect(() => {
     getSurveysRepo(token, uid, (surveyList) => setSurveys(surveyList), (error) => console.error(`[BitLabs] ${error}`));
-    getAppSettings(token, uid, (color, _2, bonusPercentage, url) => {
+    getAppSettings(token, uid, (color, _2, _3, bonusPercentage, currencySymbol) => {
+      const [isImage, content] = currencySymbol;
+
+      if (isImage) getIsImageSVG(content, (isSVG) => {
+        var size = getDimension(type);
+        setCurrencyIcon(<CurrencyIcon isSVG={isSVG} url={content} size={size} />);
+        setOldCurrencyIcon(<CurrencyIcon isSVG={isSVG} url={content} size={size * .7} />);
+      });
+      else setCurrencyString(content);
+
       setColor(extractColors(color) as string[]);
       setBonusPercentage(bonusPercentage);
-
-      if (url) getIsImageSVG(url, (isSVG) => {
-        var size = getDimension(type);
-        setCurrency(<CurrencyIcon isSVG={isSVG} url={url} size={size} />);
-        setOldCurrency(<CurrencyIcon isSVG={isSVG} url={url} size={size * .7} />);
-      });
     });
 
   }, []);
@@ -49,9 +53,10 @@ const SurveyList = ({ uid, token, style, type, onSurveyPressed }: Props) => {
           {getWidget(type, item, {
             colors: color,
             onPress: onSurveyPressed,
+            currencyIcon: currencyIcon,
+            oldCurrency: oldCurrencyIcon,
+            currencyString: currencyString,
             bonusPercentage: bonusPercentage,
-            currency: currency,
-            oldCurrency: oldCurrency
           })}
         </Gradient>)}
       style={[style, { flexGrow: 0, marginVertical: 12 }]}

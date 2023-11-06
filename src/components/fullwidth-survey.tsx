@@ -5,7 +5,7 @@ import images from "../assets/images";
 import SurveyStyles from "../styles/fullwidth-survey.styles";
 import RatingBar from "../hoc/rating-bar";
 import { RewardView } from "../hoc/reward-view";
-import { rounded } from "../utils/helpers";
+import { currencize, rounded } from "../utils/helpers";
 
 
 type Props = {
@@ -29,8 +29,8 @@ export default ({ survey, properties }: Props) => {
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <View>
-                        {properties.bonusPercentage > 0 && <RewardView styles={styles.oldRewardText} currency={properties.oldCurrency} value={oldReward} />}
-                        <RewardView styles={styles.rewardText} currency={properties.currency} value={survey.value} />
+                        {properties.bonusPercentage > 0 && <RewardView styles={styles.oldRewardText} currency={properties.oldCurrency} value={currencize(oldReward, properties.currencyString)} />}
+                        <RewardView styles={styles.rewardText} currency={properties.currencyIcon} value={currencize(survey.value, properties.currencyString)} />
                     </View>
                     {properties.bonusPercentage > 0 && <Text style={styles.percentageText}>+{(properties.bonusPercentage * 100).toFixed(0)}%</Text>}
                 </View>

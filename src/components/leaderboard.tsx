@@ -11,16 +11,23 @@ type Props = {
 }
 
 const Leaderboard = ({ uid, token }: Props) => {
+    const [factor, setFactor] = useState(1);
     const [color, setColor] = useState('#000');
+    const [currencyString, setCurrency] = useState('');
     const [currencyIcon, setCurrencyIcon] = useState<React.JSX.Element>();
     const [leaderboard, setLeaderboard] = useState<GetLeaderboardResponse>();
 
     useEffect(() => {
         getLeaderboard(token, uid, leaderboard => setLeaderboard(leaderboard));
-        getAppSettings(token, uid, (color, _2, _3, url) => {
-            if (url) getIsImageSVG(url, (isSvg) => setCurrencyIcon(<CurrencyIcon isSVG={isSvg} url={url} size={20} />));
+        getAppSettings(token, uid, (color, _2, currencyFactor, _3, currencySymbol) => {
+            const [isImage, content] = currencySymbol;
+
+            if (isImage) getIsImageSVG(content, (isSvg) => setCurrencyIcon(<CurrencyIcon isSVG={isSvg} url={content} size={20} />));
+            else setCurrency(content);
 
             setColor(extractColors(color)[0]?.toString() || '#000');
+
+            setFactor(currencyFactor);
         });
     }, []);
 
@@ -36,8 +43,10 @@ const Leaderboard = ({ uid, token }: Props) => {
                 renderItem={({ item }) => <LeaderboardItem
                     user={item}
                     color={color}
-                    isOwnUser={(leaderboard?.own_user?.rank) == item.rank}
-                    currency={currencyIcon} />}
+                    factor={factor}
+                    currencyIcon={currencyIcon}
+                    currencyString={currencyString}
+                    isOwnUser={(leaderboard?.own_user?.rank) == item.rank} />}
             />
         </View>
     ) : null;

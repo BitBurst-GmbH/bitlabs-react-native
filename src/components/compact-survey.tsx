@@ -6,7 +6,7 @@ import Images from '../assets/images'
 import type { Survey, SurveyProperties } from '../api/types'
 import Gradient from '../hoc/gradient'
 import { RewardView } from '../hoc/reward-view'
-import { rounded } from '../utils/helpers'
+import { currencize, rounded } from '../utils/helpers'
 
 type Props = {
     survey: Survey,
@@ -38,11 +38,11 @@ const Widget = ({ survey, properties }: Props) => {
                         source={Images.circlePlayLight} />
                     <View style={{ flexDirection: 'column' }}>
                         <Text style={styles.earnText}>EARN</Text>
-                        <RewardView styles={styles.earnText} value={survey.value} currency={properties.currency} />
+                        <RewardView styles={styles.earnText} value={currencize(survey.value, properties.currencyString)} currency={properties.currencyIcon} />
                     </View>
                 </View>
                 {properties.bonusPercentage > 0 && <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end' }}>
-                    <RewardView styles={styles.oldRewardText} value={oldReward} currency={properties.oldCurrency} />
+                    <RewardView styles={styles.oldRewardText} value={currencize(oldReward, properties.currencyString)} currency={properties.oldCurrency} />
                     <Gradient colors={properties.colors} rectRadius={5} style={{ marginHorizontal: 2 }}>
                         <Text style={styles.percentageText}>+{(properties.bonusPercentage * 100).toFixed(0)}%</Text>
                     </Gradient>

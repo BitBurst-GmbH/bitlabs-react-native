@@ -64,3 +64,11 @@ export const isColorLuminant = (colors: String[]) => colors.some(color => hexToL
 export const rounded = (value: number) => Math.round((value + Number.EPSILON) * 100) / 100;
 
 export const encryptBase64 = (value: string) => Buffer.from(value).toString('base64');
+
+export const currencize = (value: string, currencyString: string) => {
+    if (currencyString.length === 0) return value;
+
+    if (currencyString.includes('{value}')) return currencyString.replace('{value}', value);
+
+    return value + ' ' + currencyString;
+}
