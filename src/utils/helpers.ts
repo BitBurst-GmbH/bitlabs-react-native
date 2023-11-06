@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import type { Survey } from "../api/types";
 import { Buffer } from "buffer";
 
@@ -8,7 +9,7 @@ export const url = (path: string, queries: { [key: string]: string } = {}) => {
 }
 
 export const offerWallUrl = (token: string, uid: string, tags: { [key: string]: string | boolean }) => {
-    let url = `https://web.bitlabs.ai?token=${token}&uid=${uid}&sdk=REACT`;
+    let url = `https://web.bitlabs.ai?token=${token}&uid=${uid}&sdk=REACT&os=${Platform.OS}`;
 
     Object.keys(tags).forEach((key) => url = url + `&${key}=${tags[key]}`);
     return url;
