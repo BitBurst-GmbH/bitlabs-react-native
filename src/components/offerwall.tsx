@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { BackHandler, Image, Linking, type NativeEventSubscription, SafeAreaView, TouchableOpacity, View, Text } from 'react-native';
+import { BackHandler, Image, Linking, type NativeEventSubscription, SafeAreaView, TouchableOpacity, View, Text, Platform } from 'react-native';
 import WebView from 'react-native-webview';
 import type { ShouldStartLoadRequest, WebViewNativeEvent, WebViewNavigationEvent } from 'react-native-webview/lib/WebViewTypes';
 import { getAppSettings, leaveSurveys } from '../api/bitlabs_repository';
@@ -30,6 +30,7 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
     const [errorStr, setErrorStr] = useState('');
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isPageOfferwall, setIsPageOfferwall] = useState(true);
+    const [areParamsLoaded, setAreParamsLoaded] = useState(true);
     const [color, setColor] = useState<String[]>(['#007bff', '#007bff']);
     const [url, setUrl] = useState(offerWallUrl(token, uid, tags ?? {}));
 
@@ -69,12 +70,32 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
 
     const onLoadStart = ({ nativeEvent }: WebViewNavigationEvent) => {
         const url = nativeEvent.url;
-        setIsPageOfferwall(url.startsWith('https://web.bitlabs.ai'));
+        const isOfferwall = url.startsWith('https://web.bitlabs.ai');
+        setIsPageOfferwall(isOfferwall);
 
-        if (url.includes('survey-compete') || url.includes('survey-screenout') || url.includes('start-bonus')) {
-            reward.current += extractValue(url);
-        } else {
+        if (isOfferwall) {
+            if (url.includes('survey-compete') || url.includes('survey-screenout') || url.includes('start-bonus')) {
+                reward.current += extractValue(url);
+            }
+
+            if (!areParamsLoaded && !url.includes('sdk=REACT')) {
+                setAreParamsLoaded(true);
+                let newURL = url + `&uid=${uid}&token=${token}&os=${Platform.OS}&sdk=REACT`;
+                if (adId) newURL += `&maid=${adId}`;
+                if (tags) {
+                    Object.keys(tags).forEach(key => {
+                        newURL += `&${key}=${tags[key]}`;
+                    });
+                }
+
+                console.log("Calling url: " + newURL);
+                setUrl(newURL);
+            }
+        }
+
+        if (!isOfferwall) {
             clickId.current = extractClickId(url) ?? clickId.current;
+            setAreParamsLoaded(false);
         }
     }
 
