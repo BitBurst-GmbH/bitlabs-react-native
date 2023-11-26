@@ -42,11 +42,20 @@ export const getRandomSurveys = () => {
     return surveys;
 }
 
-export const extractColors = (color: String) => color.match(/linear-gradient\((\d+)deg,\s*(.+)\)/)?.[2]
-    ?.replace(/([0-9]+)%/g, '')
-    ?.split(',')
-    .map(v => v.trim())
-    ?? [color, color];
+export const extractColors = (color: String) => {
+    let colors = color.match(/linear-gradient\((\d+)deg,\s*(.+)\)/)?.[2]
+        ?.replace(/([0-9]+)%/g, '')
+        ?.split(',')
+        .map(v => v.trim());
+
+    if (!colors) {
+        let hex = color.match(/#([0-9a-f]{3,6})/i)?.[0];
+        if (!hex) return undefined;
+        return [hex!, hex!];
+    }
+
+    return colors;
+}
 
 const hexToLuminance = (hex: string) => {
     // Convert hex to RGB

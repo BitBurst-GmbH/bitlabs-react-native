@@ -51,7 +51,7 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
 
     // Mount/Unmount hook
     useEffect(() => {
-        getAppSettings(token, uid, (_, navigationColor) => setColor(extractColors(navigationColor)));
+        getAppSettings(token, uid, (_, navigationColor) => setColor(extractColors(navigationColor) ?? ['#007bff', '#007bff']));
 
         return () => {
             backHandler.remove();

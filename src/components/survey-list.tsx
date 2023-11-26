@@ -37,7 +37,7 @@ const SurveyList = ({ uid, token, style, type, onSurveyPressed }: Props) => {
       });
       else setCurrencyString(content);
 
-      setColor(extractColors(color) as string[]);
+      setColor(extractColors(color) ?? ['#007bff', '#007bff']);
       setBonusPercentage(bonusPercentage);
     });
 

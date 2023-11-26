@@ -25,7 +25,7 @@ const Leaderboard = ({ uid, token }: Props) => {
             if (isImage) getIsImageSVG(content, (isSvg) => setCurrencyIcon(<CurrencyIcon isSVG={isSvg} url={content} size={20} />));
             else setCurrency(content);
 
-            setColor(extractColors(color)[0]?.toString() || '#000');
+            setColor(extractColors(color)?.at(0) ?? '#000');
 
             setFactor(currencyFactor);
         });
