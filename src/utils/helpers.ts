@@ -15,7 +15,7 @@ export const offerWallUrl = (token: string, uid: string, tags: { [key: string]: 
     return url;
 }
 
-export const getRandomSurveys = () => {
+export const threeRandomSurveys = (() => {
     let surveys: Survey[] = [];
 
     for (let i = 0; i < 3; i++) {
@@ -40,7 +40,7 @@ export const getRandomSurveys = () => {
     }
 
     return surveys;
-}
+})();
 
 export const extractColors = (color: String) => {
     let colors = color.match(/linear-gradient\((\d+)deg,\s*(.+)\)/)?.[2]

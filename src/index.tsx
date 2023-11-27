@@ -3,7 +3,7 @@ import { WidgetType, type Survey } from "./api/types";
 import Leaderboard from "./components/leaderboard";
 import OfferWall from "./components/offerwall";
 import SurveyList from "./components/survey-list";
-import { getRandomSurveys } from "./utils/helpers";
+import { threeRandomSurveys } from "./utils/helpers";
 
 /**
  * Determines whether the user has surveys available.
@@ -25,7 +25,7 @@ export const checkSurveys = (token: string, uid: string, onResponse: (hasSurveys
  * @param onFailure Triggered if there has been an internal error.
  */
 export const getSurveys = (token: string, uid: string, onResponse: (surveys: Survey[]) => void, onFailure: (error: Error) => void) =>
-    getSurveysRepo(token, uid, (surveys) => onResponse(surveys.length > 0 ? surveys : getRandomSurveys()), onFailure);
+    getSurveysRepo(token, uid, (surveys) => onResponse(surveys.length > 0 ? surveys : threeRandomSurveys), onFailure);
 
 export const BitLabsOfferWall = OfferWall;
 
