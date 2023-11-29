@@ -51,7 +51,8 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
 
     // Mount/Unmount hook
     useEffect(() => {
-        getAppSettings(token, uid, (_, navigationColor) => setColor(extractColors(navigationColor) ?? ['#007bff', '#007bff']));
+        getAppSettings(token, uid, (_, navigationColor) => setColor(extractColors(navigationColor) ?? ['#007bff', '#007bff']))
+            .catch((error) => console.error(error));
 
         return () => {
             backHandler.remove();
@@ -63,7 +64,9 @@ const OfferWall = ({ token, uid, adId, onExitPressed, onReward, tags }: Props) =
         setKey((key + 1) % 2);
         if (clickId.current.length > 0) {
             console.log(`Leaving with reason ~> ${reason}`);
-            leaveSurveys(token, uid, clickId.current, reason);
+            leaveSurveys(token, uid, clickId.current, reason)
+                .then((successMsg) => console.log(successMsg))
+                .catch((errorMsg) => console.log(errorMsg));
             clickId.current = '';
         }
     }

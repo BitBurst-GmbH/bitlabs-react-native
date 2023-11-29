@@ -34,12 +34,12 @@ const SurveyList = ({ uid, token, style, type, onSurveyPressed }: Props) => {
         var size = getDimension(type);
         setCurrencyIcon(<CurrencyIcon isSVG={isSVG} url={content} size={size} />);
         setOldCurrencyIcon(<CurrencyIcon isSVG={isSVG} url={content} size={size * .7} />);
-      });
+      }).catch(error => console.error(error));
       else setCurrencyString(content);
 
       setColor(extractColors(color) ?? ['#007bff', '#007bff']);
       setBonusPercentage(bonusPercentage);
-    });
+    }).catch((error) => console.error(`[BitLabs] ${error}`));
 
   }, []);
 

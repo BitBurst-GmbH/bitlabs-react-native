@@ -18,17 +18,19 @@ const Leaderboard = ({ uid, token }: Props) => {
     const [leaderboard, setLeaderboard] = useState<GetLeaderboardResponse>();
 
     useEffect(() => {
-        getLeaderboard(token, uid, leaderboard => setLeaderboard(leaderboard));
+        getLeaderboard(token, uid, leaderboard => setLeaderboard(leaderboard))
+            .catch(error => console.error(error));
         getAppSettings(token, uid, (color, _2, currencyFactor, _3, currencySymbol) => {
             const [isImage, content] = currencySymbol;
 
-            if (isImage) getIsImageSVG(content, (isSvg) => setCurrencyIcon(<CurrencyIcon isSVG={isSvg} url={content} size={20} />));
+            if (isImage) getIsImageSVG(content, (isSvg) => setCurrencyIcon(<CurrencyIcon isSVG={isSvg} url={content} size={20} />))
+                .catch(error => console.error(error));
             else setCurrency(content);
 
-            setColor(extractColors(color)?.at(0) ?? '#000');
+            setColor(extractColors(color)?.[0] ?? '#000');
 
             setFactor(currencyFactor);
-        });
+        }).catch((error) => console.error(error));
     }, []);
 
     return leaderboard?.top_users ? (

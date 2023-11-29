@@ -2,25 +2,27 @@ import { getAppSettingsApi, getLeaderboardApi, getSurveysApi, updateClickApi } f
 import type { BitLabsResponse, GetAppSettingsResponse, GetLeaderboardResponse, GetSurveysResponse, Survey } from "./types";
 
 
-export const getSurveysRepo = (token: string, uid: string, onResponse: (surveys: Survey[]) => void, onFailure: (error: Error) => void) => getSurveysApi(token, uid)
-    .then(response => response.json() as Promise<BitLabsResponse<GetSurveysResponse>>)
-    .then(body => {
-        if (body.error) throw new Error(`[BitLabs] ${body.error.details.http} - ${body.error.details.msg}`);
+export const getSurveysRepo = (token: string, uid: string, onResponse: (surveys: Survey[]) => void, onFailure: (error: Error) => void) =>
+    getSurveysApi(token, uid)
+        .then(response => response.json() as Promise<BitLabsResponse<GetSurveysResponse>>)
+        .then(body => {
+            if (body.error) throw new Error(`[BitLabs] ${body.error.details.http} - ${body.error.details.msg}`);
 
-        onResponse(body.data.surveys);
-    })
-    .catch(error => onFailure(error));
+            onResponse(body.data.surveys);
+        })
+        .catch(error => onFailure(error));
 
-export const leaveSurveys = async (token: string, uid: string, clickId: string, reason: string) => updateClickApi(token, uid, clickId, reason)
-    .then(response => response.json() as Promise<BitLabsResponse<void>>)
-    .then(body => {
-        if (body.error) throw new Error(`[BitLabs] ${body.error.details.http} - ${body.error.details.msg}`);
+export const leaveSurveys = (token: string, uid: string, clickId: string, reason: string) =>
+    updateClickApi(token, uid, clickId, reason)
+        .then(response => response.json() as Promise<BitLabsResponse<void>>)
+        .then(body => {
+            if (body.error) throw new Error(`[BitLabs] ${body.error.details.http} - ${body.error.details.msg}`);
 
-        console.log('[BitLabs] LeaveSurvey Successful');
-    })
-    .catch(error => console.error(error));
+            return Promise.resolve('[BitLabs] LeaveSurvey Successful');
+        });
 
-export const getAppSettings = async (token: string, uid: string,
+
+export const getAppSettings = (token: string, uid: string,
     onResponse: (surveyIconColor: string, navigationColor: string, currencyFactor: number, bonusPercentage: number, currencySymbol: [boolean, string]) => void) => getAppSettingsApi(token, uid)
         .then(response => response.json() as Promise<BitLabsResponse<GetAppSettingsResponse>>)
         .then(body => {
@@ -37,18 +39,15 @@ export const getAppSettings = async (token: string, uid: string,
                 +body.data.currency.factor,
                 bonusPercentage,
                 currencySymbol);
-        })
-        .catch(error => console.error(error));
+        });
 
-export const getLeaderboard = async (token: string, uid: string, onResponse: (leaderboard: GetLeaderboardResponse) => void) => getLeaderboardApi(token, uid)
+export const getLeaderboard = (token: string, uid: string, onResponse: (leaderboard: GetLeaderboardResponse) => void) => getLeaderboardApi(token, uid)
     .then(response => response.json() as Promise<BitLabsResponse<GetLeaderboardResponse>>)
     .then(body => {
         if (body.error) throw new Error(`[BitLabs] ${body.error.details.http} - ${body.error.details.msg}`);
 
         onResponse(body.data);
-    })
-    .catch(error => console.error(error));
+    });
 
-export const getIsImageSVG = async (url: string, onResponse: (isSVG: boolean) => void) => fetch(new Request(url))
-    .then(response => onResponse(response.headers.get('content-type') === 'image/svg+xml'))
-    .catch(error => console.error(error));
+export const getIsImageSVG = (url: string, onResponse: (isSVG: boolean) => void) => fetch(new Request(url))
+    .then(response => onResponse(response.headers.get('content-type') === 'image/svg+xml'));
