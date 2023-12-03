@@ -10,7 +10,7 @@ type Props = {
     factor: number,
     isOwnUser: boolean,
     currencyString: string,
-    currencyIcon?: React.JSX.Element,
+    currencyIcon?: JSX.Element,
 }
 
 const LeaderboardItem = ({ user, color, factor, isOwnUser, currencyString, currencyIcon }: Props) => {

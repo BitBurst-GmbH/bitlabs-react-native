@@ -14,7 +14,7 @@ const Leaderboard = ({ uid, token }: Props) => {
     const [factor, setFactor] = useState(1);
     const [color, setColor] = useState('#000');
     const [currencyString, setCurrency] = useState('');
-    const [currencyIcon, setCurrencyIcon] = useState<React.JSX.Element>();
+    const [currencyIcon, setCurrencyIcon] = useState<JSX.Element>();
     const [leaderboard, setLeaderboard] = useState<GetLeaderboardResponse>();
 
     useEffect(() => {

@@ -22,8 +22,8 @@ const SurveyList = ({ uid, token, style, type, onSurveyPressed }: Props) => {
   const [bonusPercentage, setBonusPercentage] = useState(0);
   const [color, setColor] = useState(['#007bff', '#007bff']);
   const [currencyString, setCurrencyString] = useState<string>('');
-  const [currencyIcon, setCurrencyIcon] = useState<React.JSX.Element>();
-  const [oldCurrencyIcon, setOldCurrencyIcon] = useState<React.JSX.Element>();
+  const [currencyIcon, setCurrencyIcon] = useState<JSX.Element>();
+  const [oldCurrencyIcon, setOldCurrencyIcon] = useState<JSX.Element>();
 
   useEffect(() => {
     getSurveysRepo(token, uid, (surveyList) => setSurveys(surveyList), (error) => console.error(`[BitLabs] ${error}`));
