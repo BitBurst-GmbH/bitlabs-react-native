@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   dependencies: {
-    'bitlabs': {
+    bitlabs: {
       root: path.join(__dirname, '..'),
     },
   },
