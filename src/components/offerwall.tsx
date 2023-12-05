@@ -192,6 +192,7 @@ const OfferWall = ({
           </Gradient>
         )}
         <WebView
+          testID='Webview'
           key={key}
           onError={onError}
           source={{ uri: url }}

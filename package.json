@@ -53,6 +53,7 @@
     "@babel/preset-env": "^7.23.5",
     "@babel/preset-typescript": "^7.23.3",
     "@react-native-community/eslint-config": "^3.0.2",
+    "@testing-library/jest-native": "^5.4.3",
     "@testing-library/react-native": "^12.4.0",
     "@types/jest": "^29.5.10",
     "@types/react": "18.2.0",
@@ -104,8 +105,7 @@
           "singleQuote": true,
           "tabWidth": 2,
           "trailingComma": "es5",
-          "useTabs": false,
-          "no-inline-style": false
+          "useTabs": false
         }
       ]
     }
