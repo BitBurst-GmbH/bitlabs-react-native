@@ -52,7 +52,7 @@ test('renders correctly with correct Offerwall URL and Parameters', async () => 
 });
 
 test('renders correctly with adId in URL', async () => {
-    render(<OfferWall {...mockProps} adId="adId" />);
+    render(<OfferWall {...mockProps} adId='adId' />);
 
     await waitFor(() => expect(screen.getByTestId('Webview')).toBeOnTheScreen());
 
