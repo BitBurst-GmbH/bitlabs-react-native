@@ -1,11 +1,14 @@
 import { Platform } from 'react-native';
-import { url } from '../utils/helpers';
+import { buildApiURL } from '../utils/helpers';
 
 export const getSurveysApi = (token: string, uid: string) =>
   fetch(
-    new Request(url('v2/client/surveys', { os: Platform.OS, sdk: 'REACT' }), {
-      headers: { 'X-Api-Token': token, 'X-User-Id': uid },
-    })
+    new Request(
+      buildApiURL('v2/client/surveys', { os: Platform.OS, sdk: 'REACT' }),
+      {
+        headers: { 'X-Api-Token': token, 'X-User-Id': uid },
+      }
+    )
   );
 
 export const updateClickApi = (
@@ -15,7 +18,7 @@ export const updateClickApi = (
   reason: string
 ) =>
   fetch(
-    new Request(url(`v2/client/clicks/${clickId}`), {
+    new Request(buildApiURL(`v2/client/clicks/${clickId}`), {
       method: 'POST',
       headers: {
         'X-User-Id': uid,
@@ -29,14 +32,14 @@ export const updateClickApi = (
 
 export const getAppSettingsApi = (token: string, uid: string) =>
   fetch(
-    new Request(url('v1/client/settings/v2'), {
+    new Request(buildApiURL('v1/client/settings/v2'), {
       headers: { 'X-Api-Token': token, 'X-User-Id': uid },
     })
   );
 
 export const getLeaderboardApi = (token: string, uid: string) =>
   fetch(
-    new Request(url('v1/client/leaderboard'), {
+    new Request(buildApiURL('v1/client/leaderboard'), {
       headers: { 'X-Api-Token': token, 'X-User-Id': uid },
     })
   );

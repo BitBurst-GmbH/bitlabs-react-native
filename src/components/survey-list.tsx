@@ -39,10 +39,10 @@ const SurveyList = ({ uid, token, style, type, onSurveyPressed }: Props) => {
     getAppSettings(
       token,
       uid,
-      (color, _2, _3, bonusPercentage, currencySymbol) => {
+      (surveyIconColor, _2, _3, totalBonusPercentage, currencySymbol) => {
         const [isImage, content] = currencySymbol;
 
-        if (isImage)
+        if (isImage) {
           getIsImageSVG(content, (isSVG) => {
             var size = getDimension(type);
             setCurrencyIcon(
@@ -52,10 +52,12 @@ const SurveyList = ({ uid, token, style, type, onSurveyPressed }: Props) => {
               <CurrencyIcon isSVG={isSVG} url={content} size={size * 0.7} />
             );
           }).catch((error) => console.error(error));
-        else setCurrencyString(content);
+        } else {
+          setCurrencyString(content);
+        }
 
-        setColor(extractColors(color) ?? ['#007bff', '#007bff']);
-        setBonusPercentage(bonusPercentage);
+        setColor(extractColors(surveyIconColor) ?? ['#007bff', '#007bff']);
+        setBonusPercentage(totalBonusPercentage);
       }
     ).catch((error) => console.error(`[BitLabs] ${error}`));
   }, []);

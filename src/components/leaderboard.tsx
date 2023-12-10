@@ -15,6 +15,10 @@ type Props = {
   token: string;
 };
 
+const Divider = () => (
+  <View style={{ height: 1, backgroundColor: '#000', marginHorizontal: 4 }} />
+);
+
 const Leaderboard = ({ uid, token }: Props) => {
   const [factor, setFactor] = useState(1);
   const [color, setColor] = useState('#000');
@@ -23,24 +27,26 @@ const Leaderboard = ({ uid, token }: Props) => {
   const [leaderboard, setLeaderboard] = useState<GetLeaderboardResponse>();
 
   useEffect(() => {
-    getLeaderboard(token, uid, (leaderboard) =>
-      setLeaderboard(leaderboard)
+    getLeaderboard(token, uid, (leaderboardResponse) =>
+      setLeaderboard(leaderboardResponse)
     ).catch((error) => console.error(error));
     getAppSettings(
       token,
       uid,
-      (color, _2, currencyFactor, _3, currencySymbol) => {
+      (surveyIconColor, _2, currencyFactor, _3, currencySymbol) => {
         const [isImage, content] = currencySymbol;
 
-        if (isImage)
+        if (isImage) {
           getIsImageSVG(content, (isSvg) =>
             setCurrencyIcon(
               <CurrencyIcon isSVG={isSvg} url={content} size={20} />
             )
           ).catch((error) => console.error(error));
-        else setCurrency(content);
+        } else {
+          setCurrency(content);
+        }
 
-        setColor(extractColors(color)?.[0] ?? '#000');
+        setColor(extractColors(surveyIconColor)?.[0] ?? '#000');
 
         setFactor(currencyFactor);
       }
@@ -60,11 +66,7 @@ const Leaderboard = ({ uid, token }: Props) => {
       )}
       <FlatList
         data={leaderboard?.top_users}
-        ItemSeparatorComponent={() => (
-          <View
-            style={{ height: 1, backgroundColor: '#000', marginHorizontal: 4 }}
-          />
-        )}
+        ItemSeparatorComponent={Divider}
         renderItem={({ item }) => (
           <LeaderboardItem
             user={item}

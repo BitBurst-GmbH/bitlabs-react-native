@@ -93,19 +93,15 @@
     "root": true,
     "parser": "@typescript-eslint/parser",
     "extends": [
-      "@react-native-community",
-      "prettier"
+      "@react-native-community"
     ],
     "rules": {
-      "react-native/no-inline-style": 0,
+      "react-native/no-inline-styles": 0,
       "prettier/prettier": [
         "error",
         {
-          "quoteProps": "consistent",
           "singleQuote": true,
-          "tabWidth": 2,
-          "trailingComma": "es5",
-          "useTabs": false
+          "quoteProps": "consistent"
         }
       ]
     }
@@ -114,6 +110,10 @@
     "node_modules/",
     "lib/"
   ],
+  "prettier": {
+    "singleQuote": true,
+    "quoteProps": "consistent"
+  },
   "react-native-builder-bob": {
     "source": "src",
     "output": "lib",

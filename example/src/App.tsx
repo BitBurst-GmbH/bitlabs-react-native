@@ -78,7 +78,9 @@ const OfferWall = ({ navigation }: NativeStackScreenProps<any, any>) => {
   useEffect(() => {
     ReactNativeIdfaAaid.getAdvertisingInfo().then(
       (res: AdvertisingInfoResponse) => {
-        if (!res.isAdTrackingLimited) setAdId(res.id!);
+        if (!res.isAdTrackingLimited) {
+          setAdId(res.id!);
+        }
       }
     );
   }, []);

@@ -2,7 +2,10 @@ import { Platform } from 'react-native';
 import type { Survey } from '../api/types';
 import { Buffer } from 'buffer';
 
-export const url = (path: string, queries: { [key: string]: string } = {}) => {
+export const buildApiURL = (
+  path: string,
+  queries: { [key: string]: string } = {}
+) => {
   let url = `https://api.bitlabs.ai/${path}?platform=MOBILE`;
   Object.keys(queries).forEach(
     (key) => (url = url + `&${key}=${queries[key]}`)
@@ -10,7 +13,7 @@ export const url = (path: string, queries: { [key: string]: string } = {}) => {
   return url;
 };
 
-export const offerWallUrl = (
+export const buildOfferWallUrl = (
   token: string,
   uid: string,
   tags: { [key: string]: string | boolean }
@@ -57,7 +60,9 @@ export const extractColors = (color: String) => {
 
   if (!colors) {
     let hex = color.match(/#([0-9a-f]{3,6})/i)?.[0];
-    if (!hex) return undefined;
+    if (!hex) {
+      return undefined;
+    }
     return [hex!, hex!];
   }
 
@@ -85,10 +90,13 @@ export const encryptBase64 = (value: string) =>
   Buffer.from(value).toString('base64');
 
 export const currencize = (value: string, currencyString: string) => {
-  if (currencyString.length === 0) return value;
+  if (currencyString.length === 0) {
+    return value;
+  }
 
-  if (currencyString.includes('{value}'))
+  if (currencyString.includes('{value}')) {
     return currencyString.replace('{value}', value);
+  }
 
   return value + ' ' + currencyString;
 };
