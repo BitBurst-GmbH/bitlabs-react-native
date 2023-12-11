@@ -1,5 +1,5 @@
 PODS:
-  - bitlabs (1.1.3):
+  - bitlabs (1.1.11):
     - React-Core
   - boost (1.76.0)
   - CocoaAsyncSocket (7.6.5)
@@ -557,7 +557,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  bitlabs: ad57f3b3458a1883a71060cc1cacf09f4480745e
+  bitlabs: 4fd2bd5a4e6e195291543d4ef8b93a3ec03cd30e
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
@@ -615,4 +615,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: a6074cc148a88d4e25230d9ad5c7dc82a4342027
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.14.3

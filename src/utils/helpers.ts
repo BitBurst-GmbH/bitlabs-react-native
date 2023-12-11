@@ -25,7 +25,7 @@ export const buildOfferWallUrl = (
 };
 
 export const threeRandomSurveys = (() => {
-  let surveys: Survey[] = [];
+  const surveys: Survey[] = [];
 
   for (let i = 0; i < 3; i++) {
     surveys.push({
@@ -51,19 +51,19 @@ export const threeRandomSurveys = (() => {
   return surveys;
 })();
 
-export const extractColors = (color: String) => {
-  let colors = color
+export const extractColors = (color: string) => {
+  const colors = color
     .match(/linear-gradient\((\d+)deg,\s*(.+)\)/)?.[2]
     ?.replace(/([0-9]+)%/g, '')
     ?.split(',')
     .map((v) => v.trim());
 
   if (!colors) {
-    let hex = color.match(/#([0-9a-f]{3,6})/i)?.[0];
+    const hex = color.match(/#([0-9a-f]{3,6})/i)?.[0];
     if (!hex) {
       return undefined;
     }
-    return [hex!, hex!];
+    return [hex, hex];
   }
 
   return colors;
@@ -71,16 +71,16 @@ export const extractColors = (color: String) => {
 
 const hexToLuminance = (hex: string) => {
   // Convert hex to RGB
-  let r = parseInt(hex.substring(1, 3), 16) / 255;
-  let g = parseInt(hex.substring(3, 5), 16) / 255;
-  let b = parseInt(hex.substring(5, 7), 16) / 255;
+  const r = parseInt(hex.substring(1, 3), 16) / 255;
+  const g = parseInt(hex.substring(3, 5), 16) / 255;
+  const b = parseInt(hex.substring(5, 7), 16) / 255;
 
-  let luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
   return luminance;
 };
 
-export const isColorLuminant = (colors: String[]) =>
+export const isColorLuminant = (colors: string[]) =>
   colors.some((color) => hexToLuminance(color.toString()) > 0.729);
 
 export const rounded = (value: number) =>

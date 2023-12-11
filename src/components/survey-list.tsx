@@ -44,7 +44,7 @@ const SurveyList = ({ uid, token, style, type, onSurveyPressed }: Props) => {
 
         if (isImage) {
           getIsImageSVG(content, (isSVG) => {
-            var size = getDimension(type);
+            const size = getDimension(type);
             setCurrencyIcon(
               <CurrencyIcon isSVG={isSVG} url={content} size={size} />
             );

@@ -45,8 +45,8 @@ const OfferWall = ({
   onReward,
   tags,
 }: Props) => {
-  let reward = useRef(0.0);
-  let clickId = useRef('');
+  const reward = useRef(0.0);
+  const clickId = useRef('');
 
   const styles = OfferWallStyles();
   const [webviewKey, setWebviewKey] = useState(0);
@@ -54,7 +54,7 @@ const OfferWall = ({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isPageOfferwall, setIsPageOfferwall] = useState(true);
   const [areParamsLoaded, setAreParamsLoaded] = useState(true);
-  const [color, setColor] = useState<String[]>(['#007bff', '#007bff']);
+  const [color, setColor] = useState<string[]>(['#007bff', '#007bff']);
   const [offerwallUrl, setOfferwallUrl] = useState(
     buildOfferWallUrl(token, uid, tags ?? {})
   );
@@ -92,7 +92,7 @@ const OfferWall = ({
     return () => onReward(reward.current);
   }, [onReward, token, uid]);
 
-  const onBackPressed = (reason: string = '') => {
+  const onBackPressed = (reason = '') => {
     setWebviewKey((webviewKey + 1) % 2);
     if (clickId.current.length > 0) {
       console.log(`Leaving with reason ~> ${reason}`);
@@ -157,7 +157,7 @@ const OfferWall = ({
   };
 
   const onError = () => {
-    var errStr = `{ uid: ${uid}, date: ${Date.now()} }`;
+    const errStr = `{ uid: ${uid}, date: ${Date.now()} }`;
     setErrorStr(encryptBase64(errStr));
   };
 
@@ -241,7 +241,7 @@ const extractClickId = (url: string) => {
   }
 
   const params = url.split(/([?,=,&])/);
-  let index = params.indexOf('clk');
+  const index = params.indexOf('clk');
   const clk = params[index + 2];
 
   if (!clk) {
