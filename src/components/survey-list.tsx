@@ -60,7 +60,7 @@ const SurveyList = ({ uid, token, style, type, onSurveyPressed }: Props) => {
         setBonusPercentage(totalBonusPercentage);
       }
     ).catch((error) => console.error(`[BitLabs] ${error}`));
-  }, []);
+  }, [token, type, uid]);
 
   return (
     <FlatList

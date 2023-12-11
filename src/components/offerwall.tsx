@@ -3,7 +3,6 @@ import {
   BackHandler,
   Image,
   Linking,
-  type NativeEventSubscription,
   SafeAreaView,
   TouchableOpacity,
   View,
@@ -46,8 +45,6 @@ const OfferWall = ({
   onReward,
   tags,
 }: Props) => {
-  let backHandler: NativeEventSubscription;
-
   let reward = useRef(0.0);
   let clickId = useRef('');
 
@@ -64,14 +61,17 @@ const OfferWall = ({
 
   // Hook to add event listener which accepts a state value
   useEffect(() => {
-    backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      if (isPageOfferwall) {
-        return false;
-      }
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        if (isPageOfferwall) {
+          return false;
+        }
 
-      setIsModalVisible(true);
-      return true;
-    });
+        setIsModalVisible(true);
+        return true;
+      }
+    );
 
     return () => backHandler.remove();
   }, [isPageOfferwall]);
@@ -89,11 +89,8 @@ const OfferWall = ({
       setColor(extractColors(navigationColor) ?? ['#007bff', '#007bff'])
     ).catch((error) => console.error(error));
 
-    return () => {
-      backHandler.remove();
-      onReward(reward.current);
-    };
-  }, []);
+    return () => onReward(reward.current);
+  }, [onReward, token, uid]);
 
   const onBackPressed = (reason: string = '') => {
     setWebviewKey((webviewKey + 1) % 2);

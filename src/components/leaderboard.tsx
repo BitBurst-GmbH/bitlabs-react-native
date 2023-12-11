@@ -51,7 +51,7 @@ const Leaderboard = ({ uid, token }: Props) => {
         setFactor(currencyFactor);
       }
     ).catch((error) => console.error(error));
-  }, []);
+  }, [token, uid]);
 
   return leaderboard?.top_users ? (
     <View style={{ alignSelf: 'stretch', height: '25%' }}>
