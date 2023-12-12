@@ -3,7 +3,7 @@ import { View, type StyleProp, type ViewStyle } from 'react-native';
 import { Defs, LinearGradient, Rect, Stop, Svg } from 'react-native-svg';
 
 type Props = {
-  colors: String[];
+  colors: string[];
   rectRadius?: number;
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;

@@ -15,7 +15,7 @@ const RatingBar = ({ rating }: Props) => {
 };
 
 const renderStars = (rating: number) => {
-  let jsx = [];
+  const jsx = [];
 
   for (let i = 1; i <= 5; i++) {
     jsx.push(

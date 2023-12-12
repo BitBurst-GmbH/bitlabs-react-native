@@ -3,7 +3,6 @@ import {
   BackHandler,
   Image,
   Linking,
-  type NativeEventSubscription,
   SafeAreaView,
   TouchableOpacity,
   View,
@@ -24,7 +23,7 @@ import {
   encryptBase64,
   extractColors,
   isColorLuminant,
-  offerWallUrl,
+  buildOfferWallUrl,
 } from '../utils/helpers';
 import Gradient from '../hoc/gradient';
 import QRCode from 'react-native-qrcode-svg';
@@ -46,51 +45,64 @@ const OfferWall = ({
   onReward,
   tags,
 }: Props) => {
-  let backHandler: NativeEventSubscription;
-
-  let reward = useRef(0.0);
-  let clickId = useRef('');
+  const reward = useRef(0.0);
+  const clickId = useRef('');
+  const onRewardRef = useRef(onReward);
 
   const styles = OfferWallStyles();
-  const [key, setKey] = useState(0);
+  const [webviewKey, setWebviewKey] = useState(0);
   const [errorStr, setErrorStr] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isPageOfferwall, setIsPageOfferwall] = useState(true);
   const [areParamsLoaded, setAreParamsLoaded] = useState(true);
-  const [color, setColor] = useState<String[]>(['#007bff', '#007bff']);
-  const [url, setUrl] = useState(offerWallUrl(token, uid, tags ?? {}));
+  const [color, setColor] = useState<string[]>(['#007bff', '#007bff']);
+  const [offerwallUrl, setOfferwallUrl] = useState(
+    buildOfferWallUrl(token, uid, tags ?? {})
+  );
 
   // Hook to add event listener which accepts a state value
   useEffect(() => {
-    backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      if (isPageOfferwall) return false;
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        if (isPageOfferwall) {
+          return false;
+        }
 
-      setIsModalVisible(true);
-      return true;
-    });
+        setIsModalVisible(true);
+        return true;
+      }
+    );
 
     return () => backHandler.remove();
   }, [isPageOfferwall]);
 
   // Hook to add adId if one is given
   useEffect(() => {
-    if (adId) setUrl(url + `&maid=${adId}`);
+    if (adId) {
+      setOfferwallUrl((o) => o + `&maid=${adId}`);
+    }
   }, [adId]);
 
-  // Mount/Unmount hook
+  // Hook to get navigation color
   useEffect(() => {
     getAppSettings(token, uid, (_, navigationColor) =>
       setColor(extractColors(navigationColor) ?? ['#007bff', '#007bff'])
     ).catch((error) => console.error(error));
+  }, [token, uid]);
 
-    return () => {
-      backHandler.remove();
-      onReward(reward.current);
-    };
+  // Hook to update onRewardRef when onReward changes
+  useEffect(() => {
+    onRewardRef.current = onReward;
+  }, [onReward]);
+
+  // Hook to call onReward when component unmounts
+  useEffect(() => {
+    return () => onRewardRef.current(reward.current);
   }, []);
 
-  const onBackPressed = (reason: string = '') => {
-    setKey((key + 1) % 2);
+  const onBackPressed = (reason = '') => {
+    setWebviewKey((webviewKey + 1) % 2);
     if (clickId.current.length > 0) {
       console.log(`Leaving with reason ~> ${reason}`);
       leaveSurveys(token, uid, clickId.current, reason)
@@ -118,7 +130,9 @@ const OfferWall = ({
         setAreParamsLoaded(true);
         let newURL =
           url + `&uid=${uid}&token=${token}&os=${Platform.OS}&sdk=REACT`;
-        if (adId) newURL += `&maid=${adId}`;
+        if (adId) {
+          newURL += `&maid=${adId}`;
+        }
         if (tags) {
           Object.keys(tags).forEach((key) => {
             newURL += `&${key}=${tags[key]}`;
@@ -126,7 +140,7 @@ const OfferWall = ({
         }
 
         console.log('Calling url: ' + newURL);
-        setUrl(newURL);
+        setOfferwallUrl(newURL);
       }
     }
 
@@ -152,7 +166,7 @@ const OfferWall = ({
   };
 
   const onError = () => {
-    var errStr = `{ uid: ${uid}, date: ${Date.now()} }`;
+    const errStr = `{ uid: ${uid}, date: ${Date.now()} }`;
     setErrorStr(encryptBase64(errStr));
   };
 
@@ -192,10 +206,10 @@ const OfferWall = ({
           </Gradient>
         )}
         <WebView
-          testID='Webview'
-          key={key}
+          testID="Webview"
+          key={webviewKey}
           onError={onError}
-          source={{ uri: url }}
+          source={{ uri: offerwallUrl }}
           style={styles.webview}
           scalesPageToFit={false}
           javaScriptEnabled={true}
@@ -219,7 +233,9 @@ const OfferWall = ({
 };
 
 const extractValue = (url: string) => {
-  if (!url.includes('&val=')) return 0.0;
+  if (!url.includes('&val=')) {
+    return 0.0;
+  }
 
   const params = url.split(/([?,=,&])/);
   const index = params.indexOf('val');
@@ -229,13 +245,17 @@ const extractValue = (url: string) => {
 };
 
 const extractClickId = (url: string) => {
-  if (!url.startsWith('https://redirect.bitlabs.ai/')) return null;
+  if (!url.startsWith('https://redirect.bitlabs.ai/')) {
+    return null;
+  }
 
   const params = url.split(/([?,=,&])/);
-  let index = params.indexOf('clk');
+  const index = params.indexOf('clk');
   const clk = params[index + 2];
 
-  if (!clk) return null;
+  if (!clk) {
+    return null;
+  }
 
   return clk;
 };

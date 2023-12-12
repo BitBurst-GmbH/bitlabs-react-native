@@ -46,7 +46,7 @@ export type GetAppSettingsResponse = {
 };
 
 export type GetLeaderboardResponse = {
-  next_reset_at: String;
+  next_reset_at: string;
   own_user: User;
   rewards: Reward[];
   top_users: User[];
@@ -86,7 +86,7 @@ type Reward = {
 
 export type User = {
   earnings_raw: number;
-  name: String;
+  name: string;
   rank: number;
 };
 

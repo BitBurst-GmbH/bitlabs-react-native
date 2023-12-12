@@ -24,10 +24,11 @@ export const getSurveysRepo = (
         response.json() as Promise<BitLabsResponse<GetSurveysResponse>>
     )
     .then((body) => {
-      if (body.error)
+      if (body.error) {
         throw new Error(
           `[BitLabs] ${body.error.details.http} - ${body.error.details.msg}`
         );
+      }
 
       onResponse(body.data.surveys);
     })
@@ -42,10 +43,11 @@ export const leaveSurveys = (
   updateClickApi(token, uid, clickId, reason)
     .then((response) => response.json() as Promise<BitLabsResponse<void>>)
     .then((body) => {
-      if (body.error)
+      if (body.error) {
         throw new Error(
           `[BitLabs] ${body.error.details.http} - ${body.error.details.msg}`
         );
+      }
 
       return Promise.resolve('[BitLabs] LeaveSurvey Successful');
     });
@@ -67,16 +69,18 @@ export const getAppSettings = (
         response.json() as Promise<BitLabsResponse<GetAppSettingsResponse>>
     )
     .then((body) => {
-      if (body.error)
+      if (body.error) {
         throw new Error(
           `[BitLabs] ${body.error.details.http} - ${body.error.details.msg}`
         );
+      }
 
-      let bonusPercentage = body.data.currency.bonus_percentage / 100;
-      if (body.data.promotion)
-        bonusPercentage +=
+      let totalBonusPercentage = body.data.currency.bonus_percentage / 100;
+      if (body.data.promotion) {
+        totalBonusPercentage +=
           body.data.promotion.bonus_percentage / 100 +
-          (bonusPercentage * body.data.promotion.bonus_percentage) / 100;
+          (totalBonusPercentage * body.data.promotion.bonus_percentage) / 100;
+      }
 
       const currencySymbol: [boolean, string] = [
         body.data.currency.symbol.is_image,
@@ -87,7 +91,7 @@ export const getAppSettings = (
         body.data.visual.survey_icon_color,
         body.data.visual.navigation_color,
         +body.data.currency.factor,
-        bonusPercentage,
+        totalBonusPercentage,
         currencySymbol
       );
     });
@@ -103,10 +107,11 @@ export const getLeaderboard = (
         response.json() as Promise<BitLabsResponse<GetLeaderboardResponse>>
     )
     .then((body) => {
-      if (body.error)
+      if (body.error) {
         throw new Error(
           `[BitLabs] ${body.error.details.http} - ${body.error.details.msg}`
         );
+      }
 
       onResponse(body.data);
     });
