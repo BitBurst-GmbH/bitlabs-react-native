@@ -47,6 +47,7 @@ const OfferWall = ({
 }: Props) => {
   const reward = useRef(0.0);
   const clickId = useRef('');
+  const onRewardRef = useRef(onReward);
 
   const styles = OfferWallStyles();
   const [webviewKey, setWebviewKey] = useState(0);
@@ -83,14 +84,22 @@ const OfferWall = ({
     }
   }, [adId]);
 
-  // Mount/Unmount hook
+  // Hook to get navigation color
   useEffect(() => {
     getAppSettings(token, uid, (_, navigationColor) =>
       setColor(extractColors(navigationColor) ?? ['#007bff', '#007bff'])
     ).catch((error) => console.error(error));
+  }, [token, uid]);
 
-    return () => onReward(reward.current);
-  }, [onReward, token, uid]);
+  // Hook to update onRewardRef when onReward changes
+  useEffect(() => {
+    onRewardRef.current = onReward;
+  }, [onReward]);
+
+  // Hook to call onReward when component unmounts
+  useEffect(() => {
+    return () => onRewardRef.current(reward.current);
+  }, []);
 
   const onBackPressed = (reason = '') => {
     setWebviewKey((webviewKey + 1) % 2);
