@@ -24,10 +24,9 @@
   "scripts": {
     "test": "jest",
     "typescript": "tsc --noEmit",
-    "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "prepare": "bob build",
     "example": "yarn --cwd example",
-    "bootstrap": "yarn example && yarn && yarn example pods"
+    "lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "prepare": "bob build && yarn example && yarn example pods"
   },
   "keywords": [
     "ios",
