@@ -16,9 +16,14 @@ export const buildApiURL = (
 export const buildOfferWallUrl = (
   token: string,
   uid: string,
-  tags: { [key: string]: string | boolean }
+  tags: { [key: string]: string | boolean },
+  addSdkParameter: boolean
 ) => {
-  let url = `https://web.bitlabs.ai?token=${token}&uid=${uid}&sdk=REACT&os=${Platform.OS}`;
+  let url = `https://web.bitlabs.ai?token=${token}&uid=${uid}&os=${Platform.OS}`;
+
+  if (addSdkParameter) {
+    url = url + '&sdk=REACT';
+  }
 
   Object.keys(tags).forEach((key) => (url = url + `&${key}=${tags[key]}`));
   return url;
