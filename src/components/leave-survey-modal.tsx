@@ -5,7 +5,7 @@ import styles from '../styles/leave-survey-modal.styles';
 type Props = {
   visible: boolean;
   setIsVisible: (isVisible: boolean) => void;
-  leaveSurveHandler: (reason: string) => void;
+  leaveSurveyHandler: (reason: string) => void;
 };
 
 const leaveReasons = {
@@ -19,7 +19,7 @@ const leaveReasons = {
 const LeaveSurveyModal = ({
   visible,
   setIsVisible,
-  leaveSurveHandler,
+  leaveSurveyHandler,
 }: Props) => {
   const closeDialog = () => setIsVisible(false);
 
@@ -44,7 +44,7 @@ const LeaveSurveyModal = ({
               key={key}
               onPress={() => {
                 closeDialog();
-                leaveSurveHandler(key);
+                leaveSurveyHandler(key);
               }}
             >
               <Text style={styles.item}>{value}</Text>

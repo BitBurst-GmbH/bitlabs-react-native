@@ -32,7 +32,7 @@ type Props = {
   uid: string;
   adId: string;
   token: string;
-  onExitPressed: () => void;
+  onExitPressed: (() => void) | undefined;
   tags?: { [key: string]: string | boolean };
   onReward: (reward: number) => void;
 };
@@ -57,7 +57,7 @@ const OfferWall = ({
   const [areParamsLoaded, setAreParamsLoaded] = useState(true);
   const [color, setColor] = useState<string[]>(['#007bff', '#007bff']);
   const [offerwallUrl, setOfferwallUrl] = useState(
-    buildOfferWallUrl(token, uid, tags ?? {})
+    buildOfferWallUrl(token, uid, tags ?? {}, onExitPressed ? true : false)
   );
 
   // Hook to add event listener which accepts a state value
@@ -153,7 +153,7 @@ const OfferWall = ({
   const closeDetector = (nativeEvent: WebViewNativeEvent) => {
     const url = nativeEvent.url;
     if (url.endsWith('/close')) {
-      onExitPressed();
+      onExitPressed?.();
     }
   };
 
@@ -185,7 +185,7 @@ const OfferWall = ({
         <LeaveSurveyModal
           visible={isModalVisible}
           setIsVisible={setIsModalVisible}
-          leaveSurveHandler={onBackPressed}
+          leaveSurveyHandler={onBackPressed}
         />
         {!isPageOfferwall && (
           <Gradient style={{ height: 50 }} colors={color}>
