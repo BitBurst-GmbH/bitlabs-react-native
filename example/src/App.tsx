@@ -6,7 +6,7 @@ import {
 import ReactNativeIdfaAaid, {
   type AdvertisingInfoResponse,
 } from '@sparkfabrik/react-native-idfa-aaid';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import {
   BitLabsLeaderboard,
@@ -17,57 +17,80 @@ import {
   SurveyType,
 } from '../../src';
 import { APP_TOKEN } from './config';
+import styles from './styles';
 
 const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  const token = APP_TOKEN;
   const uid = 'USER_ID';
+  const token = APP_TOKEN;
+
+  const [isLeaderboardVisible, setIsLeaderboardVisible] = useState(false);
+  const [isSurveyWidgetVisible, setIsSurveyWidgetVisible] = useState(false);
 
   return (
     <View style={styles.container}>
-      <BitLabsLeaderboard uid={uid} token={token} />
-      <TouchableOpacity
-        style={styles.box}
-        onPress={() =>
-          checkSurveys(
-            token,
-            uid,
-            (hasSurveys) => console.log(`[Example] Has Surveys: ${hasSurveys}`),
-            (error) => console.log(error.message)
-          )
-        }
-      >
-        <Text>Check Surveys</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.box}
-        onPress={() =>
-          getSurveys(
-            token,
-            uid,
-            (surveys) =>
-              console.log(
-                `[Example] Getting surveys -> ${surveys.map(
-                  (survey) => `Survey ${survey.id} in ${survey.category.name}`
-                )}`
-              ),
-            (error) => console.log(error.message)
-          )
-        }
-      >
-        <Text>Get Surveys</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.box}
-        onPress={() => navigation.navigate('Offerwall')}
-      >
-        <Text>Open Offerwall</Text>
-      </TouchableOpacity>
-      <BitLabsSurveys
-        uid={uid}
-        token={token}
-        type={SurveyType.Simple}
-        onSurveyPressed={() => navigation.navigate('Offerwall')}
-      />
+      {isLeaderboardVisible && <BitLabsLeaderboard uid={uid} token={token} />}
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity
+          style={styles.box}
+          onPress={() => setIsLeaderboardVisible(true)}
+        >
+          <Text>Show Leaderboard</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.box}
+          onPress={() => navigation.navigate('Offerwall')}
+        >
+          <Text>Open Offerwall</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.box, { flex: 1 }]}
+          onPress={() =>
+            checkSurveys(
+              token,
+              uid,
+              (hasSurveys) =>
+                console.log(`[Example] Has Surveys: ${hasSurveys}`),
+              (error) => console.log(error.message)
+            )
+          }
+        >
+          <Text>Check Surveys</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.box, { flex: 1 }]}
+          onPress={() =>
+            getSurveys(
+              token,
+              uid,
+              (surveys) =>
+                console.log(
+                  `[Example] Getting surveys -> ${surveys.map(
+                    (survey) => `Survey ${survey.id} in ${survey.category.name}`
+                  )}`
+                ),
+              (error) => console.log(error.message)
+            )
+          }
+        >
+          <Text>Get Surveys</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.box}
+          onPress={() => setIsSurveyWidgetVisible(true)}
+        >
+          <Text> Show Survey Widget </Text>
+        </TouchableOpacity>
+      </View>
+      {isSurveyWidgetVisible && (
+        <View style={{ backgroundColor: 'yellow' }}>
+          <BitLabsSurveys
+            uid={uid}
+            token={token}
+            type={SurveyType.Simple}
+            onSurveyPressed={() => navigation.navigate('Offerwall')}
+          />
+        </View>
+      )}
     </View>
   );
 };
@@ -106,20 +129,3 @@ export default () => (
     </Stack.Navigator>
   </NavigationContainer>
 );
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  box: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 10,
-    width: 250,
-    height: 40,
-    backgroundColor: '#dafaba',
-    marginVertical: 10,
-  },
-});
