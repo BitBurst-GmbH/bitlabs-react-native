@@ -9,7 +9,6 @@ export default StyleSheet.create({
   buttonsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    backgroundColor: '#ff5a55',
   },
   box: {
     width: '100%',
@@ -17,10 +16,8 @@ export default StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     borderRadius: 8,
-    backgroundColor: '#dafaba',
+    color: '#fff',
+    backgroundColor: '#007bff',
     margin: 4,
-  },
-  rowButtons: {
-    flexDirection: 'row',
   },
 });

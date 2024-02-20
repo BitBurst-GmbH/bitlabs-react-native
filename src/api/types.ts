@@ -100,7 +100,8 @@ export type SurveyProperties = {
 };
 
 export enum WidgetType {
-  Simple,
-  Compact,
-  FullWidth,
+  Simple = 'simple',
+  Compact = 'compact',
+  FullWidth = 'full-width',
+  Leaderboard = 'leaderboard',
 }

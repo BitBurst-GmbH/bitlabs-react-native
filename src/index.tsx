@@ -1,8 +1,5 @@
 import { getSurveysRepo } from './api/bitlabs_repository';
 import { WidgetType, type Survey } from './api/types';
-import Leaderboard from './components/leaderboard';
-import OfferWall from './components/offerwall';
-import SurveyList from './components/survey-list';
 import { threeRandomSurveys } from './utils/helpers';
 
 /**
@@ -47,10 +44,14 @@ export const getSurveys = (
     onFailure
   );
 
-export const BitLabsOfferWall = OfferWall;
-
 export const SurveyType = WidgetType;
 
-export const BitLabsSurveys = SurveyList;
+export { WidgetType };
 
-export const BitLabsLeaderboard = Leaderboard;
+export { default as BitLabsOfferWall } from './components/offerwall';
+
+export { default as BitLabsSurveys } from './components/survey-list';
+
+export { default as BitLabsLeaderboard } from './components/leaderboard';
+
+export { default as BitLabsWidget } from './components/bitlabs-widget';

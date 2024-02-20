@@ -21,7 +21,7 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
-const SurveyList = ({ uid, token, style, type, onSurveyPressed }: Props) => {
+export default ({ uid, token, style, type, onSurveyPressed }: Props) => {
   const [surveys, setSurveys] = useState<Survey[]>([]);
   const [bonusPercentage, setBonusPercentage] = useState(0);
   const [color, setColor] = useState(['#007bff', '#007bff']);
@@ -92,6 +92,8 @@ const getDimension = (type: WidgetType) => {
       return 15;
     case WidgetType.FullWidth:
       return 15;
+    default:
+      return 20;
   }
 };
 
@@ -103,6 +105,8 @@ const getStyle = (type: WidgetType) => {
       return { width: 300, height: 80, margin: 4 };
     case WidgetType.FullWidth:
       return { width: 500, height: 50, margin: 4 };
+    default:
+      return { width: 290, height: 130, margin: 4 };
   }
 };
 
@@ -118,7 +122,7 @@ const getWidget = (
       return <CompactWidget survey={survey} properties={properties} />;
     case WidgetType.FullWidth:
       return <FullWidthWidget survey={survey} properties={properties} />;
+    default:
+      return <SimpleWidget survey={survey} properties={properties} />;
   }
 };
-
-export default SurveyList;
