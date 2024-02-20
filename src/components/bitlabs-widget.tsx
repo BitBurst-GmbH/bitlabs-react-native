@@ -1,7 +1,7 @@
 import React from 'react';
-import type { WidgetType } from '../api/types';
+import { WidgetType } from '../api/types';
 import WebView from 'react-native-webview';
-import { StyleSheet, View } from 'react-native';
+import { View, type ViewStyle } from 'react-native';
 
 type Props = {
   uid: string;
@@ -54,10 +54,10 @@ export default ({ token, uid, type }: Props) => {
     `;
 
   return (
-    <View style={styles.container}>
+    <View style={[styleByType(type)]}>
       <WebView
         source={{ html: html, baseUrl: 'https://sdk.bitlabs.ai/' }}
-        style={styles.webview}
+        style={{ backgroundColor: 'transparent' }}
         overScrollMode={'never'}
         bounces={false}
       />
@@ -65,15 +65,15 @@ export default ({ token, uid, type }: Props) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fcf',
-    justifyContent: 'center',
-    // alignItems: 'center',
-  },
-  webview: {
-    flex: 1,
-    backgroundColor: 'transparent',
-  },
-});
+const styleByType: (type: WidgetType) => ViewStyle = (type: WidgetType) => {
+  switch (type) {
+    case WidgetType.Leaderboard:
+      return { flex: 1, alignSelf: 'stretch' };
+    case WidgetType.Simple:
+      return { width: 300, height: 135, alignSelf: 'center' };
+    case WidgetType.Compact:
+      return { width: 260, height: 95, alignSelf: 'center' };
+    case WidgetType.FullWidth:
+      return { height: 70, alignSelf: 'stretch' };
+  }
+};

@@ -10,9 +10,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import {
   BitLabsOfferWall,
-  BitLabsSurveys,
   BitLabsWidget,
-  SurveyType,
   WidgetType,
   checkSurveys,
   getSurveys,
@@ -85,14 +83,7 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
         </TouchableOpacity>
       </View>
       {isSurveyWidgetVisible && (
-        <View style={{ backgroundColor: 'yellow' }}>
-          <BitLabsSurveys
-            uid={uid}
-            token={token}
-            type={SurveyType.Simple}
-            onSurveyPressed={() => navigation.navigate('Offerwall')}
-          />
-        </View>
+        <BitLabsWidget uid={uid} token={token} type={WidgetType.Simple} />
       )}
     </View>
   );
