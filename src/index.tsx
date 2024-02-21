@@ -44,6 +44,7 @@ export const getSurveys = (
     onFailure
   );
 
+/** @deprecated Use `WidgetType` instead. */
 export const SurveyType = WidgetType;
 
 export { WidgetType };

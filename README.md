@@ -14,13 +14,13 @@ OR
 yarn add bitlabs
 ```
 
+## Changelog
+
+Check the version history: [Changelog](/CHANGELOG.md).
+
 ## Usage
 
-Check Refer to the full guide: [React Native SDK](https://developer.bitlabs.ai/docs/react-native-sdk#list-of-survey-widgets)
-
-## Contributing
-
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+Refer to the full guide: [React Native SDK](https://developer.bitlabs.ai/docs/react-native-sdk#list-of-survey-widgets).
 
 ## Author
 

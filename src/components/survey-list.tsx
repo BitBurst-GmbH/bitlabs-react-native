@@ -21,6 +21,7 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
+/** @deprecated Use `BitLabsWidget` instead. */
 export default ({ uid, token, style, type, onSurveyPressed }: Props) => {
   const [surveys, setSurveys] = useState<Survey[]>([]);
   const [bonusPercentage, setBonusPercentage] = useState(0);

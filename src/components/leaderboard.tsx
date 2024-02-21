@@ -19,6 +19,7 @@ const Divider = () => (
   <View style={{ height: 1, backgroundColor: '#000', marginHorizontal: 4 }} />
 );
 
+/** @deprecated Use `BitLabsWidget` instead. */
 export default ({ uid, token }: Props) => {
   const [factor, setFactor] = useState(1);
   const [color, setColor] = useState('#000');
