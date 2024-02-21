@@ -19,7 +19,7 @@ const Divider = () => (
   <View style={{ height: 1, backgroundColor: '#000', marginHorizontal: 4 }} />
 );
 
-const Leaderboard = ({ uid, token }: Props) => {
+export default ({ uid, token }: Props) => {
   const [factor, setFactor] = useState(1);
   const [color, setColor] = useState('#000');
   const [currencyString, setCurrency] = useState('');
@@ -81,5 +81,3 @@ const Leaderboard = ({ uid, token }: Props) => {
     </View>
   ) : null;
 };
-
-export default Leaderboard;

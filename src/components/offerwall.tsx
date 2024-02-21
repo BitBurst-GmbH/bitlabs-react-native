@@ -37,14 +37,7 @@ type Props = {
   onReward: (reward: number) => void;
 };
 
-const OfferWall = ({
-  token,
-  uid,
-  adId,
-  onExitPressed,
-  onReward,
-  tags,
-}: Props) => {
+export default ({ token, uid, adId, onExitPressed, onReward, tags }: Props) => {
   const reward = useRef(0.0);
   const clickId = useRef('');
   const onRewardRef = useRef(onReward);
@@ -209,11 +202,13 @@ const OfferWall = ({
           testID="Webview"
           key={webviewKey}
           onError={onError}
-          source={{ uri: offerwallUrl }}
           style={styles.webview}
           scalesPageToFit={false}
           javaScriptEnabled={true}
           onLoadStart={onLoadStart}
+          source={{ uri: offerwallUrl }}
+          bounces={false}
+          overScrollMode="never"
           injectedJavaScript={disableZoom}
           onLoadEnd={({ nativeEvent }) => closeDetector(nativeEvent)}
           onShouldStartLoadWithRequest={onShouldStartLoadingWithRequest}
@@ -259,5 +254,3 @@ const extractClickId = (url: string) => {
 
   return clk;
 };
-
-export default OfferWall;
