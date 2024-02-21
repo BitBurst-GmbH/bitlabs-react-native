@@ -202,11 +202,13 @@ export default ({ token, uid, adId, onExitPressed, onReward, tags }: Props) => {
           testID="Webview"
           key={webviewKey}
           onError={onError}
-          source={{ uri: offerwallUrl }}
           style={styles.webview}
           scalesPageToFit={false}
           javaScriptEnabled={true}
           onLoadStart={onLoadStart}
+          source={{ uri: offerwallUrl }}
+          bounces={false}
+          overScrollMode="never"
           injectedJavaScript={disableZoom}
           onLoadEnd={({ nativeEvent }) => closeDetector(nativeEvent)}
           onShouldStartLoadWithRequest={onShouldStartLoadingWithRequest}

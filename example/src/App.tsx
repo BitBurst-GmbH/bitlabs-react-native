@@ -6,7 +6,7 @@ import {
 import ReactNativeIdfaAaid, {
   type AdvertisingInfoResponse,
 } from '@sparkfabrik/react-native-idfa-aaid';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import {
   BitLabsOfferWall,
@@ -26,9 +26,14 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const [isSurveyWidgetVisible, setIsSurveyWidgetVisible] = useState(false);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {isLeaderboardVisible && (
-        <BitLabsWidget uid={uid} token={token} type={WidgetType.Leaderboard} />
+        <BitLabsWidget
+          uid={uid}
+          token={token}
+          type={WidgetType.Leaderboard}
+          onPress={() => navigation.navigate('Offerwall')}
+        />
       )}
       <View style={styles.buttonsContainer}>
         <TouchableOpacity
@@ -65,9 +70,12 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
               uid,
               (surveys) =>
                 console.log(
-                  `[Example] Getting surveys -> ${surveys.map(
-                    (survey) => `Survey ${survey.id} in ${survey.category.name}`
-                  )}`
+                  `[Example] Getting surveys -> \n${surveys
+                    .map(
+                      (survey) =>
+                        `Survey ${survey.id} in ${survey.category.name}`
+                    )
+                    .join('\n')}`
                 ),
               (error) => console.log(error.message)
             )
@@ -83,9 +91,14 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
         </TouchableOpacity>
       </View>
       {isSurveyWidgetVisible && (
-        <BitLabsWidget uid={uid} token={token} type={WidgetType.Simple} />
+        <BitLabsWidget
+          uid={uid}
+          token={token}
+          type={WidgetType.Simple}
+          onPress={() => navigation.navigate('Offerwall')}
+        />
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 

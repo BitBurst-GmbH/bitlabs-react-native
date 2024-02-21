@@ -1,15 +1,16 @@
 import React from 'react';
 import { WidgetType } from '../api/types';
 import WebView from 'react-native-webview';
-import { View, type ViewStyle } from 'react-native';
+import { TouchableOpacity, View, type ViewStyle } from 'react-native';
 
 type Props = {
   uid: string;
   token: string;
   type: WidgetType;
+  onPress: () => void;
 };
 
-export default ({ token, uid, type }: Props) => {
+export default ({ token, uid, type, onPress }: Props) => {
   const html = `
     <!DOCTYPE html>
     <html lang="en">
@@ -53,27 +54,34 @@ export default ({ token, uid, type }: Props) => {
     </html>
     `;
 
-  return (
-    <View style={[styleByType(type)]}>
-      <WebView
-        source={{ html: html, baseUrl: 'https://sdk.bitlabs.ai/' }}
-        style={{ backgroundColor: 'transparent' }}
-        overScrollMode={'never'}
-        bounces={false}
-      />
-    </View>
+  const webview = (
+    <WebView
+      javaScriptEnabled={true}
+      source={{ html: html, baseUrl: 'https://sdk.bitlabs.ai/' }}
+      style={{ backgroundColor: 'transparent' }}
+      overScrollMode={'never'}
+      bounces={false}
+    />
   );
-};
 
-const styleByType: (type: WidgetType) => ViewStyle = (type: WidgetType) => {
-  switch (type) {
-    case WidgetType.Leaderboard:
-      return { flex: 1, alignSelf: 'stretch' };
-    case WidgetType.Simple:
-      return { width: 300, height: 135, alignSelf: 'center' };
-    case WidgetType.Compact:
-      return { width: 260, height: 95, alignSelf: 'center' };
-    case WidgetType.FullWidth:
-      return { height: 70, alignSelf: 'stretch' };
+  const style: ViewStyle = (() => {
+    switch (type) {
+      case WidgetType.Leaderboard:
+        return { flex: 1, alignSelf: 'stretch' };
+      case WidgetType.Simple:
+        return { width: 300, height: 135, alignSelf: 'center' };
+      case WidgetType.Compact:
+        return { width: 260, height: 95, alignSelf: 'center' };
+      case WidgetType.FullWidth:
+        return { height: 70, alignSelf: 'stretch' };
+    }
+  })();
+
+  if (type === WidgetType.Leaderboard) {
+    return <View style={style} children={webview} />;
   }
+
+  return (
+    <TouchableOpacity onPress={onPress} children={webview} style={style} />
+  );
 };
