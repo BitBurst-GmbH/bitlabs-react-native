@@ -501,7 +501,7 @@ PODS:
   - RNSVG (13.9.0):
     - React-Core
   - SocketRocket (0.6.1)
-  - sparkfabrik-react-native-idfa-aaid (1.0.0):
+  - sparkfabrik-react-native-idfa-aaid (1.1.0):
     - React
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -744,7 +744,7 @@ SPEC CHECKSUMS:
   RNScreens: ea4cd3a853063cda19a4e3c28d2e52180c80f4eb
   RNSVG: 53c661b76829783cdaf9b7a57258f3d3b4c28315
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
-  sparkfabrik-react-native-idfa-aaid: 8c1817e7f7703862a83457fb46c44a4642b1644c
+  sparkfabrik-react-native-idfa-aaid: e80938d526b800a6c8d35fa6e3df3bad38d3976c
   Yoga: 87e59f6d458e5061d2421086c5de994b3f7cd151
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
