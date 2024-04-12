@@ -38,17 +38,19 @@ type Props = {
 };
 
 export default ({ token, uid, adId, onExitPressed, onReward, tags }: Props) => {
-  const reward = useRef(0.0);
-  const clickId = useRef('');
-  const onRewardRef = useRef(onReward);
+  const reward = useRef(0.0); // Keep track of the reward collected during the session
+  const clickId = useRef(''); // Keep track of the last accessed survey using its clickId
+  const onRewardRef = useRef(onReward); // Store onReward to call upon unmount, can't call directly because it's a prop
+  const isPageAdGateSupport = useRef(false); // Keep track of whether the non-offerwall page is AdGate Support
 
   const styles = OfferWallStyles();
-  const [webviewKey, setWebviewKey] = useState(0);
-  const [errorStr, setErrorStr] = useState('');
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isPageOfferwall, setIsPageOfferwall] = useState(true);
-  const [areParamsLoaded, setAreParamsLoaded] = useState(true);
-  const [color, setColor] = useState<string[]>(['#007bff', '#007bff']);
+
+  const [errorStr, setErrorStr] = useState(''); // Updated when a webview error occurs
+  const [webviewKey, setWebviewKey] = useState(0); // Used to reset the webview to go back to the offerwall
+  const [isModalVisible, setIsModalVisible] = useState(false); // Used to show/hide the leave survey modal
+  const [isPageOfferwall, setIsPageOfferwall] = useState(true); // Used to determine if the current page is the offerwall
+  const [areParamsLoaded, setAreParamsLoaded] = useState(true); // Used to determine if the session params are loaded in the URL
+  const [color, setColor] = useState<string[]>(['#007bff', '#007bff']); // Used to determine the navigation (top) bar color
   const [offerwallUrl, setOfferwallUrl] = useState(
     buildOfferWallUrl(token, uid, tags ?? {}, onExitPressed ? true : false)
   );
@@ -59,11 +61,15 @@ export default ({ token, uid, adId, onExitPressed, onReward, tags }: Props) => {
       'hardwareBackPress',
       () => {
         if (isPageOfferwall) {
-          return false;
+          return false; // Do not override the back button if the user is in the offerwall, because it's the root page of the WebView and the user should be able to go back
         }
 
-        setIsModalVisible(true);
-        return true;
+        if (isPageAdGateSupport.current) {
+          setWebviewKey((oldKey) => (oldKey + 1) % 2); // Reload the webview to go back to the offerwall
+          return true; // Prevent the back button
+        }
+        setIsModalVisible(true); // Show the leave survey modal
+        return true; // Prevent the back button
       }
     );
 
@@ -94,8 +100,8 @@ export default ({ token, uid, adId, onExitPressed, onReward, tags }: Props) => {
     return () => onRewardRef.current(reward.current);
   }, []);
 
-  const onBackPressed = (reason = '') => {
-    setWebviewKey((webviewKey + 1) % 2);
+  const leaveCurrentSurvey = (reason = '') => {
+    setWebviewKey((oldKey) => (oldKey + 1) % 2);
     if (clickId.current.length > 0) {
       console.log(`Leaving with reason ~> ${reason}`);
       leaveSurveys(token, uid, clickId.current, reason)
@@ -110,8 +116,12 @@ export default ({ token, uid, adId, onExitPressed, onReward, tags }: Props) => {
     const isOfferwall = url.startsWith('https://web.bitlabs.ai');
     setIsPageOfferwall(isOfferwall);
 
+    isPageAdGateSupport.current = false; // Assume the page is not AdGate Support
+
+    // If the page is the offerwall
     if (isOfferwall) {
       if (
+        // If we came back from a survey, collect the reward
         url.includes('survey-compete') ||
         url.includes('survey-screenout') ||
         url.includes('start-bonus')
@@ -119,6 +129,7 @@ export default ({ token, uid, adId, onExitPressed, onReward, tags }: Props) => {
         reward.current += extractValue(url);
       }
 
+      // If session params are not loaded, load them into a new URL
       if (!areParamsLoaded && !url.includes('sdk=REACT')) {
         setAreParamsLoaded(true);
         let newURL =
@@ -135,11 +146,16 @@ export default ({ token, uid, adId, onExitPressed, onReward, tags }: Props) => {
         console.log('Calling url: ' + newURL);
         setOfferwallUrl(newURL);
       }
-    }
-
-    if (!isOfferwall) {
+    } else {
+      // If the page is not the offerwall
+      // Check if the URL has a clickId and extract it, if not, keep the current one
       clickId.current = extractClickId(url) ?? clickId.current;
+      // Params are indeed not loaded, because they load in the Offerwall URL only
       setAreParamsLoaded(false);
+
+      if (url.startsWith('https://wall.adgaterewards.com/contact/')) {
+        isPageAdGateSupport.current = true; // The page is AdGate Support
+      }
     }
   };
 
@@ -178,13 +194,17 @@ export default ({ token, uid, adId, onExitPressed, onReward, tags }: Props) => {
         <LeaveSurveyModal
           visible={isModalVisible}
           setIsVisible={setIsModalVisible}
-          leaveSurveyHandler={onBackPressed}
+          leaveSurveyHandler={leaveCurrentSurvey}
         />
         {!isPageOfferwall && (
           <Gradient style={{ height: 50 }} colors={color}>
             <View style={styles.headerView}>
               <TouchableOpacity
-                onPress={() => setIsModalVisible(true)}
+                onPress={() =>
+                  isPageAdGateSupport.current
+                    ? setWebviewKey((oldKey) => (oldKey + 1) % 2)
+                    : setIsModalVisible(true)
+                }
                 style={styles.chevronTouchable}
               >
                 <Image
