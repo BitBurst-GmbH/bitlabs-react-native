@@ -18,8 +18,9 @@ import {
 import { APP_TOKEN } from './config';
 import styles from './styles';
 
+const UID = 'oblivatevariegata';
+
 const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  const uid = 'USER_ID';
   const token = APP_TOKEN;
 
   const [isLeaderboardVisible, setIsLeaderboardVisible] = useState(false);
@@ -29,7 +30,7 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
     <SafeAreaView style={styles.container}>
       {isLeaderboardVisible && (
         <BitLabsWidget
-          uid={uid}
+          uid={UID}
           token={token}
           type={WidgetType.Leaderboard}
           onPress={() => navigation.navigate('Offerwall')}
@@ -53,7 +54,7 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
           onPress={() =>
             checkSurveys(
               token,
-              uid,
+              UID,
               (hasSurveys) =>
                 console.log(`[Example] Has Surveys: ${hasSurveys}`),
               (error) => console.log(error.message)
@@ -67,7 +68,7 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
           onPress={() =>
             getSurveys(
               token,
-              uid,
+              UID,
               (surveys) =>
                 console.log(
                   `[Example] Getting surveys -> \n${surveys
@@ -92,7 +93,7 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
       </View>
       {isSurveyWidgetVisible && (
         <BitLabsWidget
-          uid={uid}
+          uid={UID}
           token={token}
           type={WidgetType.Simple}
           onPress={() => navigation.navigate('Offerwall')}
@@ -117,7 +118,7 @@ const OfferWall = ({ navigation }: NativeStackScreenProps<any, any>) => {
 
   return (
     <BitLabsOfferWall
-      uid="USER_ID"
+      uid={UID}
       token={APP_TOKEN}
       onExitPressed={navigation.goBack}
       onReward={(reward) => console.log(`Reward this time: ${reward}`)}
