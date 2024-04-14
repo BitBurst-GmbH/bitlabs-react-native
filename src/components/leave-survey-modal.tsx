@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Modal, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, Text, TouchableOpacity, View } from 'react-native';
 import styles from '../styles/leave-survey-modal.styles';
 
 type Props = {
@@ -28,7 +28,7 @@ const LeaveSurveyModal = ({
       animationType="fade"
       transparent={true}
       visible={visible}
-      onRequestClose={() => Alert.alert('Modal has been closed.')}
+      onRequestClose={() => console.log('Modal has been closed')}
     >
       <View style={styles.mainContainer}>
         <TouchableOpacity

@@ -38,15 +38,15 @@ type Props = {
 };
 
 export default ({ token, uid, adId, onExitPressed, onReward, tags }: Props) => {
-  const reward = useRef(0.0); // Keep track of the reward collected during the session
-  const clickId = useRef(''); // Keep track of the last accessed survey using its clickId
-  const onRewardRef = useRef(onReward); // Store onReward to call upon unmount, can't call directly because it's a prop
+  const reward = useRef(0.0); // Keep track of the reward collected during the session(Offerwall lifecycle)
+  const clickId = useRef(''); // Keep track of the last accessed survey using its clickId(extracted from the URL)
+  const onRewardRef = useRef(onReward); // Store onReward to call upon unmount, can't call directly because it's a prop(and may be a state in the parent component)
   const isPageAdGateSupport = useRef(false); // Keep track of whether the non-offerwall page is AdGate Support
 
   const styles = OfferWallStyles();
 
   const [errorStr, setErrorStr] = useState(''); // Updated when a webview error occurs
-  const [webviewKey, setWebviewKey] = useState(0); // Used to reset the webview to go back to the offerwall
+  const [webviewKey, setWebviewKey] = useState(0); // Used to reset the webview to go back to the offerwall page
   const [isModalVisible, setIsModalVisible] = useState(false); // Used to show/hide the leave survey modal
   const [isPageOfferwall, setIsPageOfferwall] = useState(true); // Used to determine if the current page is the offerwall
   const [areParamsLoaded, setAreParamsLoaded] = useState(true); // Used to determine if the session params are loaded in the URL
@@ -55,7 +55,7 @@ export default ({ token, uid, adId, onExitPressed, onReward, tags }: Props) => {
     buildOfferWallUrl(token, uid, tags ?? {}, onExitPressed ? true : false)
   );
 
-  // Hook to add event listener which accepts a state value
+  // Hook to update the back button behavior based on the current page
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
@@ -91,11 +91,14 @@ export default ({ token, uid, adId, onExitPressed, onReward, tags }: Props) => {
   }, [token, uid]);
 
   // Hook to update onRewardRef when onReward changes
+  // This is used because onReward is a prop, and can be a state in the parent component
+  // Thus it can't be called directly from useEffect functions that run on unmount
   useEffect(() => {
     onRewardRef.current = onReward;
   }, [onReward]);
 
   // Hook to call onReward when component unmounts
+  // It calls onRewardRef because it can't call onReward directly
   useEffect(() => {
     return () => onRewardRef.current(reward.current);
   }, []);
