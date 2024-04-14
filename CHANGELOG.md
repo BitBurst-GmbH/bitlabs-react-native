@@ -1,3 +1,7 @@
+## v1.2.1
+
+- **Offer Support Page:** Now you can report to us in case there is a problem with an Offer. The Report a Problem option is now available in the Offer overview page once you start the offer.
+
 ## v1.2.0
 
 - Migrate Widgets from native components to webview components:
