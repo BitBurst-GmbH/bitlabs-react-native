@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   View,
   Text,
-  Platform,
 } from 'react-native';
 import WebView from 'react-native-webview';
 import type {
@@ -49,7 +48,6 @@ export default ({ token, uid, adId, onExitPressed, onReward, tags }: Props) => {
   const [webviewKey, setWebviewKey] = useState(0); // Used to reset the webview to go back to the offerwall page
   const [isModalVisible, setIsModalVisible] = useState(false); // Used to show/hide the leave survey modal
   const [isPageOfferwall, setIsPageOfferwall] = useState(true); // Used to determine if the current page is the offerwall
-  const [areParamsLoaded, setAreParamsLoaded] = useState(true); // Used to determine if the session params are loaded in the URL
   const [color, setColor] = useState<string[]>(['#007bff', '#007bff']); // Used to determine the navigation (top) bar color
   const [offerwallUrl, setOfferwallUrl] = useState(
     buildOfferWallUrl(token, uid, tags ?? {}, onExitPressed ? true : false)
@@ -121,44 +119,8 @@ export default ({ token, uid, adId, onExitPressed, onReward, tags }: Props) => {
 
     isPageAdGateSupport.current = false; // Assume the page is not AdGate Support
 
-    // If the page is the offerwall
-    if (isOfferwall) {
-      if (
-        // If we came back from a survey, collect the reward
-        url.includes('survey-compete') ||
-        url.includes('survey-screenout') ||
-        url.includes('start-bonus')
-      ) {
-        reward.current += extractValue(url);
-      }
-
-      // If session params are not loaded, load them into a new URL
-      if (!areParamsLoaded && !url.includes('sdk=REACT')) {
-        setAreParamsLoaded(true);
-        let newURL =
-          url + `&uid=${uid}&token=${token}&os=${Platform.OS}&sdk=REACT`;
-        if (adId) {
-          newURL += `&maid=${adId}`;
-        }
-        if (tags) {
-          Object.keys(tags).forEach((key) => {
-            newURL += `&${key}=${tags[key]}`;
-          });
-        }
-
-        console.log('Calling url: ' + newURL);
-        setOfferwallUrl(newURL);
-      }
-    } else {
-      // If the page is not the offerwall
-      // Check if the URL has a clickId and extract it, if not, keep the current one
-      clickId.current = extractClickId(url) ?? clickId.current;
-      // Params are indeed not loaded, because they load in the Offerwall URL only
-      setAreParamsLoaded(false);
-
-      if (url.startsWith('https://wall.adgaterewards.com/contact/')) {
-        isPageAdGateSupport.current = true; // The page is AdGate Support
-      }
+    if (url.startsWith('https://wall.adgaterewards.com/contact/')) {
+      isPageAdGateSupport.current = true; // The page is AdGate Support
     }
   };
 
@@ -248,32 +210,4 @@ export default ({ token, uid, adId, onExitPressed, onReward, tags }: Props) => {
       )}
     </SafeAreaView>
   );
-};
-
-const extractValue = (url: string) => {
-  if (!url.includes('&val=')) {
-    return 0.0;
-  }
-
-  const params = url.split(/([?,=,&])/);
-  const index = params.indexOf('val');
-  const value = params[index + 2];
-
-  return parseFloat(value ?? '0');
-};
-
-const extractClickId = (url: string) => {
-  if (!url.startsWith('https://redirect.bitlabs.ai/')) {
-    return null;
-  }
-
-  const params = url.split(/([?,=,&])/);
-  const index = params.indexOf('clk');
-  const clk = params[index + 2];
-
-  if (!clk) {
-    return null;
-  }
-
-  return clk;
 };
