@@ -32,7 +32,7 @@ type Props = {
   uid: string;
   adId: string;
   token: string;
-  isDebugMode: boolean;
+  isDebugMode?: boolean;
   onExitPressed: (() => void) | undefined;
   tags?: { [key: string]: string | boolean };
   onReward: (reward: number) => void;
