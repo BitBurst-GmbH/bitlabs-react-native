@@ -32,12 +32,21 @@ type Props = {
   uid: string;
   adId: string;
   token: string;
+  isDebugMode: boolean;
   onExitPressed: (() => void) | undefined;
   tags?: { [key: string]: string | boolean };
   onReward: (reward: number) => void;
 };
 
-export default ({ token, uid, adId, onExitPressed, onReward, tags }: Props) => {
+export default ({
+  token,
+  uid,
+  adId,
+  isDebugMode = false,
+  onExitPressed,
+  onReward,
+  tags,
+}: Props) => {
   const reward = useRef(0.0); // Keep track of the reward collected during the session(Offerwall lifecycle)
   const clickId = useRef(''); // Keep track of the last accessed survey using its clickId(extracted from the URL)
   const onRewardRef = useRef(onReward); // Store onReward to call upon unmount, can't call directly because it's a prop(and may be a state in the parent component)
@@ -178,6 +187,10 @@ export default ({ token, uid, adId, onExitPressed, onReward, tags }: Props) => {
   };
 
   const onError = () => {
+    if (!isDebugMode) {
+      return;
+    }
+
     const errStr = `{ uid: ${uid}, date: ${Date.now()} }`;
     setErrorStr(encryptBase64(errStr));
   };
