@@ -11,7 +11,7 @@ import {
 import WebView from 'react-native-webview';
 import type {
   ShouldStartLoadRequest,
-  WebViewNativeEvent,
+  WebViewMessageEvent,
   WebViewNavigationEvent,
 } from 'react-native-webview/lib/WebViewTypes';
 import { getAppSettings, leaveSurveys } from '../api/bitlabs_repository';
@@ -133,9 +133,15 @@ export default ({
     }
   };
 
-  const closeDetector = (nativeEvent: WebViewNativeEvent) => {
-    const url = nativeEvent.url;
-    if (url.endsWith('/close')) {
+  const onMessage = (event: WebViewMessageEvent) => {
+    console.log('Received message: ', event.nativeEvent.data);
+    const message = JSON.parse(event.nativeEvent.data);
+
+    if (message.type !== 'hook') {
+      return;
+    }
+
+    if (message.name === 'offerwall-core:sdk.close') {
       onExitPressed?.();
     }
   };
@@ -158,11 +164,22 @@ export default ({
   };
 
   const disableZoom = `
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
-        document.getElementsByTagName('head')[0].appendChild(meta);
-    `;
+    var meta = document.createElement('meta');
+    meta.name = 'viewport';
+    meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+    document.getElementsByTagName('head')[0].appendChild(meta);
+  `;
+
+  const postMessageListenerScript = `
+    if(!window.isEventListenerAdded) { // Important to add event listener only once regardless of the number of times the script is injected   
+      window.addEventListener('message', (event) => { 
+        window.ReactNativeWebView.postMessage(JSON.stringify(event.data));
+      });
+
+      window.isEventListenerAdded = true; // Set flag to true to prevent adding the event listener again
+    }
+    true;
+  `;
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -204,13 +221,12 @@ export default ({
           scalesPageToFit={false}
           javaScriptEnabled={true}
           onLoadStart={onLoadStart}
+          onMessage={onMessage}
           source={{ uri: offerwallUrl }}
           bounces={false}
           overScrollMode="never"
-          injectedJavaScript={disableZoom}
-          onLoadEnd={({ nativeEvent }) => closeDetector(nativeEvent)}
+          injectedJavaScript={disableZoom + postMessageListenerScript}
           onShouldStartLoadWithRequest={onShouldStartLoadingWithRequest}
-          onLoadProgress={({ nativeEvent }) => closeDetector(nativeEvent)}
         />
       </View>
       {errorStr.length > 0 && (
