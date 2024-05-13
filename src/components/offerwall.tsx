@@ -26,6 +26,7 @@ import {
 } from '../utils/helpers';
 import Gradient from '../hoc/gradient';
 import QRCode from 'react-native-qrcode-svg';
+import { HookName, type HookMessage } from '../api/types';
 
 type Props = {
   uid: string;
@@ -134,15 +135,44 @@ export default ({
   };
 
   const onMessage = (event: WebViewMessageEvent) => {
-    console.log('Received message: ', event.nativeEvent.data);
-    const message = JSON.parse(event.nativeEvent.data);
+    const message: HookMessage = JSON.parse(event.nativeEvent.data);
 
     if (message.type !== 'hook') {
       return;
     }
 
-    if (message.name === 'offerwall-core:sdk.close') {
-      onExitPressed?.();
+    switch (message.name) {
+      case HookName.SurveyStart:
+        clickId.current = message.args[0].clickId;
+        console.debug(`Survey ${clickId.current} started.`);
+        break;
+
+      case HookName.SurveyStartBonus:
+        const bonus = message.args[0].reward;
+        reward.current += bonus;
+        console.debug(`Started survey with bonus ${bonus}`);
+        break;
+
+      case HookName.SurveyComplete:
+        const payout = message.args[0].reward;
+        reward.current += payout;
+        console.debug(`Completed survey with reward ${payout}`);
+        break;
+
+      case HookName.SurveyScreenout:
+        const compensation = message.args[0].reward;
+        reward.current += compensation;
+        console.debug(
+          `Screened out of survey with compensation ${compensation}`
+        );
+        break;
+
+      case HookName.SdkClose:
+        onExitPressed?.();
+        break;
+
+      default:
+        break;
     }
   };
 
