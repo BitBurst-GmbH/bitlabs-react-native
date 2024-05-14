@@ -19,7 +19,7 @@ export const buildOfferWallUrl = (
   tags: { [key: string]: string | boolean },
   addSdkParameter: boolean
 ) => {
-  let url = `https://web.bitlabs.ai?token=${token}&uid=${uid}&os=${Platform.OS}`;
+  let url = `https://staging.bitlabs-web.pages.dev?token=${token}&uid=${uid}&os=${Platform.OS}`;
 
   if (addSdkParameter) {
     url = url + '&sdk=REACT';

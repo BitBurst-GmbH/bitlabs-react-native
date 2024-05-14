@@ -47,6 +47,7 @@ export default ({
   onReward,
   tags,
 }: Props) => {
+  const webview = useRef<WebView>(null); // Reference to the webview component
   const reward = useRef(0.0); // Keep track of the reward collected during the session(Offerwall lifecycle)
   const clickId = useRef(''); // Keep track of the last accessed survey using its clickId(extracted from the URL)
   const onRewardRef = useRef(onReward); // Store onReward to call upon unmount, can't call directly because it's a prop(and may be a state in the parent component)
@@ -124,8 +125,7 @@ export default ({
 
   const onLoadStart = ({ nativeEvent }: WebViewNavigationEvent) => {
     const url = nativeEvent.url;
-    const isOfferwall = url.startsWith('https://web.bitlabs.ai');
-    setIsPageOfferwall(isOfferwall);
+    setIsPageOfferwall(url.startsWith('https://web.bitlabs.ai'));
 
     isPageAdGateSupport.current = false; // Assume the page is not AdGate Support
 
@@ -142,6 +142,13 @@ export default ({
     }
 
     switch (message.name) {
+      case HookName.init:
+        webview.current?.injectJavaScript(`
+          window.postMessage({target: 'app.visual.show_close_button', value: true}, '*');
+        `);
+        console.debug('Sent message to show close button.');
+        break;
+
       case HookName.SurveyStart:
         clickId.current = message.args[0].clickId;
         console.debug(`Survey ${clickId.current} started.`);
@@ -245,6 +252,7 @@ export default ({
         )}
         <WebView
           testID="Webview"
+          ref={webview}
           key={webviewKey}
           onError={onError}
           style={styles.webview}

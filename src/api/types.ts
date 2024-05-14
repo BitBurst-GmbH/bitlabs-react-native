@@ -113,6 +113,7 @@ export type HookMessage = {
 };
 
 export enum HookName {
+  init = 'offerwall-core:init',
   SdkClose = 'offerwall-core:sdk.close',
   SurveyStart = 'offerwall-surveys:survey.start',
   SurveyComplete = 'offerwall-surveys:survey.complete',
