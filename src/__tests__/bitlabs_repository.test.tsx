@@ -17,7 +17,7 @@ const mockErrorResponse = {
 };
 
 describe('getSurveys', () => {
-  test('Failure', async () => {
+  test('fails given API call returns an error', async () => {
     jest
       .spyOn(api, 'getSurveysApi')
       .mockImplementation(() => Promise.reject('Error'));
@@ -32,7 +32,7 @@ describe('getSurveys', () => {
     );
   });
 
-  test('Success', async () => {
+  test('succeeds given API call returns survey data', async () => {
     const mockResponse = {
       data: {
         surveys: [
@@ -82,7 +82,7 @@ describe('getSurveys', () => {
     );
   });
 
-  test('Error', async () => {
+  test('fails given API call returns error response with 404', async () => {
     jest.spyOn(api, 'getSurveysApi').mockResolvedValue(
       Promise.resolve({
         json: () => Promise.resolve(mockErrorResponse),
@@ -101,7 +101,7 @@ describe('getSurveys', () => {
 });
 
 describe('getAppSettings', () => {
-  test('Failure', async () => {
+  test('fails given API call returns an error', async () => {
     jest
       .spyOn(api, 'getAppSettingsApi')
       .mockImplementation(() => Promise.reject('Error'));
@@ -111,7 +111,7 @@ describe('getAppSettings', () => {
     }).catch((error) => expect(error).toBe('Error'));
   });
 
-  test('Success', async () => {
+  test('succeeds given API call returns settings data', async () => {
     const mockResponse = {
       data: {
         visual: {
@@ -149,15 +149,15 @@ describe('getAppSettings', () => {
         expect(surveyIconColor).toEqual('survey_icon_color');
         expect(navigationColor).toEqual('navigation_color');
         expect(currencyFactor).toEqual(1);
-        expect(currencySymbol).toEqual([false, '$']);
         expect(bonusPercentage).toEqual(0.1);
+        expect(currencySymbol).toEqual([false, '$']);
       }
     ).catch((error) => {
       throw new Error(error);
     });
   });
 
-  test('Error', async () => {
+  test('fails given API call returns error response with 404', async () => {
     jest.spyOn(api, 'getAppSettingsApi').mockResolvedValue(
       Promise.resolve({
         json: () => Promise.resolve(mockErrorResponse),
@@ -171,7 +171,7 @@ describe('getAppSettings', () => {
 });
 
 describe('getLeaderboard', () => {
-  test('Failure', async () => {
+  test('fails given API call returns an error', async () => {
     jest
       .spyOn(api, 'getLeaderboardApi')
       .mockImplementation(() => Promise.reject('Error'));
@@ -181,7 +181,7 @@ describe('getLeaderboard', () => {
     }).catch((error) => expect(error).toBe('Error'));
   });
 
-  test('Success', async () => {
+  test('succeeds given API call returns leaderboard data', async () => {
     const mockResponse = {
       data: {
         top_users: [
@@ -214,7 +214,7 @@ describe('getLeaderboard', () => {
     });
   });
 
-  test('Error', async () => {
+  test('fails given API call returns error response with 404', async () => {
     jest.spyOn(api, 'getLeaderboardApi').mockResolvedValue(
       Promise.resolve({
         json: () => Promise.resolve(mockErrorResponse),
