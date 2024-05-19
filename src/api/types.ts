@@ -105,3 +105,18 @@ export enum WidgetType {
   FullWidth = 'full-width',
   Leaderboard = 'leaderboard',
 }
+
+export type HookMessage = {
+  type: string;
+  name: HookName;
+  args: any[];
+};
+
+export enum HookName {
+  init = 'offerwall-core:init',
+  SdkClose = 'offerwall-core:sdk.close',
+  SurveyStart = 'offerwall-surveys:survey.start',
+  SurveyComplete = 'offerwall-surveys:survey.complete',
+  SurveyScreenout = 'offerwall-surveys:survey.screenout',
+  SurveyStartBonus = 'offerwall-surveys:survey.start-bonus',
+}

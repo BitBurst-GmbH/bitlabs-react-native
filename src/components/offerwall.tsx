@@ -11,7 +11,7 @@ import {
 import WebView from 'react-native-webview';
 import type {
   ShouldStartLoadRequest,
-  WebViewNativeEvent,
+  WebViewMessageEvent,
   WebViewNavigationEvent,
 } from 'react-native-webview/lib/WebViewTypes';
 import { getAppSettings, leaveSurveys } from '../api/bitlabs_repository';
@@ -26,6 +26,7 @@ import {
 } from '../utils/helpers';
 import Gradient from '../hoc/gradient';
 import QRCode from 'react-native-qrcode-svg';
+import { HookName, type HookMessage } from '../api/types';
 
 type Props = {
   uid: string;
@@ -46,6 +47,7 @@ export default ({
   onReward,
   tags,
 }: Props) => {
+  const webview = useRef<WebView>(null); // Reference to the webview component
   const reward = useRef(0.0); // Keep track of the reward collected during the session(Offerwall lifecycle)
   const clickId = useRef(''); // Keep track of the last accessed survey using its clickId(extracted from the URL)
   const onRewardRef = useRef(onReward); // Store onReward to call upon unmount, can't call directly because it's a prop(and may be a state in the parent component)
@@ -123,8 +125,7 @@ export default ({
 
   const onLoadStart = ({ nativeEvent }: WebViewNavigationEvent) => {
     const url = nativeEvent.url;
-    const isOfferwall = url.startsWith('https://web.bitlabs.ai');
-    setIsPageOfferwall(isOfferwall);
+    setIsPageOfferwall(url.startsWith('https://web.bitlabs.ai'));
 
     isPageAdGateSupport.current = false; // Assume the page is not AdGate Support
 
@@ -133,10 +134,52 @@ export default ({
     }
   };
 
-  const closeDetector = (nativeEvent: WebViewNativeEvent) => {
-    const url = nativeEvent.url;
-    if (url.endsWith('/close')) {
-      onExitPressed?.();
+  const onMessage = (event: WebViewMessageEvent) => {
+    const message: HookMessage = JSON.parse(event.nativeEvent.data);
+
+    if (message.type !== 'hook') {
+      return;
+    }
+
+    switch (message.name) {
+      case HookName.init:
+        webview.current?.injectJavaScript(`
+          window.postMessage({target: 'app.visual.show_close_button', value: true}, '*');
+        `);
+        console.debug('Sent message to show close button.');
+        break;
+
+      case HookName.SurveyStart:
+        clickId.current = message.args[0].clickId;
+        console.debug(`Survey ${clickId.current} started.`);
+        break;
+
+      case HookName.SurveyStartBonus:
+        const bonus = message.args[0].reward;
+        reward.current += bonus;
+        console.debug(`Started survey with bonus ${bonus}`);
+        break;
+
+      case HookName.SurveyComplete:
+        const payout = message.args[0].reward;
+        reward.current += payout;
+        console.debug(`Completed survey with reward ${payout}`);
+        break;
+
+      case HookName.SurveyScreenout:
+        const compensation = message.args[0].reward;
+        reward.current += compensation;
+        console.debug(
+          `Screened out of survey with compensation ${compensation}`
+        );
+        break;
+
+      case HookName.SdkClose:
+        onExitPressed?.();
+        break;
+
+      default:
+        break;
     }
   };
 
@@ -158,11 +201,22 @@ export default ({
   };
 
   const disableZoom = `
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
-        document.getElementsByTagName('head')[0].appendChild(meta);
-    `;
+    var meta = document.createElement('meta');
+    meta.name = 'viewport';
+    meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+    document.getElementsByTagName('head')[0].appendChild(meta);
+  `;
+
+  const postMessageListenerScript = `
+    if(!window.isEventListenerAdded) { // Important to add event listener only once regardless of the number of times the script is injected   
+      window.addEventListener('message', (event) => { 
+        window.ReactNativeWebView.postMessage(JSON.stringify(event.data));
+      });
+
+      window.isEventListenerAdded = true; // Set flag to true to prevent adding the event listener again
+    }
+    true;
+  `;
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -198,19 +252,19 @@ export default ({
         )}
         <WebView
           testID="Webview"
+          ref={webview}
           key={webviewKey}
           onError={onError}
           style={styles.webview}
           scalesPageToFit={false}
           javaScriptEnabled={true}
           onLoadStart={onLoadStart}
+          onMessage={onMessage}
           source={{ uri: offerwallUrl }}
           bounces={false}
           overScrollMode="never"
-          injectedJavaScript={disableZoom}
-          onLoadEnd={({ nativeEvent }) => closeDetector(nativeEvent)}
+          injectedJavaScript={disableZoom + postMessageListenerScript}
           onShouldStartLoadWithRequest={onShouldStartLoadingWithRequest}
-          onLoadProgress={({ nativeEvent }) => closeDetector(nativeEvent)}
         />
       </View>
       {errorStr.length > 0 && (
