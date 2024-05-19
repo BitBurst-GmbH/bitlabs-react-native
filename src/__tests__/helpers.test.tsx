@@ -1,9 +1,11 @@
 import {
+  buildOfferWallUrl,
   currencize,
   encryptBase64,
   extractColors,
   isColorLuminant,
   rounded,
+  threeRandomSurveys,
 } from '../utils/helpers';
 
 describe('extractColors', () => {
@@ -19,14 +21,14 @@ describe('extractColors', () => {
     expect(colors).toEqual(['#ff0000', '#00ff00']);
   });
 
-  test('returns undefined given an empty string', () => {
-    const color = '';
+  test('returns undefined given a string that is neither HEX nor linear-gradient', () => {
+    const color = 'Not Hex, nor linear-gradient';
     const colors = extractColors(color);
     expect(colors).toBeUndefined();
   });
 
-  test('returns undefined given a string that is neither HEX nor linear-gradient', () => {
-    const color = 'Not Hex, nor linear-gradient';
+  test('returns undefined given an empty string', () => {
+    const color = '';
     const colors = extractColors(color);
     expect(colors).toBeUndefined();
   });
@@ -69,6 +71,18 @@ describe('rounded', () => {
     const number = 1;
     const roundedNum = rounded(number);
     expect(roundedNum).toBe(1);
+  });
+
+  test('handles negative numbers correctly', () => {
+    const number = -1.23456789;
+    const roundedNum = rounded(number);
+    expect(roundedNum).toBe(-1.23);
+  });
+
+  test('handles large numbers correctly', () => {
+    const number = 123456789.123456789;
+    const roundedNum = rounded(number);
+    expect(roundedNum).toBe(123456789.12);
   });
 });
 
@@ -114,6 +128,13 @@ describe('currencize', () => {
     const currencized = currencize(value, currency);
     expect(currencized).toBe('$1');
   });
+
+  test('handles value and currency with spaces correctly', () => {
+    const value = ' 1';
+    const currency = '$ ';
+    const currencized = currencize(value, currency);
+    expect(currencized).toBe(' 1 $ ');
+  });
 });
 
 describe('encryptBase64', () => {
@@ -133,5 +154,70 @@ describe('encryptBase64', () => {
     const str = 'Hello World!@#$%^&*()_+';
     const encrypted = encryptBase64(str);
     expect(encrypted).toBe('SGVsbG8gV29ybGQhQCMkJV4mKigpXys=');
+  });
+});
+
+describe('buildOfferWallUrl', () => {
+  test('constructs URL correctly with token, uid, tags, and sdk parameter', () => {
+    const token = 'token123';
+    const uid = 'uid123';
+    const tags = { tag1: 'value1', tag2: true };
+    const url = buildOfferWallUrl(token, uid, tags, true);
+    expect(url).toBe(
+      'https://web.bitlabs.ai?token=token123&uid=uid123&os=ios&sdk=REACT&tag1=value1&tag2=true'
+    );
+  });
+
+  test('constructs URL correctly without sdk parameter', () => {
+    const token = 'token123';
+    const uid = 'uid123';
+    const tags = { tag1: 'value1', tag2: true };
+    const url = buildOfferWallUrl(token, uid, tags, false);
+    expect(url).toBe(
+      'https://web.bitlabs.ai?token=token123&uid=uid123&os=ios&tag1=value1&tag2=true'
+    );
+  });
+
+  test('handles empty tags correctly', () => {
+    const token = 'token123';
+    const uid = 'uid123';
+    const tags = {};
+    const url = buildOfferWallUrl(token, uid, tags, true);
+    expect(url).toBe(
+      'https://web.bitlabs.ai?token=token123&uid=uid123&os=ios&sdk=REACT'
+    );
+  });
+});
+
+describe('threeRandomSurveys', () => {
+  test('returns an array with three surveys', () => {
+    expect(threeRandomSurveys.length).toBe(3);
+  });
+
+  test('each survey has correct properties', () => {
+    threeRandomSurveys.forEach((survey) => {
+      expect(survey).toHaveProperty('id');
+      expect(survey).toHaveProperty('type', 'survey');
+      expect(survey).toHaveProperty('cpi', '0.5');
+      expect(survey).toHaveProperty('value', '0.5');
+      expect(survey).toHaveProperty('loi');
+      expect(survey).toHaveProperty('country', 'US');
+      expect(survey).toHaveProperty('language', 'en');
+      expect(survey).toHaveProperty('tags');
+      expect(survey).toHaveProperty('category');
+      expect(survey.category).toHaveProperty('name');
+      expect(survey.category).toHaveProperty('icon_url');
+      expect(survey.category).toHaveProperty('icon_name');
+      expect(survey.category).toHaveProperty('name_internal');
+      expect(survey).toHaveProperty('rating');
+      expect(survey).toHaveProperty('click_url');
+    });
+  });
+
+  test('each survey has non-negative rating', () => {
+    threeRandomSurveys.forEach((survey) => {
+      expect(survey.rating).toBeGreaterThanOrEqual(0);
+      expect(survey.rating).toBeLessThanOrEqual(5);
+    });
   });
 });
