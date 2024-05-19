@@ -1,3 +1,8 @@
+## v1.2.3
+
+- **Bugfix**: onReward always executes with 0 reward despite earning in the Offerwall
+- **Bugfix**: Endless looping occasionally in the offerwall
+
 ## v1.2.2
 
 - **Add isDebugMode for BitLabsOfferwall**: Do not use it for production purposes
