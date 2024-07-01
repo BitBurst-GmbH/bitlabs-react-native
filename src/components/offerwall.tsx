@@ -33,9 +33,9 @@ type Props = {
   adId: string;
   token: string;
   isDebugMode?: boolean;
-  onExitPressed: (() => void) | undefined;
-  tags?: { [key: string]: string | boolean };
   onReward: (reward: number) => void;
+  onExitPressed: (() => void) | undefined;
+  tags: { [key: string]: string | boolean };
 };
 
 export default ({
@@ -45,7 +45,7 @@ export default ({
   isDebugMode = false,
   onExitPressed,
   onReward,
-  tags,
+  tags = {},
 }: Props) => {
   const webview = useRef<WebView>(null); // Reference to the webview component
   const reward = useRef(0.0); // Keep track of the reward collected during the session(Offerwall lifecycle)
@@ -61,7 +61,7 @@ export default ({
   const [isPageOfferwall, setIsPageOfferwall] = useState(true); // Used to determine if the current page is the offerwall
   const [color, setColor] = useState<string[]>(['#007bff', '#007bff']); // Used to determine the navigation (top) bar color
   const [offerwallUrl, setOfferwallUrl] = useState(
-    buildOfferWallUrl(token, uid, tags ?? {}, onExitPressed ? true : false)
+    buildOfferWallUrl(token, uid, tags, onExitPressed ? true : false)
   );
 
   // Hook to update the back button behavior based on the current page
@@ -144,7 +144,7 @@ export default ({
     switch (message.name) {
       case HookName.init:
         webview.current?.injectJavaScript(`
-          window.postMessage({target: 'app.visual.show_close_button', value: true}, '*');
+          window.parent.postMessage({ target: 'app.behaviour.close_button_visible', value: true }, '*');
         `);
         console.debug('Sent message to show close button.');
         break;
