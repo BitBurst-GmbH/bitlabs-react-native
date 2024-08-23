@@ -10,6 +10,7 @@ const mockProps = {
   token: 'token',
   uid: 'uid',
   adId: '',
+  tags: {},
   onExitPressed: jest.fn(),
   onReward: jest.fn(),
 };

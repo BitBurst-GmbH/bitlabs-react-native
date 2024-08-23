@@ -9,6 +9,7 @@ import type {
   GetAppSettingsResponse,
   GetLeaderboardResponse,
   GetSurveysResponse,
+  RestrictionReason,
   Survey,
 } from './types';
 
@@ -24,6 +25,30 @@ export const getSurveysRepo = (
         response.json() as Promise<BitLabsResponse<GetSurveysResponse>>
     )
     .then((body) => {
+      const prettyPrintRestriction = (restriction: RestrictionReason) => {
+        if (restriction.not_verified) {
+          return 'The publisher account that owns this app has not been verified and therefore cannot receive surveys.';
+        }
+        if (restriction.using_vpn) {
+          return 'The user is using a VPN and cannot access surveys.';
+        }
+        if (restriction.banned_until) {
+          return 'The user is banned until $bannedUntil';
+        }
+        if (restriction.unsupported_country) {
+          return 'Unsupported Country: $unsupportedCountry';
+        }
+
+        return restriction.reason ?? 'Unknown Reason';
+      };
+
+      const restriction = body.data.restriction_reason;
+      if (restriction) {
+        throw new Error(
+          '[BitLabs] Restriction: ' + prettyPrintRestriction(restriction)
+        );
+      }
+
       if (body.error) {
         throw new Error(
           `[BitLabs] ${body.error.details.http} - ${body.error.details.msg}`
