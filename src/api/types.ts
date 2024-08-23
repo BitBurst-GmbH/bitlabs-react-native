@@ -71,7 +71,7 @@ export type Survey = {
   tags: [];
 };
 
-type RestrictionReason = {
+export type RestrictionReason = {
   not_verified: boolean;
   using_vpn: boolean;
   banned_until: string;
