@@ -42,8 +42,10 @@ export const getSurveysRepo = (
         return restriction.reason ?? 'Unknown Reason';
       };
 
-      const restriction = body.data.restriction_reason;
+      const restriction = body.data?.restriction_reason;
       if (restriction) {
+        console.log('[BitLabs] Restriction: ' + restriction);
+
         throw new Error(
           '[BitLabs] Restriction: ' + prettyPrintRestriction(restriction)
         );
@@ -55,7 +57,7 @@ export const getSurveysRepo = (
         );
       }
 
-      onResponse(body.data.surveys);
+      onResponse(body.data!.surveys);
     })
     .catch((error) => onFailure(error));
 
@@ -100,22 +102,24 @@ export const getAppSettings = (
         );
       }
 
-      let totalBonusPercentage = body.data.currency.bonus_percentage / 100;
-      if (body.data.promotion) {
+      const settings = body.data!;
+
+      let totalBonusPercentage = settings.currency.bonus_percentage / 100;
+      if (settings.promotion) {
         totalBonusPercentage +=
-          body.data.promotion.bonus_percentage / 100 +
-          (totalBonusPercentage * body.data.promotion.bonus_percentage) / 100;
+          settings.promotion.bonus_percentage / 100 +
+          (totalBonusPercentage * settings.promotion.bonus_percentage) / 100;
       }
 
       const currencySymbol: [boolean, string] = [
-        body.data.currency.symbol.is_image,
-        body.data.currency.symbol.content,
+        settings.currency.symbol.is_image,
+        settings.currency.symbol.content,
       ];
 
       onResponse(
-        body.data.visual.survey_icon_color,
-        body.data.visual.navigation_color,
-        +body.data.currency.factor,
+        settings.visual.survey_icon_color,
+        settings.visual.navigation_color,
+        +settings.currency.factor,
         totalBonusPercentage,
         currencySymbol
       );
@@ -138,7 +142,7 @@ export const getLeaderboard = (
         );
       }
 
-      onResponse(body.data);
+      onResponse(body.data!);
     });
 
 export const getIsImageSVG = (
