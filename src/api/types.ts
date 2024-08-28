@@ -1,6 +1,6 @@
 export type BitLabsResponse<T> = {
-  data: T;
-  error: {
+  data?: T;
+  error?: {
     details: {
       http: string;
       msg: string;
@@ -11,7 +11,7 @@ export type BitLabsResponse<T> = {
 };
 
 export type GetSurveysResponse = {
-  restriction_reason: RestrictionReason;
+  restriction_reason?: RestrictionReason;
   surveys: Survey[];
 };
 
