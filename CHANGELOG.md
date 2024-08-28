@@ -1,3 +1,9 @@
+## v1.2.4
+
+- **Add CI via Github Actions**
+- **Remove Fake Surveys**
+- **Expose Restriction Reason as an Error for getSurveys**
+
 ## v1.2.3
 
 - **Bugfix**: onReward always executes with 0 reward despite earning in the Offerwall
