@@ -1,5 +1,4 @@
 import { Platform } from 'react-native';
-import type { Survey } from '../api/types';
 import { Buffer } from 'buffer';
 
 export const buildApiURL = (
@@ -28,33 +27,6 @@ export const buildOfferWallUrl = (
   Object.keys(tags).forEach((key) => (url = url + `&${key}=${tags[key]}`));
   return url;
 };
-
-export const threeRandomSurveys = (() => {
-  const surveys: Survey[] = [];
-
-  for (let i = 0; i < 3; i++) {
-    surveys.push({
-      id: i.toString(),
-      type: 'survey',
-      cpi: '0.5',
-      value: '0.5',
-      loi: Math.random(),
-      country: 'US',
-      language: 'en',
-      tags: [],
-      category: {
-        name: 'General',
-        icon_url: '',
-        icon_name: '',
-        name_internal: '',
-      },
-      rating: Math.floor(Math.random() * 6),
-      click_url: '',
-    });
-  }
-
-  return surveys;
-})();
 
 export const extractColors = (color: string) => {
   const colors = color

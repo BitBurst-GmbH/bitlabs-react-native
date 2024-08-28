@@ -1,6 +1,5 @@
 import { getSurveysRepo } from './api/bitlabs_repository';
 import { WidgetType, type Survey } from './api/types';
-import { threeRandomSurveys } from './utils/helpers';
 
 /**
  * Determines whether the user has surveys available.
@@ -36,13 +35,7 @@ export const getSurveys = (
   uid: string,
   onResponse: (surveys: Survey[]) => void,
   onFailure: (error: Error) => void
-) =>
-  getSurveysRepo(
-    token,
-    uid,
-    (surveys) => onResponse(surveys.length > 0 ? surveys : threeRandomSurveys),
-    onFailure
-  );
+) => getSurveysRepo(token, uid, (surveys) => onResponse(surveys), onFailure);
 
 /** @deprecated Use `WidgetType` instead. */
 export const SurveyType = WidgetType;

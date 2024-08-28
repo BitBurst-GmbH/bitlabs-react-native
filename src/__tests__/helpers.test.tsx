@@ -5,7 +5,6 @@ import {
   extractColors,
   isColorLuminant,
   rounded,
-  threeRandomSurveys,
 } from '../utils/helpers';
 
 describe('extractColors', () => {
@@ -186,38 +185,5 @@ describe('buildOfferWallUrl', () => {
     expect(url).toBe(
       'https://web.bitlabs.ai?token=token123&uid=uid123&os=ios&sdk=REACT'
     );
-  });
-});
-
-describe('threeRandomSurveys', () => {
-  test('returns an array with three surveys', () => {
-    expect(threeRandomSurveys.length).toBe(3);
-  });
-
-  test('each survey has correct properties', () => {
-    threeRandomSurveys.forEach((survey) => {
-      expect(survey).toHaveProperty('id');
-      expect(survey).toHaveProperty('type', 'survey');
-      expect(survey).toHaveProperty('cpi', '0.5');
-      expect(survey).toHaveProperty('value', '0.5');
-      expect(survey).toHaveProperty('loi');
-      expect(survey).toHaveProperty('country', 'US');
-      expect(survey).toHaveProperty('language', 'en');
-      expect(survey).toHaveProperty('tags');
-      expect(survey).toHaveProperty('category');
-      expect(survey.category).toHaveProperty('name');
-      expect(survey.category).toHaveProperty('icon_url');
-      expect(survey.category).toHaveProperty('icon_name');
-      expect(survey.category).toHaveProperty('name_internal');
-      expect(survey).toHaveProperty('rating');
-      expect(survey).toHaveProperty('click_url');
-    });
-  });
-
-  test('each survey has non-negative rating', () => {
-    threeRandomSurveys.forEach((survey) => {
-      expect(survey.rating).toBeGreaterThanOrEqual(0);
-      expect(survey.rating).toBeLessThanOrEqual(5);
-    });
   });
 });
