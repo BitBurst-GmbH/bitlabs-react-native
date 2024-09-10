@@ -1,14 +1,57 @@
 import { Platform } from 'react-native';
-import { buildApiURL } from '../utils/helpers';
+
+const bitlabsRequest = (
+  path: string,
+  token: string,
+  uid: string,
+  options?: {
+    queries?: { [key: string]: string };
+    body?: string;
+  }
+) => {
+  let url = `https://api.bitlabs.ai/${path}?platform=MOBILE`;
+  let method = 'GET';
+  let body;
+  let headers: { [key: string]: string } = {
+    'X-Api-Token': token,
+    'X-User-Id': uid,
+  };
+
+  if (options) {
+    const queries = options.queries;
+    if (queries) {
+      Object.keys(queries).forEach(
+        (key) => (url = url.concat(`&${key}=${queries[key]}`))
+      );
+    }
+
+    body = options.body;
+    if (body) {
+      method = 'POST';
+      headers = {
+        ...headers,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      };
+    }
+  }
+
+  const request = new Request(url, {
+    method: method,
+    headers: headers,
+    body: body,
+  });
+
+  console.log(request);
+
+  return request;
+};
 
 export const getSurveysApi = (token: string, uid: string) =>
   fetch(
-    new Request(
-      buildApiURL('v2/client/surveys', { os: Platform.OS, sdk: 'REACT' }),
-      {
-        headers: { 'X-Api-Token': token, 'X-User-Id': uid },
-      }
-    )
+    bitlabsRequest('v2/client/surveys', token, uid, {
+      queries: { os: Platform.OS, sdk: 'REACT' },
+    })
   );
 
 export const updateClickApi = (
@@ -18,30 +61,15 @@ export const updateClickApi = (
   reason: string
 ) =>
   fetch(
-    new Request(buildApiURL(`v2/client/clicks/${clickId}`), {
-      method: 'POST',
-      headers: {
-        'X-User-Id': uid,
-        'X-Api-Token': token,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
+    bitlabsRequest(`v2/client/clicks/${clickId}`, token, uid, {
       body: JSON.stringify({ leave_survey: { reason: reason } }),
     })
   );
 
 export const getAppSettingsApi = (token: string, uid: string) =>
-  fetch(
-    new Request(buildApiURL('v1/client/settings/v2'), {
-      headers: { 'X-Api-Token': token, 'X-User-Id': uid },
-    })
-  );
+  fetch(bitlabsRequest('v1/client/settings/v2', token, uid));
 
 export const getLeaderboardApi = (token: string, uid: string) =>
-  fetch(
-    new Request(buildApiURL('v1/client/leaderboard'), {
-      headers: { 'X-Api-Token': token, 'X-User-Id': uid },
-    })
-  );
+  fetch(bitlabsRequest('v1/client/leaderboard', token, uid));
 
 export const getCurrencyIconApi = (url: string) => fetch(new Request(url));

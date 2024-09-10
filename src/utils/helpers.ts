@@ -1,17 +1,6 @@
 import { Platform } from 'react-native';
 import { Buffer } from 'buffer';
 
-export const buildApiURL = (
-  path: string,
-  queries: { [key: string]: string } = {}
-) => {
-  let url = `https://api.bitlabs.ai/${path}?platform=MOBILE`;
-  Object.keys(queries).forEach(
-    (key) => (url = url + `&${key}=${queries[key]}`)
-  );
-  return url;
-};
-
 export const buildOfferWallUrl = (
   token: string,
   uid: string,
