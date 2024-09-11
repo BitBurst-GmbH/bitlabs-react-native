@@ -1,4 +1,4 @@
-import { Platform } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 
 const bitlabsRequest = (
   path: string,
@@ -15,6 +15,7 @@ const bitlabsRequest = (
   let headers: { [key: string]: string } = {
     'X-Api-Token': token,
     'X-User-Id': uid,
+    'User-Agent': getUserAgent(),
   };
 
   if (options) {
@@ -45,6 +46,14 @@ const bitlabsRequest = (
   console.log(request);
 
   return request;
+};
+
+const getUserAgent = () => {
+  const version = require('../../package.json').version;
+  const { width } = Dimensions.get('window');
+  const deviceType = width < 768 ? 'phone' : 'tablet';
+
+  return `BitLabs/${version} (${Platform.OS} ${Platform.Version}; ${deviceType})`;
 };
 
 export const getSurveysApi = (token: string, uid: string) =>
