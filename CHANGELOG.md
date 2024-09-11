@@ -1,3 +1,7 @@
+## v1.2.5
+
+- **Add User Agent to requests**
+
 ## v1.2.4
 
 - **Add CI via Github Actions**
