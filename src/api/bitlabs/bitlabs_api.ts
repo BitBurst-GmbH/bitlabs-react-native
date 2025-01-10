@@ -37,15 +37,11 @@ const bitlabsRequest = (
     }
   }
 
-  const request = new Request(url, {
+  return new Request(url, {
     method: method,
     headers: headers,
     body: body,
   });
-
-  console.log(request);
-
-  return request;
 };
 
 const getUserAgent = () => {
