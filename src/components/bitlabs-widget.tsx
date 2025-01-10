@@ -1,5 +1,5 @@
 import React from 'react';
-import { WidgetType } from '../api/types';
+import { WidgetType } from '../api/bitlabs/types';
 import WebView from 'react-native-webview';
 import { TouchableOpacity, View, type ViewStyle } from 'react-native';
 

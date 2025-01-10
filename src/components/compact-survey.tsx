@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import SurveyStyles from '../styles/compact-survey.styles';
 import RatingBar from '../hoc/rating-bar';
 import Images from '../assets/images';
-import type { Survey, SurveyProperties } from '../api/types';
+import type { Survey, SurveyProperties } from '../api/bitlabs/types';
 import Gradient from '../hoc/gradient';
 import { RewardView } from '../hoc/reward-view';
 import { currencize, rounded } from '../utils/helpers';

@@ -123,6 +123,7 @@ const OfferWall = ({ navigation }: NativeStackScreenProps<any, any>) => {
       onExitPressed={navigation.goBack}
       onReward={(reward) => console.log(`Reward this time: ${reward}`)}
       adId={adId}
+      tags={{}}
     />
   );
 };

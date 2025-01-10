@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
-import type { User } from '../api/types';
+import type { User } from '../api/bitlabs/types';
 import images from '../assets/images';
 import { currencize } from '../utils/helpers';
 

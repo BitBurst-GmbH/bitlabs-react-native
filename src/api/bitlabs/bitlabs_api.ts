@@ -49,7 +49,7 @@ const bitlabsRequest = (
 };
 
 const getUserAgent = () => {
-  const version = require('../../package.json').version;
+  const version = require('../../../package.json').version;
   const { width } = Dimensions.get('window');
   const deviceType = width < 768 ? 'phone' : 'tablet';
 

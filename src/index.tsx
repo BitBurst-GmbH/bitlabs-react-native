@@ -1,5 +1,5 @@
-import { getSurveysRepo } from './api/bitlabs_repository';
-import { WidgetType, type Survey } from './api/types';
+import { getSurveysRepo } from './api/bitlabs/bitlabs_repository';
+import { WidgetType, type Survey } from './api/bitlabs/types';
 
 /**
  * Determines whether the user has surveys available.
