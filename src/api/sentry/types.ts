@@ -10,6 +10,13 @@ export class SentryEnvelope {
     this.headers = headers;
     this.items = items;
   }
+
+  toString(): string {
+    const headersJson = JSON.stringify(this.headers);
+    const itemsJson = this.items.map((item) => item.toString()).join('\n');
+
+    return `${headersJson}\n${itemsJson}`;
+  }
 }
 
 interface SentryEnvelopeItem {}
