@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
-import type { Survey, SurveyProperties } from '../api/bitlabs/types';
+import type { Survey, SurveyProperties } from '../api/bitlabs_service/types';
 import images from '../assets/images';
 import SurveyStyles from '../styles/fullwidth-survey.styles';
 import RatingBar from '../hoc/rating-bar';

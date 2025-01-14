@@ -6,12 +6,12 @@ import {
   type Survey,
   type SurveyProperties,
   WidgetType,
-} from '../api/bitlabs/types';
+} from '../api/bitlabs_service/types';
 import {
   getAppSettings,
   getIsImageSVG,
   getSurveysRepo,
-} from '../api/bitlabs/bitlabs_repository';
+} from '../api/bitlabs_service';
 import FullWidthWidget from './fullwidth-survey';
 import { extractColors } from '../utils/helpers';
 import Gradient from '../hoc/gradient';

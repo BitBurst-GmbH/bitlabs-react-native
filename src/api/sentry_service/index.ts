@@ -1,5 +1,5 @@
 import { generateUUID4 } from '../../utils/helpers';
-import SentryDSN from '../sentry/dsn';
+import SentryDSN from './dsn';
 import {
   SentryEnvelope,
   SentryEventItem,
@@ -22,9 +22,7 @@ const request = (projectId: string, body?: string) => {
   });
 };
 
-const createEnvelope = (error: Error) => {
-  console.log(`[Sentry] Error: ${error}`);
-
+const createEnvelope = (token: string, uid: string, error: Error) => {
   const eventId = generateUUID4();
   const timestamp = new Date().toISOString();
 
@@ -33,20 +31,6 @@ const createEnvelope = (error: Error) => {
     value: error.message,
     module: error.name,
     mechanism: { handled: true, type: 'generic' },
-    // stacktrace: {
-    //   frames: (error.stack ?? '').split('\n').map((line) => {
-    //     // Logic to parse stack trace line to SentryStackFrame
-    //     const [_, methodName = '', module = ''] =
-    //       line.match(/at (.+?) \((.+?)\)/) || [];
-    //     return {
-    //       filename: '', // extract from module if possible
-    //       function: methodName,
-    //       module: module,
-    //       lineno: 0,
-    //       inApp: module.startsWith('ai.bitlabs.sdk'),
-    //     };
-    //   }),
-    // },
   };
 
   const event: SentryEvent = {
@@ -54,10 +38,10 @@ const createEnvelope = (error: Error) => {
     timestamp: timestamp,
     platform: 'javascript',
     logentry: { formatted: error.message },
-    user: { id: '1', ip_address: '{{auto}}' },
+    user: { id: uid, ip_address: '{{auto}}' },
     sdk: { name: 'sentry.javascript.react_native', version: '0.1.0' },
     exception: [exception],
-    tags: new Map([['token', 'value']]),
+    tags: new Map([['token', token]]),
     level: 'error',
   };
 
@@ -71,11 +55,17 @@ const createEnvelope = (error: Error) => {
   return envelope.toString();
 };
 
-export const sendEnvelope = (error: Error) => {
-  fetch(request(SentryDSN.projectId, createEnvelope(error)))
+const sendEnvelope = (token: string, uid: string, error: Error) => {
+  fetch(request(SentryDSN.projectId, createEnvelope(token, uid, error)))
     .then((response) => response.json() as Promise<SendEnvelopeResponse>)
     .then((envelope) =>
       console.log(`Sent envelope(#${envelope.id}) to Sentry!`)
     )
     .catch((e) => console.error(e));
 };
+
+const sentry = {
+  captureError: sendEnvelope,
+};
+
+export default sentry;

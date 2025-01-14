@@ -1,4 +1,4 @@
-import { sendEnvelope } from '../sentry/sentry_service';
+import sentry from '../sentry_service';
 import {
   getAppSettingsApi,
   getLeaderboardApi,
@@ -26,7 +26,7 @@ export const getSurveysRepo = (
         response.json() as Promise<BitLabsResponse<GetSurveysResponse>>
     )
     .then((body) => {
-      sendEnvelope(new Error('TEST ERROR'));
+      sentry.captureError(token, uid, new Error('TEST ERROR'));
       const prettyPrintRestriction = (restriction: RestrictionReason) => {
         if (restriction.not_verified) {
           return 'The publisher account that owns this app has not been verified and therefore cannot receive surveys.';

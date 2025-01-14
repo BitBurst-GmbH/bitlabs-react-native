@@ -14,10 +14,7 @@ import type {
   WebViewMessageEvent,
   WebViewNavigationEvent,
 } from 'react-native-webview/lib/WebViewTypes';
-import {
-  getAppSettings,
-  leaveSurveys,
-} from '../api/bitlabs/bitlabs_repository';
+import { getAppSettings, leaveSurveys } from '../api/bitlabs_service';
 import LeaveSurveyModal from './leave-survey-modal';
 import OfferWallStyles from '../styles/offerwall.styles';
 import Images from '../assets/images';
@@ -29,7 +26,7 @@ import {
 } from '../utils/helpers';
 import Gradient from '../hoc/gradient';
 import QRCode from 'react-native-qrcode-svg';
-import { HookName, type HookMessage } from '../api/bitlabs/types';
+import { HookName, type HookMessage } from '../api/bitlabs_service/types';
 
 type Props = {
   uid: string;

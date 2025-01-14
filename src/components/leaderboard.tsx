@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import type { GetLeaderboardResponse } from '../api/bitlabs/types';
+import type { GetLeaderboardResponse } from '../api/bitlabs_service/types';
 import {
   getAppSettings,
   getIsImageSVG,
   getLeaderboard,
-} from '../api/bitlabs/bitlabs_repository';
+} from '../api/bitlabs_service';
 import { FlatList, Text, View } from 'react-native';
 import LeaderboardItem from './leaderboard-item';
 import { extractColors } from '../utils/helpers';
