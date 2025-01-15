@@ -1,11 +1,11 @@
 import React from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
-import type { Survey, SurveyProperties } from '../api/types';
+import type { Survey, SurveyProperties } from '../api/bitlabs_service/types';
 import images from '../assets/images';
 import SurveyStyles from '../styles/fullwidth-survey.styles';
 import RatingBar from '../hoc/rating-bar';
 import { RewardView } from '../hoc/reward-view';
-import { currencize, rounded } from '../utils/helpers';
+import { currencize, rounded } from '../utils';
 
 type Props = {
   survey: Survey;

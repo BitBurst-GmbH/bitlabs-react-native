@@ -14,7 +14,7 @@ import type {
   WebViewMessageEvent,
   WebViewNavigationEvent,
 } from 'react-native-webview/lib/WebViewTypes';
-import { getAppSettings, leaveSurveys } from '../api/bitlabs_repository';
+import { getAppSettings, leaveSurveys } from '../api/bitlabs_service';
 import LeaveSurveyModal from './leave-survey-modal';
 import OfferWallStyles from '../styles/offerwall.styles';
 import Images from '../assets/images';
@@ -23,17 +23,17 @@ import {
   extractColors,
   isColorLuminant,
   buildOfferWallUrl,
-} from '../utils/helpers';
+} from '../utils';
 import Gradient from '../hoc/gradient';
 import QRCode from 'react-native-qrcode-svg';
-import { HookName, type HookMessage } from '../api/types';
+import { HookName, type HookMessage } from '../api/bitlabs_service/types';
 
 type Props = {
   uid: string;
   adId: string;
   token: string;
   isDebugMode?: boolean;
-  onReward: (reward: number) => void;
+  onReward?: (reward: number) => void;
   onExitPressed: (() => void) | undefined;
   tags: { [key: string]: string | boolean };
 };
@@ -44,7 +44,7 @@ export default ({
   adId,
   isDebugMode = false,
   onExitPressed,
-  onReward,
+  onReward = () => {},
   tags = {},
 }: Props) => {
   const webview = useRef<WebView>(null); // Reference to the webview component

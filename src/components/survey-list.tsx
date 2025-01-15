@@ -2,14 +2,18 @@ import { FlatList, type StyleProp, type ViewStyle } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import SimpleWidget from './simple-survey';
 import CompactWidget from './compact-survey';
-import { type Survey, type SurveyProperties, WidgetType } from '../api/types';
+import {
+  type Survey,
+  type SurveyProperties,
+  WidgetType,
+} from '../api/bitlabs_service/types';
 import {
   getAppSettings,
   getIsImageSVG,
   getSurveysRepo,
-} from '../api/bitlabs_repository';
+} from '../api/bitlabs_service';
 import FullWidthWidget from './fullwidth-survey';
-import { extractColors } from '../utils/helpers';
+import { extractColors } from '../utils';
 import Gradient from '../hoc/gradient';
 import { CurrencyIcon } from '../hoc/currency-icon';
 

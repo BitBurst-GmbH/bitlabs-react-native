@@ -1,3 +1,4 @@
+import sentry from '../sentry_service';
 import {
   getAppSettingsApi,
   getLeaderboardApi,
@@ -44,17 +45,21 @@ export const getSurveysRepo = (
 
       const restriction = body.data?.restriction_reason;
       if (restriction) {
-        console.log('[BitLabs] Restriction: ' + restriction);
-
-        throw new Error(
-          '[BitLabs] Restriction: ' + prettyPrintRestriction(restriction)
+        const error = new Error(
+          'GetSurveys Restricted: ' + prettyPrintRestriction(restriction)
         );
+
+        sentry.captureError(token, uid, error);
+        throw error;
       }
 
       if (body.error) {
-        throw new Error(
-          `[BitLabs] ${body.error.details.http} - ${body.error.details.msg}`
+        const error = new Error(
+          `GetSurveys Failed: ${body.error.details.http} - ${body.error.details.msg}`
         );
+
+        sentry.captureError(token, uid, error);
+        throw error;
       }
 
       onResponse(body.data!.surveys);
@@ -71,9 +76,12 @@ export const leaveSurveys = (
     .then((response) => response.json() as Promise<BitLabsResponse<void>>)
     .then((body) => {
       if (body.error) {
-        throw new Error(
-          `[BitLabs] ${body.error.details.http} - ${body.error.details.msg}`
+        const error = new Error(
+          `UpdateClick Failed: ${body.error.details.http} - ${body.error.details.msg}`
         );
+
+        sentry.captureError(token, uid, error);
+        throw error;
       }
 
       return Promise.resolve('[BitLabs] LeaveSurvey Successful');
@@ -97,9 +105,12 @@ export const getAppSettings = (
     )
     .then((body) => {
       if (body.error) {
-        throw new Error(
-          `[BitLabs] ${body.error.details.http} - ${body.error.details.msg}`
+        const error = new Error(
+          `GetAppSettings Failed: ${body.error.details.http} - ${body.error.details.msg}`
         );
+
+        sentry.captureError(token, uid, error);
+        throw error;
       }
 
       const settings = body.data!;
@@ -137,9 +148,12 @@ export const getLeaderboard = (
     )
     .then((body) => {
       if (body.error) {
-        throw new Error(
-          `[BitLabs] ${body.error.details.http} - ${body.error.details.msg}`
+        const error = new Error(
+          `GetLeaderboard Failed: ${body.error.details.http} - ${body.error.details.msg}`
         );
+
+        sentry.captureError(token, uid, error);
+        throw error;
       }
 
       onResponse(body.data!);
