@@ -13,7 +13,7 @@ import {
   getSurveysRepo,
 } from '../api/bitlabs_service';
 import FullWidthWidget from './fullwidth-survey';
-import { extractColors } from '../utils/helpers';
+import { extractColors } from '../utils';
 import Gradient from '../hoc/gradient';
 import { CurrencyIcon } from '../hoc/currency-icon';
 

@@ -7,7 +7,7 @@ import {
 } from '../api/bitlabs_service';
 import { FlatList, Text, View } from 'react-native';
 import LeaderboardItem from './leaderboard-item';
-import { extractColors } from '../utils/helpers';
+import { extractColors } from '../utils';
 import { CurrencyIcon } from '../hoc/currency-icon';
 
 type Props = {

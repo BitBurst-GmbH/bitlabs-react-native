@@ -1,4 +1,4 @@
-import { generateUUID4 } from '../../utils/helpers';
+import { generateUUID4 } from '../../utils';
 import SentryDSN from './dsn';
 import {
   SentryEnvelope,

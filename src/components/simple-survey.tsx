@@ -4,7 +4,7 @@ import Images from '../assets/images';
 import SurveyStyles from '../styles/simple-survey.styles';
 import type { Survey, SurveyProperties } from '../api/bitlabs_service/types';
 import { RewardView } from '../hoc/reward-view';
-import { currencize, rounded } from '../utils/helpers';
+import { currencize, rounded } from '../utils';
 
 type Props = {
   survey: Survey;

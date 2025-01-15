@@ -23,7 +23,7 @@ import {
   extractColors,
   isColorLuminant,
   buildOfferWallUrl,
-} from '../utils/helpers';
+} from '../utils';
 import Gradient from '../hoc/gradient';
 import QRCode from 'react-native-qrcode-svg';
 import { HookName, type HookMessage } from '../api/bitlabs_service/types';

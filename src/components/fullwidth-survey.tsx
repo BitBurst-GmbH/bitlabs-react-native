@@ -5,7 +5,7 @@ import images from '../assets/images';
 import SurveyStyles from '../styles/fullwidth-survey.styles';
 import RatingBar from '../hoc/rating-bar';
 import { RewardView } from '../hoc/reward-view';
-import { currencize, rounded } from '../utils/helpers';
+import { currencize, rounded } from '../utils';
 
 type Props = {
   survey: Survey;

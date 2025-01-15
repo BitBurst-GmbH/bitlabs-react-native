@@ -6,7 +6,7 @@ import Images from '../assets/images';
 import type { Survey, SurveyProperties } from '../api/bitlabs_service/types';
 import Gradient from '../hoc/gradient';
 import { RewardView } from '../hoc/reward-view';
-import { currencize, rounded } from '../utils/helpers';
+import { currencize, rounded } from '../utils';
 
 type Props = {
   survey: Survey;
