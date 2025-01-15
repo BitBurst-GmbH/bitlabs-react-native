@@ -1,3 +1,7 @@
+## v1.2.6
+
+- **Add Sentry Error Reporting**
+
 ## v1.2.5
 
 - **Add User Agent to requests**
