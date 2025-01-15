@@ -55,9 +55,9 @@ export type SentryEvent = {
   server_name?: string;
   release?: string;
   environment?: string;
-  modules?: Map<string, string>;
-  extra?: Map<string, string>;
-  tags?: Map<string, string>;
+  modules?: { [key: string]: string };
+  extra?: { [key: string]: string };
+  tags?: { [key: string]: string };
   fingerprint?: string[];
   user?: SentryUser;
   sdk?: SentrySDK;

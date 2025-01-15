@@ -41,7 +41,7 @@ const createEnvelope = (token: string, uid: string, error: Error) => {
     user: { id: uid, ip_address: '{{auto}}' },
     sdk: { name: 'sentry.javascript.react_native', version: '0.1.0' },
     exception: [exception],
-    tags: new Map([['token', token]]),
+    tags: { token: token },
     level: 'error',
   };
 
