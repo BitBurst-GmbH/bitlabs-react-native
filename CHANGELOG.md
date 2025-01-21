@@ -1,3 +1,7 @@
+## v1.2.7
+
+- **Add Native Back functionality(works on Android)**
+
 ## v1.2.6
 
 - **Add Sentry Error Reporting**
