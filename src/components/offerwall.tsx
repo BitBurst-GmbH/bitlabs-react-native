@@ -11,7 +11,6 @@ import {
 import WebView from 'react-native-webview';
 import type {
   ShouldStartLoadRequest,
-  WebViewErrorEvent,
   WebViewMessageEvent,
   WebViewNavigationEvent,
 } from 'react-native-webview/lib/WebViewTypes';
@@ -196,10 +195,8 @@ export default ({
     isPageAdGateSupport.current = adGateUrlRegex.test(url); // The page is AdGate Support
   };
 
-  const onLoadEnd = (event: WebViewNavigationEvent | WebViewErrorEvent) => {
-    if ('canGoBack' in event.nativeEvent) {
-      setCanWebViewGoBack(event.nativeEvent.canGoBack);
-    }
+  const onLoad = (event: WebViewNavigationEvent) => {
+    setCanWebViewGoBack(event.nativeEvent.canGoBack);
   };
 
   const onShouldStartLoadingWithRequest = ({ url }: ShouldStartLoadRequest) => {
@@ -279,7 +276,7 @@ export default ({
           scalesPageToFit={false}
           javaScriptEnabled={true}
           onLoadStart={onLoadStart}
-          onLoadEnd={onLoadEnd}
+          onLoad={onLoad}
           onMessage={onMessage}
           source={{ uri: offerwallUrl }}
           bounces={false}
