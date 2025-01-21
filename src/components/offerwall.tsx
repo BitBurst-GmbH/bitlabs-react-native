@@ -60,6 +60,7 @@ export default ({
   const [canWebViewGoBack, setCanWebViewGoBack] = useState(false); // Used to determine if the webview can go back
   const [shouldShowHeader, setShouldShowHeader] = useState(false); // Used to determine if the current page is a survey
   const [color, setColor] = useState<string[]>(['#007bff', '#007bff']); // Used to determine the navigation (top) bar color
+  const [shouldStopNavigation, setShouldStopNavigation] = useState(false); // Used to determine if the webview should stop navigation
   const [offerwallUrl, setOfferwallUrl] = useState(
     buildOfferWallUrl(token, uid, tags, onExitPressed ? true : false)
   );
@@ -176,6 +177,18 @@ export default ({
         );
         break;
 
+      case HookName.OfferStart:
+        const clickUrl = message.args[0].offer.clickUrl;
+        setShouldStopNavigation(true);
+        Linking.openURL(clickUrl);
+        break;
+
+      case HookName.OfferContinue:
+        const link = message.args[0].link;
+        setShouldStopNavigation(true);
+        Linking.openURL(link);
+        break;
+
       case HookName.SdkClose:
         onExitPressed?.();
         break;
@@ -190,8 +203,8 @@ export default ({
   };
 
   const onShouldStartLoadingWithRequest = ({ url }: ShouldStartLoadRequest) => {
-    if (url.includes('/offers/')) {
-      Linking.openURL(url);
+    if (shouldStopNavigation) {
+      setShouldStopNavigation(false);
       return false;
     }
 
