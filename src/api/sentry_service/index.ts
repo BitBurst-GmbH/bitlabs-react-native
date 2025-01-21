@@ -56,6 +56,12 @@ const createEnvelope = (token: string, uid: string, error: Error) => {
 };
 
 const sendEnvelope = (token: string, uid: string, error: Error) => {
+  // Do not send the error to Sentry if the environment is test or debug
+  const isTestOrDebug = process.env.NODE_ENV === 'test' || __DEV__;
+  if (isTestOrDebug) {
+    return;
+  }
+
   fetch(request(SentryDSN.projectId, createEnvelope(token, uid, error)))
     .then((response) => response.json() as Promise<SendEnvelopeResponse>)
     .then((envelope) =>
