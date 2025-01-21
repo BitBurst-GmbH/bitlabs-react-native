@@ -11,6 +11,7 @@ import {
 import WebView from 'react-native-webview';
 import type {
   ShouldStartLoadRequest,
+  WebViewErrorEvent,
   WebViewMessageEvent,
   WebViewNavigationEvent,
 } from 'react-native-webview/lib/WebViewTypes';
@@ -56,8 +57,8 @@ export default ({
   const styles = OfferWallStyles();
 
   const [errorStr, setErrorStr] = useState(''); // Updated when a webview error occurs
-  const [webviewKey, setWebviewKey] = useState(0); // Used to reset the webview to go back to the offerwall page
   const [isModalVisible, setIsModalVisible] = useState(false); // Used to show/hide the leave survey modal
+  const [canWebViewGoBack, setCanWebViewGoBack] = useState(false); // Used to determine if the webview can go back
   const [isPageOfferwall, setIsPageOfferwall] = useState(true); // Used to determine if the current page is the offerwall
   const [color, setColor] = useState<string[]>(['#007bff', '#007bff']); // Used to determine the navigation (top) bar color
   const [offerwallUrl, setOfferwallUrl] = useState(
@@ -70,11 +71,19 @@ export default ({
       'hardwareBackPress',
       () => {
         if (isPageOfferwall) {
+          if (canWebViewGoBack) {
+            webview.current?.goBack();
+            return true; // Prevent the back button
+          }
+
           return false; // Do not override the back button if the user is in the offerwall, because it's the root page of the WebView and the user should be able to go back
         }
 
         if (isPageAdGateSupport.current) {
-          setWebviewKey((oldKey) => (oldKey + 1) % 2); // Reload the webview to go back to the offerwall
+          webview.current?.injectJavaScript(
+            'window.history.go(-(window.history.length - 1));' // Go back to the initial URL
+          );
+
           return true; // Prevent the back button
         }
         setIsModalVisible(true); // Show the leave survey modal
@@ -83,7 +92,7 @@ export default ({
     );
 
     return () => backHandler.remove();
-  }, [isPageOfferwall]);
+  }, [isPageOfferwall, canWebViewGoBack]);
 
   // Hook to add adId if one is given
   useEffect(() => {
@@ -113,24 +122,16 @@ export default ({
   }, []);
 
   const leaveCurrentSurvey = (reason = '') => {
-    setWebviewKey((oldKey) => (oldKey + 1) % 2);
+    webview.current?.injectJavaScript(
+      'window.history.go(-(window.history.length - 1));'
+    );
+
     if (clickId.current.length > 0) {
       console.log(`Leaving with reason ~> ${reason}`);
       leaveSurveys(token, uid, clickId.current, reason)
         .then((successMsg) => console.log(successMsg))
         .catch((errorMsg) => console.log(errorMsg));
       clickId.current = '';
-    }
-  };
-
-  const onLoadStart = ({ nativeEvent }: WebViewNavigationEvent) => {
-    const url = nativeEvent.url;
-    setIsPageOfferwall(url.startsWith('https://web.bitlabs.ai'));
-
-    isPageAdGateSupport.current = false; // Assume the page is not AdGate Support
-
-    if (url.startsWith('https://wall.adgaterewards.com/contact/')) {
-      isPageAdGateSupport.current = true; // The page is AdGate Support
     }
   };
 
@@ -180,6 +181,24 @@ export default ({
 
       default:
         break;
+    }
+  };
+
+  const onLoadStart = ({ nativeEvent }: WebViewNavigationEvent) => {
+    const url = nativeEvent.url;
+    setIsPageOfferwall(url.startsWith('https://web.bitlabs.ai'));
+
+    isPageAdGateSupport.current = false; // Assume the page is not AdGate Support
+
+    const adGateUrlRegex =
+      /^https:\/\/wall\.adgaterewards?.com\/(.*\/)*contact/;
+
+    isPageAdGateSupport.current = adGateUrlRegex.test(url); // The page is AdGate Support
+  };
+
+  const onLoadEnd = (event: WebViewNavigationEvent | WebViewErrorEvent) => {
+    if ('canGoBack' in event.nativeEvent) {
+      setCanWebViewGoBack(event.nativeEvent.canGoBack);
     }
   };
 
@@ -234,7 +253,9 @@ export default ({
               <TouchableOpacity
                 onPress={() =>
                   isPageAdGateSupport.current
-                    ? setWebviewKey((oldKey) => (oldKey + 1) % 2)
+                    ? webview.current?.injectJavaScript(
+                        'window.history.go(-(window.history.length - 1));' // Go back to the initial URL
+                      )
                     : setIsModalVisible(true)
                 }
                 style={styles.chevronTouchable}
@@ -253,12 +274,12 @@ export default ({
         <WebView
           testID="Webview"
           ref={webview}
-          key={webviewKey}
           onError={onError}
           style={styles.webview}
           scalesPageToFit={false}
           javaScriptEnabled={true}
           onLoadStart={onLoadStart}
+          onLoadEnd={onLoadEnd}
           onMessage={onMessage}
           source={{ uri: offerwallUrl }}
           bounces={false}
