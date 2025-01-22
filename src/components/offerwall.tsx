@@ -52,13 +52,14 @@ export default ({
   const clickId = useRef(''); // Keep track of the last accessed survey using its clickId(extracted from the URL)
   const onRewardRef = useRef(onReward); // Store onReward to call upon unmount, can't call directly because it's a prop(and may be a state in the parent component)
   const isPageAdGateSupport = useRef(false); // Keep track of whether the non-offerwall page is AdGate Support
+  const shouldStopNavigation = useRef(false); // Used to determine if the webview should stop navigation
 
   const styles = OfferWallStyles();
 
   const [errorStr, setErrorStr] = useState(''); // Updated when a webview error occurs
   const [isModalVisible, setIsModalVisible] = useState(false); // Used to show/hide the leave survey modal
   const [canWebViewGoBack, setCanWebViewGoBack] = useState(false); // Used to determine if the webview can go back
-  const [isPageOfferwall, setIsPageOfferwall] = useState(true); // Used to determine if the current page is the offerwall
+  const [shouldShowHeader, setShouldShowHeader] = useState(false); // Used to determine if the current page is a survey
   const [color, setColor] = useState<string[]>(['#007bff', '#007bff']); // Used to determine the navigation (top) bar color
   const [offerwallUrl, setOfferwallUrl] = useState(
     buildOfferWallUrl(token, uid, tags, onExitPressed ? true : false)
@@ -69,7 +70,7 @@ export default ({
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       () => {
-        if (isPageOfferwall) {
+        if (!shouldShowHeader) {
           if (canWebViewGoBack) {
             webview.current?.goBack();
             return true; // Prevent the back button
@@ -91,7 +92,7 @@ export default ({
     );
 
     return () => backHandler.remove();
-  }, [isPageOfferwall, canWebViewGoBack]);
+  }, [shouldShowHeader, canWebViewGoBack]);
 
   // Hook to add adId if one is given
   useEffect(() => {
@@ -146,10 +147,12 @@ export default ({
         webview.current?.injectJavaScript(`
           window.parent.postMessage({ target: 'app.behaviour.close_button_visible', value: true }, '*');
         `);
+        setShouldShowHeader(false);
         console.debug('Sent message to show close button.');
         break;
 
       case HookName.SurveyStart:
+        setShouldShowHeader(true);
         clickId.current = message.args[0].clickId;
         console.debug(`Survey ${clickId.current} started.`);
         break;
@@ -174,6 +177,18 @@ export default ({
         );
         break;
 
+      case HookName.OfferStart:
+        const clickUrl = message.args[0].offer.clickUrl;
+        shouldStopNavigation.current = true;
+        Linking.openURL(clickUrl);
+        break;
+
+      case HookName.OfferContinue:
+        const link = message.args[0].link;
+        shouldStopNavigation.current = true;
+        Linking.openURL(link);
+        break;
+
       case HookName.SdkClose:
         onExitPressed?.();
         break;
@@ -183,27 +198,27 @@ export default ({
     }
   };
 
-  const onLoadStart = ({ nativeEvent }: WebViewNavigationEvent) => {
-    const url = nativeEvent.url;
-    setIsPageOfferwall(url.startsWith('https://web.bitlabs.ai'));
+  const onLoad = (event: WebViewNavigationEvent) => {
+    setCanWebViewGoBack(event.nativeEvent.canGoBack);
+  };
+
+  const onShouldStartLoadingWithRequest = ({ url }: ShouldStartLoadRequest) => {
+    if (shouldStopNavigation.current) {
+      shouldStopNavigation.current = false;
+      webview.current?.goBack(); // important for iOS, because onShouldStartLoadingWithRequest is called before onMessage
+      return false;
+    }
 
     isPageAdGateSupport.current = false; // Assume the page is not AdGate Support
 
     const adGateUrlRegex =
       /^https:\/\/wall\.adgaterewards?.com\/(.*\/)*contact/;
 
-    isPageAdGateSupport.current = adGateUrlRegex.test(url); // The page is AdGate Support
-  };
-
-  const onLoad = (event: WebViewNavigationEvent) => {
-    setCanWebViewGoBack(event.nativeEvent.canGoBack);
-  };
-
-  const onShouldStartLoadingWithRequest = ({ url }: ShouldStartLoadRequest) => {
-    if (url.includes('/offers/')) {
-      Linking.openURL(url);
-      return false;
+    if (adGateUrlRegex.test(url)) {
+      isPageAdGateSupport.current = true;
+      setShouldShowHeader(true);
     }
+
     return true;
   };
 
@@ -244,7 +259,7 @@ export default ({
           setIsVisible={setIsModalVisible}
           leaveSurveyHandler={leaveCurrentSurvey}
         />
-        {!isPageOfferwall && (
+        {shouldShowHeader && (
           <Gradient style={{ height: 50 }} colors={color}>
             <View style={styles.headerView}>
               <TouchableOpacity
@@ -275,7 +290,6 @@ export default ({
           style={styles.webview}
           scalesPageToFit={false}
           javaScriptEnabled={true}
-          onLoadStart={onLoadStart}
           onLoad={onLoad}
           onMessage={onMessage}
           source={{ uri: offerwallUrl }}

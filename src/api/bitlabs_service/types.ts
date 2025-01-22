@@ -119,4 +119,6 @@ export enum HookName {
   SurveyComplete = 'offerwall-surveys:survey.complete',
   SurveyScreenout = 'offerwall-surveys:survey.screenout',
   SurveyStartBonus = 'offerwall-surveys:survey.start-bonus',
+  OfferStart = 'offerwall-offers:offer.start',
+  OfferContinue = 'offerwall-offers:offer.continue',
 }
