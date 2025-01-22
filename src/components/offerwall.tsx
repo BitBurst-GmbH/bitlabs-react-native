@@ -52,6 +52,7 @@ export default ({
   const clickId = useRef(''); // Keep track of the last accessed survey using its clickId(extracted from the URL)
   const onRewardRef = useRef(onReward); // Store onReward to call upon unmount, can't call directly because it's a prop(and may be a state in the parent component)
   const isPageAdGateSupport = useRef(false); // Keep track of whether the non-offerwall page is AdGate Support
+  const shouldStopNavigation = useRef(false); // Used to determine if the webview should stop navigation
 
   const styles = OfferWallStyles();
 
@@ -60,7 +61,6 @@ export default ({
   const [canWebViewGoBack, setCanWebViewGoBack] = useState(false); // Used to determine if the webview can go back
   const [shouldShowHeader, setShouldShowHeader] = useState(false); // Used to determine if the current page is a survey
   const [color, setColor] = useState<string[]>(['#007bff', '#007bff']); // Used to determine the navigation (top) bar color
-  const [shouldStopNavigation, setShouldStopNavigation] = useState(false); // Used to determine if the webview should stop navigation
   const [offerwallUrl, setOfferwallUrl] = useState(
     buildOfferWallUrl(token, uid, tags, onExitPressed ? true : false)
   );
@@ -179,13 +179,13 @@ export default ({
 
       case HookName.OfferStart:
         const clickUrl = message.args[0].offer.clickUrl;
-        setShouldStopNavigation(true);
+        shouldStopNavigation.current = true;
         Linking.openURL(clickUrl);
         break;
 
       case HookName.OfferContinue:
         const link = message.args[0].link;
-        setShouldStopNavigation(true);
+        shouldStopNavigation.current = true;
         Linking.openURL(link);
         break;
 
@@ -203,8 +203,9 @@ export default ({
   };
 
   const onShouldStartLoadingWithRequest = ({ url }: ShouldStartLoadRequest) => {
-    if (shouldStopNavigation) {
-      setShouldStopNavigation(false);
+    if (shouldStopNavigation.current) {
+      shouldStopNavigation.current = false;
+      webview.current?.goBack(); // important for iOS, because onShouldStartLoadingWithRequest is called before onMessage
       return false;
     }
 
