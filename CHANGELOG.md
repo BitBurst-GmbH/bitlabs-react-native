@@ -1,3 +1,7 @@
+## v1.2.8
+
+- **Improve mechanism of offer and survey opening**
+
 ## v1.2.7
 
 - **Add Native Back functionality(works on Android)**
