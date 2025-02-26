@@ -14,7 +14,7 @@ import {
   WidgetType,
   checkSurveys,
   getSurveys,
-} from '../../src';
+} from 'bitlabs';
 import { APP_TOKEN } from './config';
 import styles from './styles';
 
