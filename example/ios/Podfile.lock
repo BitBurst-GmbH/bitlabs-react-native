@@ -72,9 +72,9 @@ PODS:
     - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
   - glog (0.3.5)
-  - hermes-engine (0.71.17):
-    - hermes-engine/Pre-built (= 0.71.17)
-  - hermes-engine/Pre-built (0.71.17)
+  - hermes-engine (0.72.12):
+    - hermes-engine/Pre-built (= 0.72.12)
+  - hermes-engine/Pre-built (0.72.12)
   - libevent (2.1.12)
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.07.22.00):
@@ -688,10 +688,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  bitlabs: 4a7234d98a998284031c07e09ff0c8818515e321
-  boost: a7c83b31436843459a1961bfd74b96033dc77234
+  bitlabs: a82f23d449da385b6b0dc6889151d2bea39d0f87
+  boost: 7dcd2de282d72e344012f7d6564d024930a6a440
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
-  DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
+  DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
   FBLazyVector: a31ac2336aea59512b5b982f8e231f65d7d148e1
   FBReactNativeSpec: 0976da6bc1ebd3ea9b3a65d04be2c0117d304c4c
   Flipper: 6edb735e6c3e332975d1b17956bcc584eccf5818
@@ -703,33 +703,33 @@ SPEC CHECKSUMS:
   Flipper-PeerTalk: 116d8f857dc6ef55c7a5a75ea3ceaafe878aadc9
   FlipperKit: 2efad7007d6745a3f95e4034d547be637f89d3f6
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
-  hermes-engine: 7d82f250301e83c48ec0857c6810283d787b61da
+  glog: 08b301085f15bcbb6ff8632a8ebaf239aae04e6a
+  hermes-engine: e89344b9e9e54351c3c5cac075e0275148fb37ba
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
-  RCT-Folly: 0080d0a6ebf2577475bda044aa59e2ca1f909cda
+  RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: b6cea797b684c6d8d82ba0107cef58cbb679afdb
   RCTTypeSafety: d2eb5e0e8af9181b24034f5171f9b659994b4678
   React: e5aafc4c18040e8fbe0870a1f6df890d35f5af1d
   React-callinvoker: d345fd762faa4a3d371aedf40332abb09746ca03
-  React-Codegen: 821ca0b8a9fb023eef3faab61afd2390658c8f1c
-  React-Core: 6e27275ea4a91992f488bcc9c8575ffb564b504b
-  React-CoreModules: 6cb0798606e69b33e8271a9da526e3d674bedb2c
-  React-cxxreact: 63436ba2c7811121ca978ce60d49aa8786322726
+  React-Codegen: 443faf20ffb1610d6737ea051cc7cda262e7f122
+  React-Core: 6986970a7b4a2227531b0cda507c3cdf6e1cdf5c
+  React-CoreModules: 0553b91da99512251069cf6a07497f944526bf47
+  React-cxxreact: 640f7e389c4f12c613c9afa31ff5fe0bec9511d1
   React-debug: b29cfcf06c990f0ea4b3d6430996baa71dd676af
-  React-hermes: 077b82c248fe8e698820717a1d240c8502150c31
-  React-jsi: 42edc74ef0479952c32c8659563ab9cd62353a75
-  React-jsiexecutor: 95bdf0ab46024ca9849e08739b6abd8fe489cd33
+  React-hermes: 74e6a0ff6e58aca73fe9507727a0415e23b258b9
+  React-jsi: ae12d2de825deef00aace8652e6ed182c8b229d4
+  React-jsiexecutor: a0d38e73271d6fd4a5139c5e38bcf81c17437da4
   React-jsinspector: 8e291ed0ab371314de269001d6b9b25db6aabf42
-  React-logger: d4010de0b0564e63637ad08373bc73b5d919974b
-  react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
-  react-native-webview: 9f111dfbcfc826084d6c507f569e5e03342ee1c1
-  React-NativeModulesApple: 694679e4193a49c09f0a76ee27ec09b2c466d59c
+  React-logger: 46eac23bef040a760f9e629ffa005b9089f342fb
+  react-native-safe-area-context: 863c9695a24b9e6bb6c412f1c8ddb4dfc3ae3862
+  react-native-webview: ec195db71ebf55705d7b46a7da5f1b1746bb7efd
+  React-NativeModulesApple: 828bba25c52f8c7be4672ac43e1c5e6af99c36d5
   React-perflogger: 63606aeab27683112e1bd4ef25bd099ec1cb03f8
   React-RCTActionSheet: 5b39fc2b479d47325e5ac95193c482044bfebbc6
   React-RCTAnimation: d684a1de0e20c53e31376738839d1cda56b60486
-  React-RCTAppDelegate: 3099e9aebf2f821503e65432e09a9423a37d767a
-  React-RCTBlob: 0dcf271322ba0c0406fcd4a3f87cd7d951dfcc37
+  React-RCTAppDelegate: 1f35b90af6d1efc6afabf3dcf0afc8a8528b665d
+  React-RCTBlob: b8c771afcf44cab4407fd935691ff152f93b64e7
   React-RCTImage: b8bfa9ed1eecc7bb96d219f8a01f569d490f34fc
   React-RCTLinking: 32c9b7af01937d911010d8ab1963147e31766190
   React-RCTNetwork: c58ad73a25aa6b35258b6c59c0a24018c329fe96
@@ -738,16 +738,16 @@ SPEC CHECKSUMS:
   React-RCTVibration: ff75e7530a22dc80a27fffdc07a2785d6bdf4f8e
   React-rncore: 52247442683082756b2fb3de145fb8149f15d1f6
   React-runtimeexecutor: 1c5219c682091392970608972655001103c27d21
-  React-runtimescheduler: 8aea338c561b2175f47018124c076d89d3808d30
-  React-utils: 9a24cb88f950d1020ee55bddacbc8c16a611e2dc
-  ReactCommon: 76843a9bb140596351ac2786257ac9fe60cafabb
-  RNScreens: ea4cd3a853063cda19a4e3c28d2e52180c80f4eb
-  RNSVG: 53c661b76829783cdaf9b7a57258f3d3b4c28315
+  React-runtimescheduler: c10576dd5b9fc8bcc6941f75112d33a87623bcc8
+  React-utils: 782b267a46d1fb9599a473730283c88ad1bc94b3
+  ReactCommon: 188eadc9629142a4a1a271698de555443d8a29c0
+  RNScreens: 4ff3bbcbc50751821952382c820df2e4394b2879
+  RNSVG: 67c430ac7a54043cac37f6bd7bc94f8e22d8a64a
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
-  sparkfabrik-react-native-idfa-aaid: e80938d526b800a6c8d35fa6e3df3bad38d3976c
+  sparkfabrik-react-native-idfa-aaid: 35a90ab50379bba09072018863bec5ba5637de9f
   Yoga: 87e59f6d458e5061d2421086c5de994b3f7cd151
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 090df36b2a27dbe62ef21d4828c3f98b6a1eed14
+PODFILE CHECKSUM: 3f44eed42ddd0a4dd2f376e0b2c41613b54e862a
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
