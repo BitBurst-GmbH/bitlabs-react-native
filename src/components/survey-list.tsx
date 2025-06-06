@@ -28,7 +28,7 @@ type Props = {
 /** @deprecated Use `BitLabsWidget` instead. */
 export default ({ uid, token, style, type, onSurveyPressed }: Props) => {
   const [surveys, setSurveys] = useState<Survey[]>([]);
-  const [bonusPercentage, setBonusPercentage] = useState(0);
+  const [bonusPercentage] = useState(0);
   const [color, setColor] = useState(['#007bff', '#007bff']);
   const [currencyString, setCurrencyString] = useState<string>('');
   const [currencyIcon, setCurrencyIcon] = useState<JSX.Element>();
@@ -41,30 +41,38 @@ export default ({ uid, token, style, type, onSurveyPressed }: Props) => {
       (surveyList) => setSurveys(surveyList),
       (error) => console.error(`[BitLabs] ${error}`)
     );
-    getAppSettings(
-      token,
-      uid,
-      (surveyIconColor, _2, _3, totalBonusPercentage, currencySymbol) => {
-        const [isImage, content] = currencySymbol;
+    getAppSettings(token, (settings) => {
+      const config = settings.configuration;
+      const isImage =
+        config.find(
+          (c) => c.internalIdentifier === 'general.currency.symbol.is_image'
+        )?.value ?? '0';
+      const content =
+        config.find(
+          (c) => c.internalIdentifier === 'general.currency.symbol.content'
+        )?.value ?? '';
 
-        if (isImage) {
-          getIsImageSVG(content, (isSVG) => {
-            const size = getDimension(type);
-            setCurrencyIcon(
-              <CurrencyIcon isSVG={isSVG} url={content} size={size} />
-            );
-            setOldCurrencyIcon(
-              <CurrencyIcon isSVG={isSVG} url={content} size={size * 0.7} />
-            );
-          }).catch((error) => console.error(error));
-        } else {
-          setCurrencyString(content);
-        }
-
-        setColor(extractColors(surveyIconColor) ?? ['#007bff', '#007bff']);
-        setBonusPercentage(totalBonusPercentage);
+      if (isImage) {
+        getIsImageSVG(content, (isSVG) => {
+          const size = getDimension(type);
+          setCurrencyIcon(
+            <CurrencyIcon isSVG={isSVG} url={content} size={size} />
+          );
+          setOldCurrencyIcon(
+            <CurrencyIcon isSVG={isSVG} url={content} size={size * 0.7} />
+          );
+        }).catch((error) => console.error(error));
+      } else {
+        setCurrencyString(content);
       }
-    ).catch((error) => console.error(`[BitLabs] ${error}`));
+
+      const surveyIconColor =
+        config.find(
+          (c) => c.internalIdentifier === 'app.visual.light.survey_icon_color'
+        )?.value ?? '';
+
+      setColor(extractColors(surveyIconColor) ?? ['#007bff', '#007bff']);
+    }).catch((error) => console.error(`[BitLabs] ${error}`));
   }, [token, type, uid]);
 
   return (

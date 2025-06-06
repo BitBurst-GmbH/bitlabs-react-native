@@ -103,10 +103,15 @@ export default ({
 
   // Hook to get navigation color
   useEffect(() => {
-    getAppSettings(token, uid, (_, navigationColor) =>
-      setColor(extractColors(navigationColor) ?? ['#007bff', '#007bff'])
-    ).catch((error) => console.error(error));
-  }, [token, uid]);
+    getAppSettings(token, (settings) => {
+      const theme = 'light';
+      const navigationColor =
+        settings.configuration.find(
+          (c) => c.internalIdentifier === `app.visual.${theme}.navigation_color`
+        )?.value ?? '';
+      setColor(extractColors(navigationColor) ?? ['#007bff', '#007bff']);
+    }).catch((error) => console.error(error));
+  }, [token]);
 
   // Hook to update onRewardRef when onReward changes
   // This is used because onReward is a prop, and can be a state in the parent component

@@ -16,33 +16,12 @@ export type GetSurveysResponse = {
 };
 
 export type GetAppSettingsResponse = {
-  visual: {
-    background_color: string;
-    color_rating_threshold: number;
-    custom_logo_url: string;
-    element_border_radius: string;
-    hide_reward_value: boolean;
-    interaction_color: string;
-    navigation_color: string;
-    offerwall_width: string;
-    screenout_reward: string;
-    survey_icon_color: string;
-  };
-  currency: {
-    bonus_percentage: number;
-    currency_promotion: number;
-    factor: string;
-    floor_decimal: boolean;
-    symbol: {
-      content: string;
-      is_image: boolean;
-    };
-  };
-  promotion?: {
-    start_date: string;
-    end_date: string;
-    bonus_percentage: number;
-  };
+  configuration: [
+    {
+      internalIdentifier: string;
+      value: string;
+    }
+  ];
 };
 
 export type GetLeaderboardResponse = {

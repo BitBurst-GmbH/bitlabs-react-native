@@ -21,7 +21,7 @@ const Divider = () => (
 
 /** @deprecated Use `BitLabsWidget` instead. */
 export default ({ uid, token }: Props) => {
-  const [factor, setFactor] = useState(1);
+  const [factor] = useState(1);
   const [color, setColor] = useState('#000');
   const [currencyString, setCurrency] = useState('');
   const [currencyIcon, setCurrencyIcon] = useState<JSX.Element>();
@@ -31,27 +31,34 @@ export default ({ uid, token }: Props) => {
     getLeaderboard(token, uid, (leaderboardResponse) =>
       setLeaderboard(leaderboardResponse)
     ).catch((error) => console.error(error));
-    getAppSettings(
-      token,
-      uid,
-      (surveyIconColor, _2, currencyFactor, _3, currencySymbol) => {
-        const [isImage, content] = currencySymbol;
+    getAppSettings(token, (settings) => {
+      const config = settings.configuration;
+      const isImage =
+        config.find(
+          (c) => c.internalIdentifier === 'general.currency.symbol.is_image'
+        )?.value ?? '0';
+      const content =
+        config.find(
+          (c) => c.internalIdentifier === 'general.currency.symbol.content'
+        )?.value ?? '';
 
-        if (isImage) {
-          getIsImageSVG(content, (isSvg) =>
-            setCurrencyIcon(
-              <CurrencyIcon isSVG={isSvg} url={content} size={20} />
-            )
-          ).catch((error) => console.error(error));
-        } else {
-          setCurrency(content);
-        }
-
-        setColor(extractColors(surveyIconColor)?.[0] ?? '#000');
-
-        setFactor(currencyFactor);
+      if (isImage) {
+        getIsImageSVG(content, (isSvg) =>
+          setCurrencyIcon(
+            <CurrencyIcon isSVG={isSvg} url={content} size={20} />
+          )
+        ).catch((error) => console.error(error));
+      } else {
+        setCurrency(content);
       }
-    ).catch((error) => console.error(error));
+
+      const surveyIconColor =
+        config.find(
+          (c) => c.internalIdentifier === 'app.visual.light.survey_icon_color'
+        )?.value ?? '';
+
+      setColor(extractColors(surveyIconColor)?.[0] ?? '#000');
+    }).catch((error) => console.error(error));
   }, [token, uid]);
 
   return leaderboard?.top_users ? (
