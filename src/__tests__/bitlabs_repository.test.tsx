@@ -114,25 +114,24 @@ describe('getAppSettings', () => {
       .spyOn(api, 'getAppSettingsApi')
       .mockImplementation(() => Promise.reject('Error'));
 
-    await getAppSettings('', '', (_) => {
+    await getAppSettings('', (_) => {
       throw new Error('onResponse should not be called');
     }).catch((error: string) => expect(error).toBe('Error'));
   });
 
   test('succeeds given API call returns settings data', async () => {
     const mockSettings = {
-      visual: {
-        navigation_color: 'navigation_color',
-        survey_icon_color: 'survey_icon_color',
-      },
-      currency: {
-        factor: 1,
-        symbol: {
-          content: '$',
-          is_image: false,
+      configuration: [
+        {
+          internalIdentifier: 'app.visual.light.survey_icon_color',
+          value: 'survey_icon_color',
         },
-        bonus_percentage: 10,
-      },
+        {
+          internalIdentifier: 'app.visual.light.navigation_color',
+          value: 'navigation_color',
+        },
+        { internalIdentifier: 'general.currency.factor', value: '1' },
+      ],
     };
 
     jest
@@ -141,23 +140,24 @@ describe('getAppSettings', () => {
         Promise.resolve(createMockResponse(mockSettings) as Response)
       );
 
-    await getAppSettings(
-      '',
-      '',
-      (
-        surveyIconColor: string,
-        navigationColor: string,
-        currencyFactor: number,
-        bonusPercentage: number,
-        currencySymbol: [boolean, string]
-      ) => {
-        expect(surveyIconColor).toEqual('survey_icon_color');
-        expect(navigationColor).toEqual('navigation_color');
-        expect(currencyFactor).toEqual(1);
-        expect(bonusPercentage).toEqual(0.1); // Divided by 100
-        expect(currencySymbol).toEqual([false, '$']);
-      }
-    ).catch((error) => {
+    await getAppSettings('', (settings) => {
+      let surveyIconColor = settings.configuration.find(
+        (c) => c.internalIdentifier === 'app.visual.light.survey_icon_color'
+      )?.value;
+      expect(surveyIconColor).toEqual('survey_icon_color');
+
+      let navigationColor = settings.configuration.find(
+        (c) => c.internalIdentifier === 'app.visual.light.navigation_color'
+      )?.value;
+      expect(navigationColor).toEqual('navigation_color');
+
+      let currencyFactor = parseFloat(
+        settings.configuration.find(
+          (c) => c.internalIdentifier === 'general.currency.factor'
+        )?.value ?? '1'
+      );
+      expect(currencyFactor).toEqual(1);
+    }).catch((error) => {
       throw new Error(error.message);
     });
   });
@@ -169,7 +169,7 @@ describe('getAppSettings', () => {
         Promise.resolve(createMockErrorResponse('404', 'Not Found') as Response)
       );
 
-    await getAppSettings('', '', (_) => {
+    await getAppSettings('', (_) => {
       throw new Error('onResponse should not be called');
     }).catch((error) => expect(error.message).toContain('404 - Not Found'));
   });

@@ -18,7 +18,7 @@ import {
 import { APP_TOKEN } from './config';
 import styles from './styles';
 
-const UID = 'oblivatevariegata1';
+const UID = 'oblivatevariegata';
 
 const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
   const token = APP_TOKEN;

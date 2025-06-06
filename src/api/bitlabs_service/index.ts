@@ -89,52 +89,11 @@ export const leaveSurveys = (
 
 export const getAppSettings = (
   token: string,
-  uid: string,
-  onResponse: (
-    surveyIconColor: string,
-    navigationColor: string,
-    currencyFactor: number,
-    bonusPercentage: number,
-    currencySymbol: [boolean, string]
-  ) => void
+  onResponse: (settings: GetAppSettingsResponse) => void
 ) =>
-  getAppSettingsApi(token, uid)
-    .then(
-      (response) =>
-        response.json() as Promise<BitLabsResponse<GetAppSettingsResponse>>
-    )
-    .then((body) => {
-      if (body.error) {
-        const error = new Error(
-          `GetAppSettings Failed: ${body.error.details.http} - ${body.error.details.msg}`
-        );
-
-        sentry.captureError(token, uid, error);
-        throw error;
-      }
-
-      const settings = body.data!;
-
-      let totalBonusPercentage = settings.currency.bonus_percentage / 100;
-      if (settings.promotion) {
-        totalBonusPercentage +=
-          settings.promotion.bonus_percentage / 100 +
-          (totalBonusPercentage * settings.promotion.bonus_percentage) / 100;
-      }
-
-      const currencySymbol: [boolean, string] = [
-        settings.currency.symbol.is_image,
-        settings.currency.symbol.content,
-      ];
-
-      onResponse(
-        settings.visual.survey_icon_color,
-        settings.visual.navigation_color,
-        +settings.currency.factor,
-        totalBonusPercentage,
-        currencySymbol
-      );
-    });
+  getAppSettingsApi(`https://dashboard.bitlabs.ai/api/public/v1/apps/${token}`)
+    .then((response) => response.json() as Promise<GetAppSettingsResponse>)
+    .then((body) => onResponse(body));
 
 export const getLeaderboard = (
   token: string,

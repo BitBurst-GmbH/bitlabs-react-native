@@ -71,8 +71,7 @@ export const updateClickApi = (
     })
   );
 
-export const getAppSettingsApi = (token: string, uid: string) =>
-  fetch(bitlabsRequest('v1/client/settings/v2', token, uid));
+export const getAppSettingsApi = (url: string) => fetch(new Request(url));
 
 export const getLeaderboardApi = (token: string, uid: string) =>
   fetch(bitlabsRequest('v1/client/leaderboard', token, uid));
