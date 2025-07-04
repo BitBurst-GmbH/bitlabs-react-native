@@ -72,8 +72,3 @@ export const updateClickApi = (
   );
 
 export const getAppSettingsApi = (url: string) => fetch(new Request(url));
-
-export const getLeaderboardApi = (token: string, uid: string) =>
-  fetch(bitlabsRequest('v1/client/leaderboard', token, uid));
-
-export const getCurrencyIconApi = (url: string) => fetch(new Request(url));

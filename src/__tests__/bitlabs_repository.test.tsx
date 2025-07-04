@@ -1,9 +1,5 @@
 import * as api from '../api/bitlabs_service/bitlabs_api';
-import {
-  getAppSettings,
-  getLeaderboard,
-  getSurveysRepo,
-} from '../api/bitlabs_service';
+import { getAppSettings, getSurveysRepo } from '../api/bitlabs_service';
 
 const createMockResponse = (data: any) => ({
   json: () => Promise.resolve({ data, status: 'success', trace_id: '' }),
@@ -170,60 +166,6 @@ describe('getAppSettings', () => {
       );
 
     await getAppSettings('', (_) => {
-      throw new Error('onResponse should not be called');
-    }).catch((error) => expect(error.message).toContain('404 - Not Found'));
-  });
-});
-
-describe('getLeaderboard', () => {
-  test('fails given API call returns an error', async () => {
-    jest
-      .spyOn(api, 'getLeaderboardApi')
-      .mockImplementation(() => Promise.reject('Error'));
-
-    await getLeaderboard('', '', (_) => {
-      throw new Error('onResponse should not be called');
-    }).catch((error) => expect(error).toBe('Error'));
-  });
-
-  test('succeeds given API call returns leaderboard data', async () => {
-    const mockLeaderboard = {
-      top_users: [
-        {
-          rank: 1,
-          name: 'name',
-          points: 1,
-        },
-      ],
-      own_user: {
-        rank: 1,
-        name: 'name',
-        points: 1,
-      },
-    };
-
-    jest
-      .spyOn(api, 'getLeaderboardApi')
-      .mockResolvedValue(
-        Promise.resolve(createMockResponse(mockLeaderboard) as Response)
-      );
-
-    await getLeaderboard('', '', (leaderboard) => {
-      expect(leaderboard.top_users).toEqual(mockLeaderboard.top_users);
-      expect(leaderboard.own_user).toEqual(mockLeaderboard.own_user);
-    }).catch((error) => {
-      throw new Error(error);
-    });
-  });
-
-  test('fails when API call returns 404 error response', async () => {
-    jest
-      .spyOn(api, 'getLeaderboardApi')
-      .mockResolvedValue(
-        Promise.resolve(createMockErrorResponse('404', 'Not Found') as Response)
-      );
-
-    await getLeaderboard('', '', (_) => {
       throw new Error('onResponse should not be called');
     }).catch((error) => expect(error.message).toContain('404 - Not Found'));
   });

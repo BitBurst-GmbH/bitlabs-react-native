@@ -1,11 +1,9 @@
 import {
   buildOfferWallUrl,
-  currencize,
   encryptBase64,
   extractColors,
   generateUUID4,
   isColorLuminant,
-  rounded,
 } from '../utils';
 
 describe('extractColors', () => {
@@ -51,89 +49,6 @@ describe('isColorLuminant', () => {
     const colors = ['#ffffff', '#000000'];
     const isLuminant = isColorLuminant(colors);
     expect(isLuminant).toBe(true);
-  });
-});
-
-describe('rounded', () => {
-  test('returns number rounded to 2 decimal points given a number with 2 or more decimal points', () => {
-    const number = 1.23456789;
-    const roundedNum = rounded(number);
-    expect(roundedNum).toBe(1.23);
-  });
-
-  test('returns the same number given a number with 1 decimal point', () => {
-    const number = 1.2;
-    const roundedNum = rounded(number);
-    expect(roundedNum).toBe(1.2);
-  });
-
-  test('returns the same number given a number with no decimal points', () => {
-    const number = 1;
-    const roundedNum = rounded(number);
-    expect(roundedNum).toBe(1);
-  });
-
-  test('handles negative numbers correctly', () => {
-    const number = -1.23456789;
-    const roundedNum = rounded(number);
-    expect(roundedNum).toBe(-1.23);
-  });
-
-  test('handles large numbers correctly', () => {
-    const number = 123456789.123456789;
-    const roundedNum = rounded(number);
-    expect(roundedNum).toBe(123456789.12);
-  });
-});
-
-describe('currencize', () => {
-  test('returns value with currency string appended given a value and a currency string', () => {
-    const value = '1';
-    const currency = '$';
-    const currencized = currencize(value, currency);
-    expect(currencized).toBe('1 $');
-  });
-
-  test('returns value alone given a value and an empty currency string', () => {
-    const value = '1';
-    const currency = '';
-    const currencized = currencize(value, currency);
-    expect(currencized).toBe('1');
-  });
-
-  test('returns currency string alone given an empty value and a currency string', () => {
-    const value = '';
-    const currency = '$';
-    const currencized = currencize(value, currency);
-    expect(currencized).toBe(' $');
-  });
-
-  test('returns an empty string given an empty value and an empty currency string', () => {
-    const value = '';
-    const currency = '';
-    const currencized = currencize(value, currency);
-    expect(currencized).toBe('');
-  });
-
-  test('returns value with currency string positioned to the right given a value and a right-positional currency string', () => {
-    const value = '1';
-    const currency = '{value}$';
-    const currencized = currencize(value, currency);
-    expect(currencized).toBe('1$');
-  });
-
-  test('returns value with currency string positioned to the left given a value and a left-positional currency string', () => {
-    const value = '1';
-    const currency = '${value}';
-    const currencized = currencize(value, currency);
-    expect(currencized).toBe('$1');
-  });
-
-  test('handles value and currency with spaces correctly', () => {
-    const value = ' 1';
-    const currency = '$ ';
-    const currencized = currencize(value, currency);
-    expect(currencized).toBe(' 1 $ ');
   });
 });
 

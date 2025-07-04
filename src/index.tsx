@@ -44,8 +44,4 @@ export { WidgetType };
 
 export { default as BitLabsOfferWall } from './components/offerwall';
 
-export { default as BitLabsSurveys } from './components/survey-list';
-
-export { default as BitLabsLeaderboard } from './components/leaderboard';
-
 export { default as BitLabsWidget } from './components/bitlabs-widget';

@@ -24,13 +24,6 @@ export type GetAppSettingsResponse = {
   ];
 };
 
-export type GetLeaderboardResponse = {
-  next_reset_at: string;
-  own_user: User;
-  rewards: Reward[];
-  top_users: User[];
-};
-
 export type Survey = {
   id: string;
   type: string;
@@ -56,17 +49,6 @@ export type RestrictionReason = {
   banned_until: string;
   reason: string;
   unsupported_country: string;
-};
-
-type Reward = {
-  rank: number;
-  reward_raw: number;
-};
-
-export type User = {
-  earnings_raw: number;
-  name: string;
-  rank: number;
 };
 
 export type SurveyProperties = {

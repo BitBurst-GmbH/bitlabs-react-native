@@ -1,14 +1,12 @@
 import sentry from '../sentry_service';
 import {
   getAppSettingsApi,
-  getLeaderboardApi,
   getSurveysApi,
   updateClickApi,
 } from './bitlabs_api';
 import type {
   BitLabsResponse,
   GetAppSettingsResponse,
-  GetLeaderboardResponse,
   GetSurveysResponse,
   RestrictionReason,
   Survey,
@@ -94,34 +92,3 @@ export const getAppSettings = (
   getAppSettingsApi(`https://dashboard.bitlabs.ai/api/public/v1/apps/${token}`)
     .then((response) => response.json() as Promise<GetAppSettingsResponse>)
     .then((body) => onResponse(body));
-
-export const getLeaderboard = (
-  token: string,
-  uid: string,
-  onResponse: (leaderboard: GetLeaderboardResponse) => void
-) =>
-  getLeaderboardApi(token, uid)
-    .then(
-      (response) =>
-        response.json() as Promise<BitLabsResponse<GetLeaderboardResponse>>
-    )
-    .then((body) => {
-      if (body.error) {
-        const error = new Error(
-          `GetLeaderboard Failed: ${body.error.details.http} - ${body.error.details.msg}`
-        );
-
-        sentry.captureError(token, uid, error);
-        throw error;
-      }
-
-      onResponse(body.data!);
-    });
-
-export const getIsImageSVG = (
-  url: string,
-  onResponse: (isSVG: boolean) => void
-) =>
-  fetch(new Request(url)).then((response) =>
-    onResponse(response.headers.get('content-type') === 'image/svg+xml')
-  );
