@@ -1,5 +1,4 @@
 import { Platform } from 'react-native';
-import { Buffer } from 'buffer';
 
 export const buildOfferWallUrl = (
   token: string,

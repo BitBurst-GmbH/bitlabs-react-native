@@ -1,5 +1,5 @@
 PODS:
-  - bitlabs (1.2.8):
+  - bitlabs (1.2.9):
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
@@ -1969,7 +1969,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  bitlabs: 5b5547c43c625fa8b023a27d8fd738ed343e6094
+  bitlabs: 77988113b1bd90f45348fe1f77f78d6e6062f0b9
   boost: 1dca942403ed9342f98334bf4c3621f011aa7946
   DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6

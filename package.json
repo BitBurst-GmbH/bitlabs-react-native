@@ -49,10 +49,10 @@
     "react-native-qrcode-svg": "^6.3.15"
   },
   "devDependencies": {
-    "@babel/core": "^7.24.4",
-    "@babel/preset-env": "^7.24.4",
-    "@react-native/babel-preset": "0.73.21",
-    "@react-native/eslint-config": "0.73.2",
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.3",
+    "@react-native/babel-preset": "0.76.0",
+    "@react-native/eslint-config": "0.76.0",
     "@testing-library/jest-native": "^5.4.3",
     "@testing-library/react-native": "^12.4.0",
     "@types/jest": "^29.5.10",
@@ -63,12 +63,12 @@
     "eslint-plugin-ft-flow": "^3.0.9",
     "jest": "^29.6.3",
     "prettier": "2.8.8",
-    "react": "18.2.0",
-    "react-native": "0.73.6",
+    "react": "18.3.1",
+    "react-native": "0.76.0",
     "react-native-builder-bob": "^0.18.3",
     "react-native-svg": "^13.9.0",
     "react-native-webview": "^13.4.0",
-    "react-test-renderer": "18.2.0",
+    "react-test-renderer": "18.3.1",
     "typescript": "5.0.4"
   },
   "peerDependencies": {
@@ -95,6 +95,9 @@
     "extends": [
       "prettier",
       "@react-native"
+    ],
+    "plugins": [
+      "prettier"
     ],
     "rules": {
       "react-native/no-inline-styles": 0,
