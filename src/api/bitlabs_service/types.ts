@@ -10,11 +10,6 @@ export type BitLabsResponse<T> = {
   trace_id: string;
 };
 
-export type GetSurveysResponse = {
-  restriction_reason?: RestrictionReason;
-  surveys: Survey[];
-};
-
 export type GetAppSettingsResponse = {
   configuration: [
     {
@@ -49,14 +44,6 @@ export type Survey = {
     nameInternal: string;
   };
   tags: [];
-};
-
-export type RestrictionReason = {
-  not_verified: boolean;
-  using_vpn: boolean;
-  banned_until: string;
-  reason: string;
-  unsupported_country: string;
 };
 
 export type SurveyProperties = {

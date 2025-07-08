@@ -52,13 +52,6 @@ const getUserAgent = () => {
   return `BitLabs/${version} (${Platform.OS} ${Platform.Version}; ${deviceType})`;
 };
 
-export const getSurveysApi = (token: string, uid: string) =>
-  fetch(
-    bitlabsRequest('v2/client/surveys', token, uid, {
-      queries: { os: Platform.OS, sdk: 'REACT' },
-    })
-  );
-
 export const updateClickApi = (
   token: string,
   uid: string,

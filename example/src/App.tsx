@@ -10,10 +10,9 @@ import { View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import {
   BitLabsOfferWall,
+  BitLabsService,
   BitLabsWidget,
   WidgetType,
-  checkSurveys,
-  getSurveys,
 } from 'bitlabs';
 import { APP_TOKEN } from './config';
 import styles from './styles';
@@ -21,7 +20,7 @@ import styles from './styles';
 const UID = 'oblivatevariegata';
 
 const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  const token = APP_TOKEN;
+  BitLabsService.init(APP_TOKEN, UID);
 
   const [isLeaderboardVisible, setIsLeaderboardVisible] = useState(false);
   const [isSurveyWidgetVisible, setIsSurveyWidgetVisible] = useState(false);
@@ -31,7 +30,7 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
       {isLeaderboardVisible && (
         <BitLabsWidget
           uid={UID}
-          token={token}
+          token={APP_TOKEN}
           type={WidgetType.Leaderboard}
           onPress={() => navigation.navigate('Offerwall')}
         />
@@ -52,13 +51,9 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
         <TouchableOpacity
           style={[styles.box, { flex: 1 }]}
           onPress={() =>
-            checkSurveys(
-              token,
-              UID,
-              (hasSurveys) =>
-                console.log(`[Example] Has Surveys: ${hasSurveys}`),
-              (error) => console.log(error.message)
-            )
+            BitLabsService.checkSurveys()
+              .then((hasSurveys) => console.log(`Has Surveys: ${hasSurveys}`))
+              .catch((error) => console.log(error.message))
           }
         >
           <Text style={{ color: '#fff' }}>Check Surveys</Text>
@@ -66,17 +61,14 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
         <TouchableOpacity
           style={[styles.box, { flex: 1 }]}
           onPress={() =>
-            getSurveys(
-              token,
-              UID,
-              (surveys) => {
-                console.log(`[Example] Surveys found: ${surveys.length}.`);
+            BitLabsService.getSurveys()
+              .then((surveys) => {
+                console.log(`Surveys found: ${surveys.length}.`);
                 surveys.forEach((s) => {
                   console.log(`Survey ${s.id} in ${s.category.name}`);
                 });
-              },
-              (error) => console.log(error.message)
-            )
+              })
+              .catch((error) => console.log(error.message))
           }
         >
           <Text style={{ color: '#fff' }}>Get Surveys</Text>
@@ -91,7 +83,7 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
       {isSurveyWidgetVisible && (
         <BitLabsWidget
           uid={UID}
-          token={token}
+          token={APP_TOKEN}
           type={WidgetType.Simple}
           onPress={() => navigation.navigate('Offerwall')}
         />

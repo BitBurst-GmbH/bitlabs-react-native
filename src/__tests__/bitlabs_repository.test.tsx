@@ -1,5 +1,5 @@
 import * as api from '../api/bitlabs_service/bitlabs_api';
-import { getAppSettings, getSurveysRepo } from '../api/bitlabs_service';
+import { getAppSettings } from '../api/bitlabs_service';
 
 const createMockResponse = (data: any) => ({
   json: () => Promise.resolve({ data, status: 'success', trace_id: '' }),
@@ -23,85 +23,6 @@ beforeEach(() => {
 afterEach(() => {
   // Additional cleanup after each test if necessary
   jest.clearAllMocks();
-});
-
-describe('getSurveys', () => {
-  test('fails given API call returns an error', async () => {
-    jest
-      .spyOn(api, 'getSurveysApi')
-      .mockImplementation(() => Promise.reject('Error'));
-
-    await getSurveysRepo(
-      '',
-      '',
-      (_) => {
-        throw new Error('onResponse should not be called');
-      },
-      (error) => expect(error).toBe('Error')
-    );
-  });
-
-  test('succeeds given API call returns survey data', async () => {
-    const mockSurvey = {
-      id: '1',
-      title: 'title',
-      description: 'description',
-      cover_image_url: 'cover_image_url',
-      thank_you_message: 'thank_you_message',
-      is_active: true,
-      questions: [
-        {
-          id: '1',
-          title: 'title',
-          description: 'description',
-          question_type: 'question_type',
-          required: true,
-          options: [
-            {
-              id: '1',
-              title: 'title',
-              description: 'description',
-              image_url: 'image_url',
-            },
-          ],
-        },
-      ],
-    };
-
-    jest
-      .spyOn(api, 'getSurveysApi')
-      .mockResolvedValue(
-        Promise.resolve(
-          createMockResponse({ surveys: [mockSurvey] }) as Response
-        )
-      );
-
-    await getSurveysRepo(
-      '',
-      '',
-      (surveys) => expect(surveys).toEqual([mockSurvey]),
-      (_) => {
-        throw new Error('onFailure should not be called');
-      }
-    );
-  });
-
-  test('fails given API call returns error response with 404', async () => {
-    jest
-      .spyOn(api, 'getSurveysApi')
-      .mockResolvedValue(
-        Promise.resolve(createMockErrorResponse('404', 'Not Found') as Response)
-      );
-
-    await getSurveysRepo(
-      '',
-      '',
-      (_) => {
-        throw new Error('onResponse should not be called');
-      },
-      (error) => expect(error.message).toContain('404 - Not Found')
-    );
-  });
 });
 
 describe('getAppSettings', () => {

@@ -8,6 +8,11 @@ class NativeBitLabs: NSObject {
     BitLabs.shared.configure(token: token, uid: uid)
   }
   
+  @objc(configureAPI:uid:)
+  func configureAPI(token: String, uid: String) {
+    BitLabs.API.configure(token: token, uid: uid)
+  }
+  
   @objc func setTags(_ tags: [String: Any]) {
     BitLabs.shared.setTags(tags)
   }
@@ -32,7 +37,7 @@ class NativeBitLabs: NSObject {
   
   @objc(getSurveys:reject:)
   func getSurveys(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-    BitLabs.shared.getSurveys { result in
+    BitLabs.API.getSurveys { result in
       switch result {
       case .success(let surveys):
         let surveyDictionaries = surveys.map { survey -> [String: Any]? in
@@ -51,7 +56,7 @@ class NativeBitLabs: NSObject {
   
   @objc(checkSurveys:reject:)
   func checkSurveys(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-    BitLabs.shared.checkSurveys { result in
+    BitLabs.API.checkSurveys { result in
       switch result {
       case .success(let surveys):
         resolve(surveys)

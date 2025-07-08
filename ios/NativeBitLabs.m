@@ -4,6 +4,8 @@
 
 RCT_EXTERN_METHOD(configure:(NSString *)token uid:(NSString *)uid)
 
+RCT_EXTERN_METHOD(configureAPI:(NSString *)token uid:(NSString *)uid)
+
 RCT_EXTERN_METHOD(launchOfferwall)
 
 RCT_EXTERN_METHOD(setTags: (NSDictionary *)tags)

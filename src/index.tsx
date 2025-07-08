@@ -1,20 +1,10 @@
-import { NativeModules } from 'react-native';
-import { getSurveysRepo } from './api/bitlabs_service';
 import { WidgetType, type Survey } from './api/bitlabs_service/types';
-
-interface BitLabsModule {
-  configure: (token: string, uid: string) => void;
-  setTags: (tags: Record<string, string>) => void;
-  addTag: (key: string, value: string) => void;
-  launchOfferwall: () => void;
-  getSurveys: () => Promise<Survey[]>;
-  checkSurveys: () => Promise<boolean>;
-}
-
-const { NativeBitLabs } = NativeModules as { NativeBitLabs: BitLabsModule };
+import { NativeBitLabs } from './native_bitlabs';
 
 /**
  * Determines whether the user has surveys available.
+ *
+ * @deprecated Use `BitLabsService.checkSurveys` instead.
  *
  * @param token Found in your [BitLabs Dashboard](https://dashboard.bitlabs.ai/).
  * @param uid Should belong to the current user so that you to keep track of which user got what.
@@ -26,16 +16,18 @@ export const checkSurveys = (
   uid: string,
   onResponse: (hasSurveys: boolean) => void,
   onFailure: (error: Error) => void
-) =>
-  getSurveysRepo(
-    token,
-    uid,
-    (surveys) => onResponse(surveys.length > 0),
-    onFailure
-  );
+) => {
+  NativeBitLabs.configureAPI(token, uid);
+
+  NativeBitLabs.checkSurveys()
+    .then((hasSurveys: boolean) => onResponse(hasSurveys))
+    .catch((error: Error) => onFailure(error));
+};
 
 /**
  * Fetches a list of surveys the user can open.
+ *
+ * @deprecated Use `BitLabsService.getSurveys` instead.
  *
  * @param token Found in your [BitLabs Dashboard](https://dashboard.bitlabs.ai/).
  * @param uid Should belong to the current user so that you to keep track of which user got what.
@@ -47,10 +39,15 @@ export const getSurveys = (
   uid: string,
   onResponse: (surveys: Survey[]) => void,
   onFailure: (error: Error) => void
-) => getSurveysRepo(token, uid, (surveys) => onResponse(surveys), onFailure);
+) => {
+  NativeBitLabs.configureAPI(token, uid);
 
-/** @deprecated Use `WidgetType` instead. */
-export const SurveyType = WidgetType;
+  NativeBitLabs.getSurveys()
+    .then((surveys: Survey[]) => onResponse(surveys))
+    .catch((error: Error) => onFailure(error));
+};
+
+export { BitLabsService } from './api/bitlabs_service';
 
 export { WidgetType };
 
