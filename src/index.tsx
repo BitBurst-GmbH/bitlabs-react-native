@@ -1,5 +1,17 @@
+import { NativeModules } from 'react-native';
 import { getSurveysRepo } from './api/bitlabs_service';
 import { WidgetType, type Survey } from './api/bitlabs_service/types';
+
+interface BitLabsModule {
+  configure: (token: string, uid: string) => void;
+  setTags: (tags: Record<string, string>) => void;
+  addTag: (key: string, value: string) => void;
+  launchOfferwall: () => void;
+  getSurveys: () => Promise<Survey[]>;
+  checkSurveys: () => Promise<boolean>;
+}
+
+const { NativeBitLabs } = NativeModules as { NativeBitLabs: BitLabsModule };
 
 /**
  * Determines whether the user has surveys available.

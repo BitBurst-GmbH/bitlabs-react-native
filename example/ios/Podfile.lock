@@ -1,5 +1,6 @@
 PODS:
   - bitlabs (1.2.9):
+    - BLCustom
     - DoubleConversion
     - glog
     - hermes-engine
@@ -20,6 +21,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - BLCustom (4.0.1)
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
   - fast_float (6.1.4)
@@ -1835,6 +1837,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - BLCustom
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -1981,7 +1984,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  bitlabs: 3b1dadbe151a47598bda2baee6b5e4687077500b
+  bitlabs: c772b58bebd17669c51c40ed5793588b1a3bfba4
+  BLCustom: b5d80343e57b7d67597769017aee3b9efa846ead
   boost: 1dca942403ed9342f98334bf4c3621f011aa7946
   DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6

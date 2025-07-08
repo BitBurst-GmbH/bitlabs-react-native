@@ -69,15 +69,12 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
             getSurveys(
               token,
               UID,
-              (surveys) =>
-                console.log(
-                  `[Example] Getting surveys -> \n${surveys
-                    .map(
-                      (survey) =>
-                        `Survey ${survey.id} in ${survey.category.name}`
-                    )
-                    .join('\n')}`
-                ),
+              (surveys) => {
+                console.log(`[Example] Surveys found: ${surveys.length}.`);
+                surveys.forEach((s) => {
+                  console.log(`Survey ${s.id} in ${s.category.name}`);
+                });
+              },
               (error) => console.log(error.message)
             )
           }
