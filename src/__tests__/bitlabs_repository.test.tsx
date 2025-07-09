@@ -1,5 +1,5 @@
-import * as api from '../api/bitlabs_service/bitlabs_api';
-import { getAppSettings } from '../api/bitlabs_service';
+import * as api from '../api/bitlabs-service/bitlabs-api';
+import { getAppSettings } from '../api/bitlabs-service';
 
 const createMockResponse = (data: any) => ({
   json: () => Promise.resolve({ data, status: 'success', trace_id: '' }),

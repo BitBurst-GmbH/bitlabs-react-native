@@ -12,6 +12,7 @@ import {
   BitLabsOfferWall,
   BitLabsService,
   BitLabsWidget,
+  Offerwall,
   WidgetType,
 } from 'bitlabs';
 import { APP_TOKEN } from './config';
@@ -21,6 +22,14 @@ const UID = 'oblivatevariegata';
 
 const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
   BitLabsService.init(APP_TOKEN, UID);
+
+  Offerwall.init(APP_TOKEN, UID);
+  Offerwall.setOnReward((reward) => {
+    console.log(`Reward this time: ${reward}`);
+  });
+  Offerwall.setOnOfferwallClosed(() => {
+    console.log('Offerwall closed');
+  });
 
   const [isLeaderboardVisible, setIsLeaderboardVisible] = useState(false);
   const [isSurveyWidgetVisible, setIsSurveyWidgetVisible] = useState(false);
@@ -44,7 +53,15 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.box}
-          onPress={() => navigation.navigate('Offerwall')}
+          onPress={() => Offerwall.requestTrackingAuthorization()}
+        >
+          <Text style={{ color: '#fff' }}>Request Ad Id (iOS Only)</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.box}
+          onPress={() => Offerwall.launch()}
+          // onPress={() => setShouldShowOfferwall(true)}
+          // onPress={() => navigation.navigate('Offerwall')}
         >
           <Text style={{ color: '#fff' }}>Open Offerwall</Text>
         </TouchableOpacity>
@@ -92,30 +109,30 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
   );
 };
 
-const OfferWall = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  const [adId, setAdId] = useState('');
+// const OfferWall = ({ navigation }: NativeStackScreenProps<any, any>) => {
+//   const [adId, setAdId] = useState('');
 
-  useEffect(() => {
-    ReactNativeIdfaAaid.getAdvertisingInfo().then(
-      (res: AdvertisingInfoResponse) => {
-        if (!res.isAdTrackingLimited) {
-          setAdId(res.id!);
-        }
-      }
-    );
-  }, []);
+//   useEffect(() => {
+//     ReactNativeIdfaAaid.getAdvertisingInfo().then(
+//       (res: AdvertisingInfoResponse) => {
+//         if (!res.isAdTrackingLimited) {
+//           setAdId(res.id!);
+//         }
+//       }
+//     );
+//   }, []);
 
-  return (
-    <BitLabsOfferWall
-      uid={UID}
-      token={APP_TOKEN}
-      onExitPressed={navigation.goBack}
-      onReward={(reward) => console.log(`Reward this time: ${reward}`)}
-      adId={adId}
-      tags={{}}
-    />
-  );
-};
+//   return (
+//     <NewOfferWall
+//       uid={UID}
+//       token={APP_TOKEN}
+//       onExitPressed={navigation.goBack}
+//       onReward={(reward) => console.log(`Reward this time: ${reward}`)}
+//       adId={adId}
+//       tags={{}}
+//     />
+//   );
+// };
 
 const Stack = createNativeStackNavigator();
 
@@ -123,7 +140,6 @@ export default () => (
   <NavigationContainer>
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Offerwall" component={OfferWall} />
     </Stack.Navigator>
   </NavigationContainer>
 );

@@ -1,5 +1,5 @@
-import { WidgetType, type Survey } from './api/bitlabs_service/types';
-import { NativeBitLabs } from './native_bitlabs';
+import { WidgetType, type Survey } from './api/bitlabs-service/types';
+import { NativeBitLabs } from './native-bitlabs';
 
 /**
  * Determines whether the user has surveys available.
@@ -47,7 +47,9 @@ export const getSurveys = (
     .catch((error: Error) => onFailure(error));
 };
 
-export { BitLabsService } from './api/bitlabs_service';
+export { default as BitLabsService } from './api/bitlabs-service';
+
+export { default as Offerwall } from './offerwall-new';
 
 export { WidgetType };
 

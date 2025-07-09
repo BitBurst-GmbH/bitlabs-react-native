@@ -1,10 +1,10 @@
 import React from 'react';
-import * as api from '../api/bitlabs_service/bitlabs_api';
+import * as api from '../api/bitlabs-service/bitlabs-api';
 import { act, render, screen, waitFor } from '@testing-library/react-native';
 import '@testing-library/jest-native/extend-expect';
 import OfferWall from '../components/offerwall';
 import { Platform } from 'react-native';
-import { HookName, type HookMessage } from '../api/bitlabs_service/types';
+import { HookName, type HookMessage } from '../api/bitlabs-service/types';
 
 const mockProps = {
   token: 'token',

@@ -1,11 +1,24 @@
 import BLCustom
+import React
 
 @objc(NativeBitLabs)
-class NativeBitLabs: NSObject {
+class NativeBitLabs: RCTEventEmitter {
+  
+  override func supportedEvents() -> [String]! {
+    return ["onOfferwallClosed"]
+  }
   
   @objc(configure:uid:)
   func configure(token: String, uid: String) {
     BitLabs.shared.configure(token: token, uid: uid)
+    
+    BitLabs.shared.setRewardCompletionHandler { (reward) in
+      self.sendEvent(withName: "onOfferwallClosed", body: ["reward": reward])
+    }
+  }
+  
+  @objc func requestTrackingAuthorization() {
+    BitLabs.shared.requestTrackingAuthorization()
   }
   
   @objc(configureAPI:uid:)

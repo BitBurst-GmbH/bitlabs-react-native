@@ -1,6 +1,6 @@
-import { NativeBitLabs } from '../../native_bitlabs';
-import sentry from '../sentry_service';
-import { getAppSettingsApi, updateClickApi } from './bitlabs_api';
+import { NativeBitLabs } from '../../native-bitlabs';
+import sentry from '../sentry-service';
+import { getAppSettingsApi, updateClickApi } from './bitlabs-api';
 import type { BitLabsResponse, GetAppSettingsResponse } from './types';
 
 export const leaveSurveys = (
@@ -32,15 +32,13 @@ export const getAppSettings = (
     .then((response) => response.json() as Promise<GetAppSettingsResponse>)
     .then((body) => onResponse(body));
 
-const init = (token: string, uid: string) => {
-  NativeBitLabs.configureAPI(token, uid);
-};
+const init = NativeBitLabs.configureAPI;
 
 const getSurveys = NativeBitLabs.getSurveys;
 
 const checkSurveys = NativeBitLabs.checkSurveys;
 
-export const BitLabsService = {
+export default {
   init,
   getSurveys,
   checkSurveys,

@@ -1,10 +1,13 @@
 #import <React/RCTBridgeModule.h>
+#import <React/RCTEventEmitter.h>
 
-@interface RCT_EXTERN_MODULE(NativeBitLabs, NSObject)
+@interface RCT_EXTERN_MODULE(NativeBitLabs, RCTEventEmitter)
 
 RCT_EXTERN_METHOD(configure:(NSString *)token uid:(NSString *)uid)
 
 RCT_EXTERN_METHOD(configureAPI:(NSString *)token uid:(NSString *)uid)
+
+RCT_EXTERN_METHOD(requestTrackingAuthorization)
 
 RCT_EXTERN_METHOD(launchOfferwall)
 
