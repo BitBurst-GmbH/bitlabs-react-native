@@ -53,6 +53,8 @@ export { default as Offerwall } from './offerwall-new';
 
 export { WidgetType };
 
+/** @deprecated Use Offerwall module instead */
 export { default as BitLabsOfferWall } from './components/offerwall';
 
+/** @deprecated Will be removed in the future */
 export { default as BitLabsWidget } from './components/bitlabs-widget';
