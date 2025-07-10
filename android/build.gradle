@@ -133,6 +133,7 @@ dependencies {
     //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  implementation "com.github.BitBurst-GmbH.bitlabs-android-library:core:4.0.0"
 // From node_modules
 }
 
