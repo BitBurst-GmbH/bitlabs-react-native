@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
-import { BitLabsService, BitLabsWidget, Offerwall, WidgetType } from 'bitlabs';
+import {
+  BitLabsAPI,
+  BitLabsWidget,
+  BitLabsOfferwall,
+  WidgetType,
+} from 'bitlabs';
 import { APP_TOKEN } from './config';
 import styles from './styles';
 
 const UID = 'oblivatevariegata';
 
 const HomeScreen = () => {
-  BitLabsService.init(APP_TOKEN, UID);
+  BitLabsAPI.init(APP_TOKEN, UID);
 
-  Offerwall.init(APP_TOKEN, UID);
-  Offerwall.setOnReward((reward) => {
+  BitLabsOfferwall.init(APP_TOKEN, UID);
+  BitLabsOfferwall.setOnReward((reward) => {
     console.log(`Reward this time: ${reward}`);
   });
-  Offerwall.setOnOfferwallClosed(() => {
+  BitLabsOfferwall.setOnOfferwallClosed(() => {
     console.log('Offerwall closed');
   });
 
@@ -27,7 +32,7 @@ const HomeScreen = () => {
           uid={UID}
           token={APP_TOKEN}
           type={WidgetType.Leaderboard}
-          onPress={() => Offerwall.launch()}
+          onPress={() => BitLabsOfferwall.launch()}
         />
       )}
       <View style={styles.buttonsContainer}>
@@ -39,17 +44,20 @@ const HomeScreen = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.box}
-          onPress={() => Offerwall.requestTrackingAuthorization()}
+          onPress={() => BitLabsOfferwall.requestTrackingAuthorization()}
         >
           <Text style={{ color: '#fff' }}>Request Ad Id (iOS Only)</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.box} onPress={() => Offerwall.launch()}>
+        <TouchableOpacity
+          style={styles.box}
+          onPress={() => BitLabsOfferwall.launch()}
+        >
           <Text style={{ color: '#fff' }}>Open Offerwall</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.box, { flex: 1 }]}
           onPress={() =>
-            BitLabsService.checkSurveys()
+            BitLabsAPI.checkSurveys()
               .then((hasSurveys) => console.log(`Has Surveys: ${hasSurveys}`))
               .catch((error) => console.log(error.message))
           }
@@ -59,7 +67,7 @@ const HomeScreen = () => {
         <TouchableOpacity
           style={[styles.box, { flex: 1 }]}
           onPress={() =>
-            BitLabsService.getSurveys()
+            BitLabsAPI.getSurveys()
               .then((surveys) => {
                 console.log(`Surveys found: ${surveys.length}.`);
                 surveys.forEach((s) => {
@@ -83,7 +91,7 @@ const HomeScreen = () => {
           uid={UID}
           token={APP_TOKEN}
           type={WidgetType.Simple}
-          onPress={() => Offerwall.launch()}
+          onPress={() => BitLabsOfferwall.launch()}
         />
       )}
     </SafeAreaView>

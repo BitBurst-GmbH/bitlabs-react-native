@@ -1,6 +1,6 @@
 import { NativeBitLabs } from '../../native-bitlabs';
 import sentry from '../sentry-service';
-import { getAppSettingsApi, updateClickApi } from './bitlabs-api';
+import { getAppSettingsApi, updateClickApi } from './request';
 import type { BitLabsResponse, GetAppSettingsResponse } from './types';
 
 export const leaveSurveys = (

@@ -1,4 +1,4 @@
-import { WidgetType, type Survey } from './api/bitlabs-service/types';
+import { WidgetType, type Survey } from './api/bitlabs-api/types';
 import { NativeBitLabs } from './native-bitlabs';
 
 /**
@@ -47,9 +47,9 @@ export const getSurveys = (
     .catch((error: Error) => onFailure(error));
 };
 
-export { default as BitLabsService } from './api/bitlabs-service';
+export { default as BitLabsAPI } from './api/bitlabs-api';
 
-export { default as Offerwall } from './offerwall-new';
+export { default as BitLabsOfferwall } from './offerwall-bitlabs';
 
 export { WidgetType };
 

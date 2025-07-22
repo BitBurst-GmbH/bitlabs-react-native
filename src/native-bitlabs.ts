@@ -1,5 +1,5 @@
 import { NativeModules } from 'react-native';
-import type { Survey } from './api/bitlabs-service/types';
+import type { Survey } from './api/bitlabs-api/types';
 
 interface BitLabsModule {
   configure: (token: string, uid: string) => void;
