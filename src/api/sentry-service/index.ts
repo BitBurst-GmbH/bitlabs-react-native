@@ -1,4 +1,3 @@
-import { generateUUID4 } from '../../utils';
 import SentryDSN from './dsn';
 import {
   SentryEnvelope,
@@ -7,6 +6,7 @@ import {
   type SentryEvent,
   type SentryException,
 } from './types';
+import { generateUUID4 } from './utils';
 
 const request = (projectId: string, body?: string) => {
   const url = `${SentryDSN.protocol}://${SentryDSN.host}/api/${projectId}/envelope/`;

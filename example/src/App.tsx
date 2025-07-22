@@ -1,11 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
-import {
-  BitLabsAPI,
-  BitLabsWidget,
-  BitLabsOfferwall,
-  WidgetType,
-} from 'bitlabs';
+import { BitLabsAPI, BitLabsOfferwall } from 'bitlabs';
 import { APP_TOKEN } from './config';
 import styles from './styles';
 
@@ -22,26 +17,9 @@ const HomeScreen = () => {
     console.log('Offerwall closed');
   });
 
-  const [isLeaderboardVisible, setIsLeaderboardVisible] = useState(false);
-  const [isSurveyWidgetVisible, setIsSurveyWidgetVisible] = useState(false);
-
   return (
     <SafeAreaView style={styles.container}>
-      {isLeaderboardVisible && (
-        <BitLabsWidget
-          uid={UID}
-          token={APP_TOKEN}
-          type={WidgetType.Leaderboard}
-          onPress={() => BitLabsOfferwall.launch()}
-        />
-      )}
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity
-          style={styles.box}
-          onPress={() => setIsLeaderboardVisible(true)}
-        >
-          <Text style={{ color: '#fff' }}>Show Leaderboard</Text>
-        </TouchableOpacity>
         <TouchableOpacity
           style={styles.box}
           onPress={() => BitLabsOfferwall.requestTrackingAuthorization()}
@@ -79,21 +57,7 @@ const HomeScreen = () => {
         >
           <Text style={{ color: '#fff' }}>Get Surveys</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.box}
-          onPress={() => setIsSurveyWidgetVisible(true)}
-        >
-          <Text style={{ color: '#fff' }}> Show Survey Widget </Text>
-        </TouchableOpacity>
       </View>
-      {isSurveyWidgetVisible && (
-        <BitLabsWidget
-          uid={UID}
-          token={APP_TOKEN}
-          type={WidgetType.Simple}
-          onPress={() => BitLabsOfferwall.launch()}
-        />
-      )}
     </SafeAreaView>
   );
 };

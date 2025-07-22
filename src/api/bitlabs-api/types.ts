@@ -55,13 +55,6 @@ export type SurveyProperties = {
   oldCurrency?: JSX.Element;
 };
 
-export enum WidgetType {
-  Simple = 'simple',
-  Compact = 'compact',
-  FullWidth = 'full-width',
-  Leaderboard = 'leaderboard',
-}
-
 export type HookMessage = {
   type: string;
   name: HookName;
