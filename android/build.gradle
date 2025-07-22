@@ -131,9 +131,9 @@ def kotlin_version = getExtOrDefault('kotlinVersion')
 
 dependencies {
     //noinspection GradleDynamicVersion
+  implementation "com.prodege.bitlabs:core:5.0.0"
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation "com.github.BitBurst-GmbH.bitlabs-android-library:core:4.0.0"
 // From node_modules
 }
 

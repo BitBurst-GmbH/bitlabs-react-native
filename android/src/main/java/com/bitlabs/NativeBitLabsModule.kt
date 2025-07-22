@@ -21,6 +21,9 @@ class NativeBitLabsModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
+  fun requestTrackingAuthorization() {}
+
+  @ReactMethod
   fun configureAPI(token: String, uid: String) {
     BitLabs.API.init(token, uid)
   }
