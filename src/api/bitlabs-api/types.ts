@@ -10,31 +10,21 @@ export type BitLabsResponse<T> = {
   trace_id: string;
 };
 
-export type GetSurveysResponse = {
-  restriction_reason?: RestrictionReason;
-  surveys: Survey[];
-};
-
 export type GetAppSettingsResponse = {
   configuration: [
     {
       internalIdentifier: string;
       value: string;
-    }
+    },
   ];
-};
-
-export type GetLeaderboardResponse = {
-  next_reset_at: string;
-  own_user: User;
-  rewards: Reward[];
-  top_users: User[];
 };
 
 export type Survey = {
   id: string;
   type: string;
+  /** @deprecated Use `clickUrl` instead. */
   click_url: string;
+  clickUrl: string;
   cpi: string;
   value: string;
   loi: number;
@@ -43,30 +33,17 @@ export type Survey = {
   rating: number;
   category: {
     name: string;
+    /** @deprecated Use `iconUrl` instead. */
     icon_url: string;
+    iconUrl: string;
+    /** @deprecated Use `iconName` instead. */
     icon_name: string;
+    iconName: string;
+    /** @deprecated Use `nameInternal` instead. */
     name_internal: string;
+    nameInternal: string;
   };
   tags: [];
-};
-
-export type RestrictionReason = {
-  not_verified: boolean;
-  using_vpn: boolean;
-  banned_until: string;
-  reason: string;
-  unsupported_country: string;
-};
-
-type Reward = {
-  rank: number;
-  reward_raw: number;
-};
-
-export type User = {
-  earnings_raw: number;
-  name: string;
-  rank: number;
 };
 
 export type SurveyProperties = {
@@ -77,13 +54,6 @@ export type SurveyProperties = {
   currencyIcon?: JSX.Element;
   oldCurrency?: JSX.Element;
 };
-
-export enum WidgetType {
-  Simple = 'simple',
-  Compact = 'compact',
-  FullWidth = 'full-width',
-  Leaderboard = 'leaderboard',
-}
 
 export type HookMessage = {
   type: string;

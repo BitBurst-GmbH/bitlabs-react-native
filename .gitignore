@@ -38,6 +38,7 @@ project.xcworkspace
 .idea
 .project
 .settings
+.kotlin
 local.properties
 android.iml
 
@@ -47,6 +48,7 @@ example/src/config.ts
 # Cocoapods
 #
 **/Pods/
+
 
 # Ruby
 example/vendor/

@@ -1,4 +1,3 @@
-import { generateUUID4 } from '../../utils';
 import SentryDSN from './dsn';
 import {
   SentryEnvelope,
@@ -7,6 +6,7 @@ import {
   type SentryEvent,
   type SentryException,
 } from './types';
+import { generateUUID4 } from './utils';
 
 const request = (projectId: string, body?: string) => {
   const url = `${SentryDSN.protocol}://${SentryDSN.host}/api/${projectId}/envelope/`;
@@ -49,7 +49,7 @@ const createEnvelope = (token: string, uid: string, error: Error) => {
 
   const envelope = new SentryEnvelope(
     { event_id: eventId, sent_at: timestamp, dsn: SentryDSN.dsn },
-    [eventItem]
+    [eventItem],
   );
 
   return envelope.toString();
@@ -65,7 +65,7 @@ const sendEnvelope = (token: string, uid: string, error: Error) => {
   fetch(request(SentryDSN.projectId, createEnvelope(token, uid, error)))
     .then((response) => response.json() as Promise<SendEnvelopeResponse>)
     .then((envelope) =>
-      console.log(`Sent envelope(#${envelope.id}) to Sentry!`)
+      console.log(`Sent envelope(#${envelope.id}) to Sentry!`),
     )
     .catch((e) => console.error(e));
 };

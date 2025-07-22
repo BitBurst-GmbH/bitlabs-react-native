@@ -1,64 +1,43 @@
-import React, { useEffect, useState } from 'react';
-import {
-  createNativeStackNavigator,
-  type NativeStackScreenProps,
-} from '@react-navigation/native-stack';
-import ReactNativeIdfaAaid, {
-  type AdvertisingInfoResponse,
-} from '@sparkfabrik/react-native-idfa-aaid';
+import React from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import {
-  BitLabsOfferWall,
-  BitLabsWidget,
-  WidgetType,
-  checkSurveys,
-  getSurveys,
-} from 'bitlabs';
+import { BitLabsAPI, BitLabsOfferwall } from 'bitlabs';
 import { APP_TOKEN } from './config';
 import styles from './styles';
 
 const UID = 'oblivatevariegata';
 
-const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  const token = APP_TOKEN;
+const HomeScreen = () => {
+  BitLabsAPI.init(APP_TOKEN, UID);
 
-  const [isLeaderboardVisible, setIsLeaderboardVisible] = useState(false);
-  const [isSurveyWidgetVisible, setIsSurveyWidgetVisible] = useState(false);
+  BitLabsOfferwall.init(APP_TOKEN, UID);
+  BitLabsOfferwall.setOnReward((reward) => {
+    console.log(`Reward this time: ${reward}`);
+  });
+  BitLabsOfferwall.setOnOfferwallClosed(() => {
+    console.log('Offerwall closed');
+  });
 
   return (
     <SafeAreaView style={styles.container}>
-      {isLeaderboardVisible && (
-        <BitLabsWidget
-          uid={UID}
-          token={token}
-          type={WidgetType.Leaderboard}
-          onPress={() => navigation.navigate('Offerwall')}
-        />
-      )}
       <View style={styles.buttonsContainer}>
         <TouchableOpacity
           style={styles.box}
-          onPress={() => setIsLeaderboardVisible(true)}
+          onPress={() => BitLabsOfferwall.requestTrackingAuthorization()}
         >
-          <Text style={{ color: '#fff' }}>Show Leaderboard</Text>
+          <Text style={{ color: '#fff' }}>Request Ad Id (iOS Only)</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.box}
-          onPress={() => navigation.navigate('Offerwall')}
+          onPress={() => BitLabsOfferwall.launch()}
         >
           <Text style={{ color: '#fff' }}>Open Offerwall</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.box, { flex: 1 }]}
           onPress={() =>
-            checkSurveys(
-              token,
-              UID,
-              (hasSurveys) =>
-                console.log(`[Example] Has Surveys: ${hasSurveys}`),
-              (error) => console.log(error.message)
-            )
+            BitLabsAPI.checkSurveys()
+              .then((hasSurveys) => console.log(`Has Surveys: ${hasSurveys}`))
+              .catch((error) => console.log(error.message))
           }
         >
           <Text style={{ color: '#fff' }}>Check Surveys</Text>
@@ -66,75 +45,21 @@ const HomeScreen = ({ navigation }: NativeStackScreenProps<any, any>) => {
         <TouchableOpacity
           style={[styles.box, { flex: 1 }]}
           onPress={() =>
-            getSurveys(
-              token,
-              UID,
-              (surveys) =>
-                console.log(
-                  `[Example] Getting surveys -> \n${surveys
-                    .map(
-                      (survey) =>
-                        `Survey ${survey.id} in ${survey.category.name}`
-                    )
-                    .join('\n')}`
-                ),
-              (error) => console.log(error.message)
-            )
+            BitLabsAPI.getSurveys()
+              .then((surveys) => {
+                console.log(`Surveys found: ${surveys.length}.`);
+                surveys.forEach((s) => {
+                  console.log(`Survey ${s.id} in ${s.category.name}`);
+                });
+              })
+              .catch((error) => console.log(error.message))
           }
         >
           <Text style={{ color: '#fff' }}>Get Surveys</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.box}
-          onPress={() => setIsSurveyWidgetVisible(true)}
-        >
-          <Text style={{ color: '#fff' }}> Show Survey Widget </Text>
-        </TouchableOpacity>
       </View>
-      {isSurveyWidgetVisible && (
-        <BitLabsWidget
-          uid={UID}
-          token={token}
-          type={WidgetType.Simple}
-          onPress={() => navigation.navigate('Offerwall')}
-        />
-      )}
     </SafeAreaView>
   );
 };
 
-const OfferWall = ({ navigation }: NativeStackScreenProps<any, any>) => {
-  const [adId, setAdId] = useState('');
-
-  useEffect(() => {
-    ReactNativeIdfaAaid.getAdvertisingInfo().then(
-      (res: AdvertisingInfoResponse) => {
-        if (!res.isAdTrackingLimited) {
-          setAdId(res.id!);
-        }
-      }
-    );
-  }, []);
-
-  return (
-    <BitLabsOfferWall
-      uid={UID}
-      token={APP_TOKEN}
-      onExitPressed={navigation.goBack}
-      onReward={(reward) => console.log(`Reward this time: ${reward}`)}
-      adId={adId}
-      tags={{}}
-    />
-  );
-};
-
-const Stack = createNativeStackNavigator();
-
-export default () => (
-  <NavigationContainer>
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Offerwall" component={OfferWall} />
-    </Stack.Navigator>
-  </NavigationContainer>
-);
+export default HomeScreen;

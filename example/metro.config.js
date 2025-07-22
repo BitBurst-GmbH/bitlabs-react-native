@@ -15,7 +15,7 @@ const modules = Object.keys({
  * Metro configuration
  * https://reactnative.dev/docs/metro
  *
- * @type {import('metro-config').MetroConfig}
+ * @type {import('@react-native/metro-config').MetroConfig}
  */
 const config = {
   projectRoot: __dirname,
@@ -26,8 +26,8 @@ const config = {
     blacklistRE: exclusionList(
       modules.map(
         (m) =>
-          new RegExp(`^${escape(path.join(root, 'node_modules', m))}\\/.*$`)
-      )
+          new RegExp(`^${escape(path.join(root, 'node_modules', m))}\\/.*$`),
+      ),
     ),
     extraNodeModules: modules.reduce((acc, name) => {
       acc[name] = path.join(__dirname, 'node_modules', name);

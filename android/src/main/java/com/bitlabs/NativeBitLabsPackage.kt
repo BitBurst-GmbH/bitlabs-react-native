@@ -5,9 +5,9 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.uimanager.ViewManager
 
 
-class BitlabsPackage : ReactPackage {
+class NativeBitLabsPackage : ReactPackage {
     override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
-        return listOf(BitlabsModule(reactContext))
+        return listOf(NativeBitLabsModule(reactContext))
     }
 
     override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
