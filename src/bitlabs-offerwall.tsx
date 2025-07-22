@@ -3,8 +3,14 @@ import { NativeBitLabs } from './native-bitlabs';
 
 const BitLabsEmitter = new NativeEventEmitter(NativeBitLabs);
 
-const init = NativeBitLabs.configure;
+const init = (token: string, uid: string) => {
+  NativeBitLabs.configure(token, uid);
 
+  BitLabsEmitter.addListener('onOfferwallClosed', ({ reward }) => {
+    onReward(reward as number);
+    onOfferwallClosed();
+  });
+};
 const requestTrackingAuthorization = NativeBitLabs.requestTrackingAuthorization;
 
 const setTags = NativeBitLabs.setTags;
@@ -14,11 +20,9 @@ const setOnReward = (callback: (reward: number) => void) => {
   onReward = callback;
 };
 
-const setOnOfferwallClosed = (onOfferwallClosed: () => void) => {
-  BitLabsEmitter.addListener('onOfferwallClosed', ({ reward }) => {
-    onReward(reward as number);
-    onOfferwallClosed();
-  });
+let onOfferwallClosed = () => {};
+const setOnOfferwallClosed = (callback: () => void) => {
+  onOfferwallClosed = callback;
 };
 
 const launch = NativeBitLabs.launchOfferwall;
