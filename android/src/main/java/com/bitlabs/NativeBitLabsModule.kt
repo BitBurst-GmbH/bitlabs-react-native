@@ -7,6 +7,8 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.WritableMap
+import com.facebook.react.modules.core.DeviceEventManagerModule.*
 
 const val REACT_CLASS = "NativeBitLabs"
 
@@ -15,13 +17,27 @@ class NativeBitLabsModule(reactContext: ReactApplicationContext) :
 
   override fun getName() = REACT_CLASS
 
-  @ReactMethod
-  fun configure(token: String, uid: String) {
-    BitLabs.init(reactApplicationContext, token, uid)
+  private fun sendEvent(name: String, params: WritableMap?) {
+    reactApplicationContext
+      .getJSModule<RCTDeviceEventEmitter>(RCTDeviceEventEmitter::class.java)
+      .emit(name, params)
   }
 
   @ReactMethod
-  fun requestTrackingAuthorization() {}
+  fun configure(token: String, uid: String) {
+    BitLabs.init(reactApplicationContext, token, uid)
+
+    BitLabs.setOnRewardListener { reward ->
+      val params = Arguments.createMap().apply {
+        putDouble("reward", reward)
+      }
+      sendEvent("onOfferwallClosed", params)
+    }
+  }
+
+  @ReactMethod
+  fun requestTrackingAuthorization() {
+  }
 
   @ReactMethod
   fun configureAPI(token: String, uid: String) {
