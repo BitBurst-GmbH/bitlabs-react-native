@@ -68,9 +68,6 @@
     "react-native": ">=0.79.0"
   },
   "jest": {
-    "setupFiles": [
-      "<rootDir>/jest.setup.ts"
-    ],
     "preset": "react-native",
     "transformIgnorePatterns": [
       "node_modules/(?!(react-native-webview|@?react-native|react-native-qrcode-svg)/)"
