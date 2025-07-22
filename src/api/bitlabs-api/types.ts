@@ -15,7 +15,7 @@ export type GetAppSettingsResponse = {
     {
       internalIdentifier: string;
       value: string;
-    }
+    },
   ];
 };
 

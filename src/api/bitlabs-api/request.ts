@@ -7,7 +7,7 @@ const bitlabsRequest = (
   options?: {
     queries?: { [key: string]: string };
     body?: string;
-  }
+  },
 ) => {
   let url = `https://api.bitlabs.ai/${path}?platform=MOBILE`;
   let method = 'GET';
@@ -22,7 +22,7 @@ const bitlabsRequest = (
     const queries = options.queries;
     if (queries) {
       Object.keys(queries).forEach(
-        (key) => (url = url.concat(`&${key}=${queries[key]}`))
+        (key) => (url = url.concat(`&${key}=${queries[key]}`)),
       );
     }
 
@@ -56,12 +56,12 @@ export const updateClickApi = (
   token: string,
   uid: string,
   clickId: string,
-  reason: string
+  reason: string,
 ) =>
   fetch(
     bitlabsRequest(`v2/client/clicks/${clickId}`, token, uid, {
       body: JSON.stringify({ leave_survey: { reason: reason } }),
-    })
+    }),
   );
 
 export const getAppSettingsApi = (url: string) => fetch(new Request(url));
