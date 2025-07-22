@@ -1,3 +1,9 @@
+## v2.0.0
+
+- **Breaking Changes**: Refactor all BitLabs code to native iOS/Android.
+  Basically, this library has been refactored to Wrapper. The whole usage has changed.
+  Please follow [this migration guide](https://developer.bitlabs.ai/docs/react-native-sdk).
+
 ## v1.2.8
 
 - **Improve mechanism of offer and survey opening**
@@ -36,7 +42,6 @@
 ## v1.2.0
 
 - Migrate Widgets from native components to webview components:
-
   - Deprecate `SurveyType` in favour of `WidgetType`
   - Deprecate `BitLabsSurveys` and `BitLabsLeaderboard` components in favour of `BitLabsWidget`.
 

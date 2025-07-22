@@ -11,6 +11,7 @@ const init = (token: string, uid: string) => {
     onOfferwallClosed();
   });
 };
+
 const requestTrackingAuthorization = NativeBitLabs.requestTrackingAuthorization;
 
 const setTags = NativeBitLabs.setTags;
