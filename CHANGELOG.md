@@ -1,3 +1,13 @@
+## v2.1.0
+
+- Support Deep Linking to Offers and MagicReceipts Offers:
+
+```typescript
+BitLabsOfferwall.openOffer(offerId: string)
+BitLabsOfferwall.openMagicReceiptsOffer(offerId: string)
+BitLabsOfferwall.openMagicReceiptsMerchant(merchantId: string)
+```
+
 ## v2.0.0
 
 - **Breaking Changes**: Refactor all BitLabs code to native iOS/Android.

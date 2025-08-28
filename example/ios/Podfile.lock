@@ -1,5 +1,5 @@
 PODS:
-  - bitlabs (2.0.0):
+  - bitlabs (2.1.0):
     - BLCustom (= 4.1.0)
     - DoubleConversion
     - glog
@@ -1987,7 +1987,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  bitlabs: 6a31ef4277ef5d4f7a82b27f4b758f5b3c2fe374
+  bitlabs: 4700d3467a822c5c3cbded76dabdfac076768797
   BLCustom: 973705d9c0fc13f4510e00d42b345d5de41c0da8
   boost: 1dca942403ed9342f98334bf4c3621f011aa7946
   DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
