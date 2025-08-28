@@ -28,11 +28,20 @@ const setOnOfferwallClosed = (callback: () => void) => {
 
 const launch = NativeBitLabs.launchOfferwall;
 
+const openOffer = NativeBitLabs.openOffer;
+
+const openMagicReceiptsOffer = NativeBitLabs.openMagicReceiptsOffer;
+
+const openMagicReceiptsMerchant = NativeBitLabs.openMagicReceiptsMerchant;
+
 export default {
   init,
   launch,
   setTags,
   setOnReward,
+  openOffer,
+  openMagicReceiptsOffer,
+  openMagicReceiptsMerchant,
   setOnOfferwallClosed,
   requestTrackingAuthorization,
 };

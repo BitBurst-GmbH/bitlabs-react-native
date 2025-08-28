@@ -10,6 +10,9 @@ interface BitLabsModule {
   launchOfferwall: () => void;
   getSurveys: () => Promise<Survey[]>;
   checkSurveys: () => Promise<boolean>;
+  openOffer: (offerId: string) => void;
+  openMagicReceiptsOffer: (offerId: string) => void;
+  openMagicReceiptsMerchant: (merchantId: string) => void;
   addListener(eventType: string): void;
   removeListeners(count: number): void;
 }

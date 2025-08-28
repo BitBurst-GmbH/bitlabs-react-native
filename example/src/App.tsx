@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, SafeAreaView } from 'react-native';
 import { BitLabsAPI, BitLabsOfferwall } from 'bitlabs';
 import { APP_TOKEN } from './config';
 import styles from './styles';
+import { CustomButton } from './button';
 
 const UID = 'oblivatevariegata';
 
@@ -20,30 +21,43 @@ const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity
+        <CustomButton
+          text="Open Shopping Merchant: 7"
+          style={styles.box}
+          onPress={() => BitLabsOfferwall.openMagicReceiptsMerchant('7')}
+        />
+        <CustomButton
+          text="Open Shopping Offer: 311768"
+          style={styles.box}
+          onPress={() => BitLabsOfferwall.openMagicReceiptsOffer('311768')}
+        />
+        <CustomButton
+          text="Request Ad Id (iOS Only)"
           style={styles.box}
           onPress={() => BitLabsOfferwall.requestTrackingAuthorization()}
-        >
-          <Text style={{ color: '#fff' }}>Request Ad Id (iOS Only)</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+        />
+        <CustomButton
+          text="Open Offer with id: 1671485"
           style={styles.box}
+          onPress={() => BitLabsOfferwall.openOffer('1671485')}
+        />
+        <CustomButton
+          text="Open Offerwall"
+          style={[styles.box, { flexBasis: '100%' }]}
           onPress={() => BitLabsOfferwall.launch()}
-        >
-          <Text style={{ color: '#fff' }}>Open Offerwall</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.box, { flex: 1 }]}
+        />
+        <CustomButton
+          text="Check Surveys"
+          style={styles.box}
           onPress={() =>
             BitLabsAPI.checkSurveys()
               .then((hasSurveys) => console.log(`Has Surveys: ${hasSurveys}`))
               .catch((error) => console.log(error.message))
           }
-        >
-          <Text style={{ color: '#fff' }}>Check Surveys</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.box, { flex: 1 }]}
+        />
+        <CustomButton
+          text="Get Surveys"
+          style={styles.box}
           onPress={() =>
             BitLabsAPI.getSurveys()
               .then((surveys) => {
@@ -54,9 +68,7 @@ const HomeScreen = () => {
               })
               .catch((error) => console.log(error.message))
           }
-        >
-          <Text style={{ color: '#fff' }}>Get Surveys</Text>
-        </TouchableOpacity>
+        />
       </View>
     </SafeAreaView>
   );
