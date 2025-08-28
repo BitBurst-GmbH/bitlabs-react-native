@@ -1,6 +1,8 @@
 package com.bitlabs
 
 import ai.bitlabs.sdk.BitLabs
+import ai.bitlabs.sdk.offerwall.Offerwall
+import ai.bitlabs.sdk.util.OnOfferwallClosedListener
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
@@ -15,6 +17,8 @@ const val REACT_CLASS = "NativeBitLabs"
 class NativeBitLabsModule(reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
 
+  private lateinit var offerwall: Offerwall
+
   override fun getName() = REACT_CLASS
 
   private fun sendEvent(name: String, params: WritableMap?) {
@@ -25,9 +29,9 @@ class NativeBitLabsModule(reactContext: ReactApplicationContext) :
 
   @ReactMethod
   fun configure(token: String, uid: String) {
-    BitLabs.init(reactApplicationContext, token, uid)
+    offerwall = BitLabs.OFFERWALL.create(token, uid)
 
-    BitLabs.setOnRewardListener { reward ->
+    offerwall.onOfferwallClosedListener = OnOfferwallClosedListener { reward ->
       val params = Arguments.createMap().apply {
         putDouble("reward", reward)
       }
@@ -50,17 +54,17 @@ class NativeBitLabsModule(reactContext: ReactApplicationContext) :
     tags.entryIterator.forEach { (key, value) ->
       tagsMap[key] = value!!
     }
-    BitLabs.tags = tagsMap
+    offerwall.tags.putAll(tagsMap)
   }
 
   @ReactMethod
   fun addTag(key: String, value: String) {
-    BitLabs.tags[key] = value
+    offerwall.tags[key] = value
   }
 
   @ReactMethod
   fun launchOfferwall() {
-    BitLabs.launchOfferWall(currentActivity ?: reactApplicationContext)
+    offerwall.launch(currentActivity ?: reactApplicationContext)
   }
 
   @ReactMethod
@@ -81,6 +85,21 @@ class NativeBitLabsModule(reactContext: ReactApplicationContext) :
       { promise.resolve(it) },
       { promise.reject("CheckSurveys", it.message) }
     )
+  }
+
+  @ReactMethod
+  fun openOffer(offerId: String) {
+    offerwall.openOffer(currentActivity ?: reactApplicationContext, offerId)
+  }
+
+  @ReactMethod
+  fun openMagicReceiptsOffer(offerId: String) {
+    offerwall.openMagicReceiptsOffer(currentActivity ?: reactApplicationContext, offerId)
+  }
+
+  @ReactMethod
+  fun openMagicReceiptsMerchant(merchantId: String) {
+    offerwall.openMagicReceiptsMerchant(currentActivity ?: reactApplicationContext, merchantId)
   }
 
   @ReactMethod

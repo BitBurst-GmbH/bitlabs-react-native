@@ -3,6 +3,7 @@ import React
 
 @objc(NativeBitLabs)
 class NativeBitLabs: RCTEventEmitter {
+  var offerwall: Offerwall?
   
   override func supportedEvents() -> [String]! {
     return ["onOfferwallClosed"]
@@ -10,15 +11,15 @@ class NativeBitLabs: RCTEventEmitter {
   
   @objc(configure:uid:)
   func configure(token: String, uid: String) {
-    BitLabs.shared.configure(token: token, uid: uid)
+    offerwall = BitLabs.OFFERWALL.create(token: token, uid: uid)
     
-    BitLabs.shared.setRewardCompletionHandler { (reward) in
+    offerwall?.offerwallClosedHandler = { (reward) in
       self.sendEvent(withName: "onOfferwallClosed", body: ["reward": reward])
     }
   }
   
   @objc func requestTrackingAuthorization() {
-    BitLabs.shared.requestTrackingAuthorization()
+    offerwall?.requestTrackingAuthorization()
   }
   
   @objc(configureAPI:uid:)
@@ -27,24 +28,19 @@ class NativeBitLabs: RCTEventEmitter {
   }
   
   @objc func setTags(_ tags: [String: Any]) {
-    BitLabs.shared.setTags(tags)
+    offerwall?.tags = tags
   }
   
   @objc(addTag:value:)
   func addTag(key: String, value: String) {
-    BitLabs.shared.addTag(key: key, value: value)
+    offerwall?.tags[key] = value
   }
   
   @objc func launchOfferwall() {
     DispatchQueue.main.async {
-      var vc = UIApplication.shared.delegate!.window!!.rootViewController
+      guard var topVC = self.getTopViewController() else { return }
       
-      if let presentedVC = vc?.presentedViewController,
-         presentedVC.presentedViewController?.isBeingDismissed == false {
-        vc = presentedVC
-      }
-      
-      BitLabs.shared.launchOfferWall(parent: vc!)
+      self.offerwall?.launch(parent: topVC)
     }
   }
   
@@ -77,5 +73,44 @@ class NativeBitLabs: RCTEventEmitter {
         reject("error", error.localizedDescription, nil)
       }
     }
+  }
+  
+  @objc(openOffer:)
+  func openOffer(offerId: String) {
+    DispatchQueue.main.async {
+      guard var topVC = self.getTopViewController() else { return }
+      
+      self.offerwall?.openOffer(withId: offerId, parent: topVC)
+    }
+  }
+  
+  @objc(openMagicReceiptsOffer:)
+  func openMagicReceiptsOffer(offerId: String) {
+    DispatchQueue.main.async {
+      guard var topVC = self.getTopViewController() else { return }
+      
+      self.offerwall?.openMagicReceiptsOffer(withId: offerId, parent: topVC)
+    }
+  }
+  
+  @objc(openMagicReceiptsMerchant:)
+  func openMagicReceiptsMerchant(merchantId: String) {
+    DispatchQueue.main.async {
+      guard var topVC = self.getTopViewController() else { return }
+      
+      self.offerwall?.openMagicReceiptsMerchant(withId: merchantId, parent: topVC)
+    }
+  }
+  
+  private func getTopViewController() -> UIViewController? {
+    var topViewController: UIViewController?
+    guard let root = UIApplication.shared.keyWindow?.rootViewController else { return nil }
+    
+    topViewController = root
+    while let presented = topViewController?.presentedViewController {
+      topViewController = presented
+    }
+    
+    return topViewController
   }
 }

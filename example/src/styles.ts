@@ -10,9 +10,11 @@ export default StyleSheet.create({
     flexWrap: 'wrap',
   },
   box: {
-    width: '100%',
+    flex: 1,
     flexShrink: 1,
+    flexBasis: '45%',
     alignItems: 'center',
+    justifyContent: 'center',
     padding: 10,
     borderRadius: 8,
     color: '#fff',

@@ -15,6 +15,6 @@ Pod::Spec.new do |s|
 
   s.source_files = "ios/**/*.{h,m,mm,swift}"
 
-  s.dependency "BLCustom"
+  s.dependency "BLCustom", "4.1.0"
   install_modules_dependencies(s)
 end
