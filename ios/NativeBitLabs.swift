@@ -103,11 +103,15 @@ class NativeBitLabs: RCTEventEmitter {
   }
   
   private func getTopViewController() -> UIViewController? {
-    var topViewController: UIViewController?
-    guard let root = UIApplication.shared.keyWindow?.rootViewController else { return nil }
+    let keyWindow = UIApplication.shared.connectedScenes
+      .compactMap { $0 as? UIWindowScene }
+      .filter { $0.activationState == .foregroundActive }
+      .flatMap(\.windows)
+      .first(where: \.isKeyWindow)
     
-    topViewController = root
-    while let presented = topViewController?.presentedViewController {
+    guard var topViewController = keyWindow?.rootViewController else { return nil }
+    
+    while let presented = topViewController.presentedViewController {
       topViewController = presented
     }
     
