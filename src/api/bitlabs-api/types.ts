@@ -1,24 +1,3 @@
-export type BitLabsResponse<T> = {
-  data?: T;
-  error?: {
-    details: {
-      http: string;
-      msg: string;
-    };
-  };
-  status: string;
-  trace_id: string;
-};
-
-export type GetAppSettingsResponse = {
-  configuration: [
-    {
-      internalIdentifier: string;
-      value: string;
-    },
-  ];
-};
-
 export type Survey = {
   id: string;
   type: string;
@@ -45,29 +24,3 @@ export type Survey = {
   };
   tags: [];
 };
-
-export type SurveyProperties = {
-  colors: string[];
-  onPress: () => void;
-  currencyString: string;
-  bonusPercentage: number;
-  currencyIcon?: JSX.Element;
-  oldCurrency?: JSX.Element;
-};
-
-export type HookMessage = {
-  type: string;
-  name: HookName;
-  args: any[];
-};
-
-export enum HookName {
-  init = 'offerwall-core:init',
-  SdkClose = 'offerwall-core:sdk.close',
-  SurveyStart = 'offerwall-surveys:survey.start',
-  SurveyComplete = 'offerwall-surveys:survey.complete',
-  SurveyScreenout = 'offerwall-surveys:survey.screenout',
-  SurveyStartBonus = 'offerwall-surveys:survey.start-bonus',
-  OfferStart = 'offerwall-offers:offer.start',
-  OfferContinue = 'offerwall-offers:offer.continue',
-}
