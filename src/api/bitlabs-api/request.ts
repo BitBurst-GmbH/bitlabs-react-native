@@ -10,32 +10,23 @@ const bitlabsRequest = (
   },
 ) => {
   let url = `https://api.bitlabs.ai/${path}?platform=MOBILE`;
-  let method = 'GET';
-  let body;
-  let headers: { [key: string]: string } = {
+
+  const queries = new URLSearchParams(options?.queries).toString();
+  if (queries) {
+    url = url.concat(`&${queries}`);
+  }
+
+  const body = options?.body;
+  const method = body ? 'POST' : 'GET';
+  const headers = {
     'X-Api-Token': token,
     'X-User-Id': uid,
     'User-Agent': getUserAgent(),
+    ...(body && {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }),
   };
-
-  if (options) {
-    const queries = options.queries;
-    if (queries) {
-      Object.keys(queries).forEach(
-        (key) => (url = url.concat(`&${key}=${queries[key]}`)),
-      );
-    }
-
-    body = options.body;
-    if (body) {
-      method = 'POST';
-      headers = {
-        ...headers,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      };
-    }
-  }
 
   return new Request(url, {
     method: method,

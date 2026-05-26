@@ -1,5 +1,10 @@
 import React from 'react';
-import { StyleProp, Text, TouchableOpacity, ViewStyle } from 'react-native';
+import {
+  Text,
+  TouchableOpacity,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
 
 type Props = {
   onPress: () => void;
