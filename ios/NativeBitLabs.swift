@@ -58,7 +58,7 @@ class NativeBitLabs: RCTEventEmitter {
         }
         resolve(surveyDictionaries)
       case .failure(let error):
-        reject("error", error.localizedDescription, nil)
+        reject("error", String(describing: error), nil)
       }
     }
   }
@@ -70,7 +70,7 @@ class NativeBitLabs: RCTEventEmitter {
       case .success(let surveys):
         resolve(surveys)
       case .failure(let error):
-        reject("error", error.localizedDescription, nil)
+        reject("error", String(describing: error), nil)
       }
     }
   }
