@@ -1,3 +1,9 @@
+## v2.1.1
+
+- Fix `onReward` and `onOfferwallClosed` firing multiple times when `BitLabsOfferwall.init` is called more than once.
+- iOS: `getSurveys` and `checkSurveys` errors now include the actual reason instead of a generic "BLCustom.Exception error 1".
+- iOS: minimum deployment target raised from 10.0 to 13.0.
+
 ## v2.1.0
 
 - Support Deep Linking to Offers and MagicReceipts Offers:
